@@ -1,0 +1,100 @@
+\documentclass[preprint]{elsarticle}
+
+\usepackage{lineno,hyperref}
+\modulolinenumbers[5]
+
+\journal{To be determined}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{mathptmx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[linesnumbered]{algorithm2e}
+\usepackage{algcompatible}
+\usepackage{enumerate}
+\usepackage[english]{babel}
+\usepackage{multirow}
+\usepackage{tabularx}  % for 'tabularx' environment and 'X' column type
+\usepackage{ragged2e}  % for '\RaggedRight' macro (allows hyphenation)
+
+%appendix name fix
+\usepackage[english]{babel}
+
+%Pretty tables
+\usepackage{booktabs}
+\setlength\heavyrulewidth{0.2ex}
+\setlength\lightrulewidth{0.15ex}
+\setlength\cmidrulewidth{0.15ex}
+
+\usepackage{caption}
+\usepackage[utf8]{inputenc}
+\usepackage{subcaption}
+
+%for drawing over the notation table
+\usepackage{tikz}
+
+%set double spacing
+\usepackage{setspace}
+
+%Allow more figures per page
+\renewcommand{\floatpagefraction}{.999}
+
+
+%%%%%%%%%%%% FIX SECTIONS LATEXDIFF %%%%%%%%%%%%%%%%%%%%%
+\usepackage{xcolor}
+\DeclareRobustCommand{\hsout}[1]{\texorpdfstring{\sout{#1}}{#1}}
+\DeclareRobustCommand{\hwave}[1]{\texorpdfstring{\uwave{#1}}{#1}}
+\RequirePackage[normalem]{ulem}% DIF PREAMBLE
+\RequirePackage{color}\definecolor{DELETIONS}{rgb}{1.0,0.0,0.0}
+\RequirePackage{color}\definecolor{ADDITIONS}{rgb}{0.0,0.6,0.0}
+\providecommand{\DIFadd}[1]{{\protect\textcolor{ADDITIONS}{\hwave{#1}}}}% DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\textcolor{DELETIONS}{\hsout{#1}}}}% DIF PREAMBLE
+%\providecommand{\DIFdel}[1]{{\protect}}% DIF PREAMBLE
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{verbatim}
+
+\begin{document}
+
+\title{Improving recommendation of useful pieces of information for users to better understand current context}
+
+\begin{spacing}{2}
+
+\begin{frontmatter}
+
+\author[addressjorge,addressjie]{Jorge Castro\corref{mycorrespondingauthor}}
+\ead{jcastro@decsai.ugr.es}
+
+\author[addressjie]{-Jie Lu}
+\ead{jie.lu@uts.edu.au}
+
+\author[addressjie]{-Guangquan Zhang}
+\ead{guangquan.zhang@uts.edu.au}
+
+\author[addressluis]{Luis Mart\'inez}
+\cortext[mycorrespondingauthor]{Corresponding author}
+\ead{martin@ujaen.es}
+
+\address[addressjorge]{Department of Computer Science and Artificial Intelligence, University of Granada, Granada (Spain)}
+\address[addressjie]{School of Software, University of Technology Sydney, Sydney (Australia)}
+\address[addressluis]{Computer Science Department, University of Ja\'en, Ja\'en (Spain)}
+
+\begin{abstract}
+
+Recommender systems (GRSs) filter relevant items to users in overloaded search spaces using information about their preferences. In this scenario, there are succesful RSs for several domains including recommendation of news and Q&A, among others. The traditional recommendation scheme consists of analysing the terms used in the item to generate an item profile and a user profile that later is used to recommend items that match user profiles. This basic scheme can be further improved considering that context influences user preferences. Some examples of contexts are the device where the recommendations are shown, companion of the target user or trends in current interest according to what others talk about. In the latter case, there have been . This paper focuses on the context extracted from the latter scenario, in which a feed of status updates of a well-known social network is used. When the information is extracted in such a way, there are several key aspects in the context integration with the user profile, such as context cleaning, aggregation and weighting. This paper explores such aspects and proposes a recommender system that integrates context to improve q&a recommendations with context information. A case study will evaluate the results on several datasets, showing that the context integration benefits recommendation.
+
+\begin{keyword}
+   \texttt{recommender systems} \sep \texttt{context-aware recommendation} \sep \texttt{user profile contextualisation}
+\end{keyword}
+\end{abstract}
+
+\end{frontmatter}
+
+\section{Introduction}\label{sec:introduction}
+
+\textbf{\textit{Acknowledgements:}} This research work was partially supported by the Research Project TIN-2015-66524-P, the Spanish FPU fellowship (FPU13/01151), and also the Eureka SD Project (agreement number 2013-2591).
+
+\section*{Bibliography}
+\bibliography{rs-bibliography}
+\bibliographystyle{plain}
