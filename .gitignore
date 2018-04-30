@@ -1,0 +1,62 @@
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.mtc1
+*.bak
+*.out
+*.pdf
+*.synctex
+*.synctex.gz
+*.synctex(busy)
+*.spl
+*.ps
+
+
+#WinEDT backup files?
+*.bak
+
+#Strange Mac files
+*.DS_Store
+
+#LibreOffice lock files
+.~lock.*
+
+#Gedit backups
+*~
+
+#pdfcomment package temp files
+*.upa
+*.upb
+
+#changebar package temp files 
+*.cb
+*.cb2
+
+
+*-blx.bib
+*.run.xml
+
+
+latex/old.tex
+latex/diff.tex
+
+
+latex/old*
+latex/diff*

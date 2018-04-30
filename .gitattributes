@@ -1,0 +1,7 @@
+*.tex   diff=tex
+*.bib   diff=bibtex
+
+
+*.docx  diff=pandoc
+*.doc   diff=pandoc
+*.odt   diff=pandoc
