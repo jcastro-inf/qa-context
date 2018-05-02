@@ -82,7 +82,7 @@
 
 \begin{abstract}
 
-Recommender systems (GRSs) filter relevant items to users in overloaded search spaces using information about their preferences. In this scenario, there are succesful RSs for several domains including recommendation of news and Q&A, among others. The traditional recommendation scheme consists of analysing the terms used in the item to generate an item profile and a user profile that later is used to recommend items that match user profiles. This basic scheme can be further improved considering that context influences user preferences. Some examples of contexts are the device where the recommendations are shown, companion of the target user or trends in current interest according to what others talk about. In the latter case, there have been . This paper focuses on the context extracted from the latter scenario, in which a feed of status updates of a well-known social network is used. When the information is extracted in such a way, there are several key aspects in the context integration with the user profile, such as context cleaning, aggregation and weighting. This paper explores such aspects and proposes a recommender system that integrates context to improve q&a recommendations with context information. A case study will evaluate the results on several datasets, showing that the context integration benefits recommendation.
+Recommender systems (GRSs) filter relevant items to users in overloaded search spaces using information about their preferences. In this scenario, there are succesful RSs for several domains including recommendation of news and QA, among others. The traditional recommendation scheme consists of analysing the terms used in the item to generate an item profile and a user profile that later is used to recommend items that match user profiles. This basic scheme can be further improved considering that context influences user preferences. Some examples of contexts are the device where the recommendations are shown, companion of the target user or trends in current interest according to what others talk about. In the latter case, there have been . This paper focuses on the context extracted from the latter scenario, in which a feed of status updates of a well-known social network is used. When the information is extracted in such a way, there are several key aspects in the context integration with the user profile, such as context cleaning, aggregation and weighting. This paper explores such aspects and proposes a recommender system that integrates context to improve QA recommendation with context information. A case study will evaluate the results on several datasets, showing that the context integration benefits recommendation.
 
 \begin{keyword}
    \texttt{recommender systems} \sep \texttt{context-aware recommendation} \sep \texttt{user profile contextualisation}
@@ -96,7 +96,7 @@ Recommender systems (GRSs) filter relevant items to users in overloaded search s
 \section{Proposal}
 
 The proposal is composed of several parts:
-
+11
 \begin{enumerate}
 	\item Extract information of the QA domain.
 	\begin{itemize}
@@ -105,14 +105,30 @@ The proposal is composed of several parts:
 	\end{itemize}
 	\item Building user preference profile: Aggregate 
 	\item Context profile building
-	\item Contextualisation of user profiles
+	\item Contextualization of user profiles
 	\item Prediction
 \end{enumerate}
 
 
+\section{Extract information of the QA domain.}
 
+In the QA dataset there is textual information of the question and its related answers. In this proposal we treat all the i
 
-\section[Experiment]
+\subsection{TfIdf}
+
+$$ profile_{post} = \{tf_word \\ word \in post \} $$
+
+$$ tf_{word} = $$
+
+\subsection{LSA over TfIdf}
+
+\section{Building user preference profile: Aggregate words' profiles}
+\section{Context profile building}
+
+\section{Contextualization of user profiles}
+\section{Prediction}
+
+\section{Experiment}
 
 \textbf{\textit{Acknowledgements:}} This research work was partially supported by the Research Project TIN-2015-66524-P, the Spanish FPU fellowship (FPU13/01151), and also the Eureka SD Project (agreement number 2013-2591).
 
