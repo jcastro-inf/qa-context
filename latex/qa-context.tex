@@ -116,22 +116,183 @@ In the QA dataset there is textual information of the question and its related a
 
 \subsection{TfIdf}
 
-$$ profile_{post} = \{tf_word \\ word \in post \} $$
+In this proposal we consider posts as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once stemmed, their term frequency is computed using the raw count of appearance on the document:
+\begin{equation}
+	profile_{d} = \{tf_{t,d}~~~~s.t.~~~~ t \in d \} ~~~~,  ~~~~~~
+	tf_{t,d} = f_{t,d}
+\end{equation}
 
-$$ tf_{word} = $$
+Once the term frequency is computed for all terms in all documents, the inverse document frequency is calculated for each term.
+
+\begin{equation}
+	idf_t = - \log( N / n_t )
+\end{equation}
+
+Finally, the values of the profiles are weighted with the $idf_t$ of each term:
+\begin{equation}
+	profile_d = \{w_{t,d} ~~~~s.t. ~~~~t\in d\} ~~~~,  ~~~~~~
+	w_{t,d} = tf_{t,d}*idf_t
+\end{equation}
 
 \subsection{LSA over TfIdf}
 
+Once the tf-idf profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and words in a reduced number of features, while reducing the negative impact of synonyms in the text \cite{}. Therefore, the aim of this step is to decompose the word-document in: word-features matrix ($U$), singular value vector ($s$), and document-features matrix ($V$):
+
+\begin{equation}
+	TFIDF_{(|D|\times|T|)} = U_{(|D|\times k)} * s_{(k)} * V'_{(k \times |W|)}
+\end{equation}
+
+The proposal performs an approximated factorisation of the TF-IDF matrix using singular value decomposition, which allows to reduce the dimensionality of the original matrix keeping the $k$ most relevant singular values of the original matrix.
+
+Hence, we obtain the profile of both terms and documents in the reduced space:
+\begin{equation}
+	profile_d = \{ U_{t,1},\dots, U_{t,k}\}
+\end{equation}
+
+\begin{equation}
+	profile_t = \{ V_{t,1},\dots, V_{t,k}\}
+\end{equation}
+
 \section{Building user preference profile: Aggregate words' profiles}
+
+At this point the proposal has built a model to describe documents and words. In order to provide personalised recommendation to users, it is needed to build user profiles in the same space. The information the system holds about users is a unary matrix that states whether the user has expressed interest in the document either by creating, commenting, or voting it:
+
+\begin{table}
+	\caption{Users' preferences over items, the rating matrix.}
+	\label{tab:user-preferences}
+	\centerline{\small\baselineskip=13pt
+	\begin{tabular}{|c||ccccc|}
+		\hline
+         &     $i_1$     & $\dots$  &     $i_k$     & $\dots$  & $i_n$
+		\tabularnewline
+		\hline
+		\hline
+$u_1$    & $r_{u_1,i_1}$ & $\dots$  & $r_{u_1,i_k}$ & $\dots$  & $r_{u_1,i_n}$
+		\tabularnewline
+$\vdots$ & $\vdots$      & $\ddots$ & $\vdots$      & $\ddots$ & $\vdots$
+		\tabularnewline
+$u_j$    & $r_{u_j,i_1}$ & $\dots$  & $r_{u_j,i_k}$ & $\dots$  & $r_{u_j,i_n}$
+		\tabularnewline
+$\vdots$ & $\vdots$      & $\ddots$ & $\vdots$      & $\ddots$ & $\vdots$
+		\tabularnewline
+$u_m$    & $r_{u_m,i_1}$ & $\dots$  & $r_{u_m,i_k}$ & $\dots$  & $r_{u_m,i_n}$
+		\tabularnewline
+		\hline
+	\end{tabular}}
+\end{table}
+
+With this table we can get the set of documents that user $u$ has expressed interest in:
+\begin{equation}
+	R_{u} = {d ~~~~s.t.~~~~r_{u,d} =1 }
+\end{equation}
+
+This way, the user profile is built upon the profiles of the documents that belong to $R_u$:
+
+\begin{equation}
+	profile_u = \sum_{d \in R_u} V_d = \{ \sum_{d \in R_u} V_{d,1}, \dots, \sum_{d \in R_u} V_{d,k}\}
+\end{equation}
+
+This user profile describes the user preferences in terms of the singular values.
+
 \section{Context profile building}
 
+In parallel with the building of the user profile, it is needed to build the context profile. In this proposal we assume that the source of the context is a microblogging system that delivers status updates by users. To narrow down the status updates that the system receives in order to focus in an aspect of the context. Therefore, there is a set of terms that must appear in the status updates:
+
+\begin{equation}
+	\forall d \in Context \exists t \in d \wedge t\in T_c
+\end{equation}
+
+Based on the terms that appear on the context we can build the profile of the context using the feature representation of each term from the QA domain.
+
+\begin{equation}
+	profile_{T_c} = \{\sum_{t \in T_c} U_{t,1}, \dots, \sum_{t \in T_c} U_{t,k} \}
+\end{equation}
+
 \section{Contextualization of user profiles}
+
+Once we have the user profile and the context profile, it is needed to combine them in order to provide personalised recommendation that are suited to the current context $T_c$:
+
+\begin{equation}
+	profile_u^{T_c} = \alpha * profile_u + (1- \alpha )*profile_{T_c}
+\end{equation}
+
+\begin{equation}
+	profile_u^{T_c} = \{ \alpha * profile_{u,1} + (1- \alpha ) * profile_{T_c,1},\dots, \alpha * profile_{u,1} + ( 1 - \alpha ) * profile_{T_c,k} \}
+\end{equation}
+
 \section{Prediction}
 
+Once we have the contextualised user profile, we can produce a prediction of the suitability for a given item regarding the profile:
+\begin{equation}
+	p_{u,d} = profile_u^{T_c}*s*profile_d
+\end{equation}
+
+The recommendation is a list of documents sorted by $p_{u,d}$.
+
 \section{Experiment}
+
+To evaluate the proposal, we performed an experiment that simulates the recommendation of QA items in in various context. The remainder of the section is structured as follows. First, the settings of the experiment are described. The datasets and methods for processing are then detailed. After that, the evaluation measures are commented. Lastly, the results are analysed.
+
+\subsection{Experimental procedure}
+
+In these experiments, a RS based on LSA modelling with contextual information is evaluated (LSAContext). The baseline method to compare with is the LSA method without contextual information. 30 features are considered in LSA and LSAContext models.
+
+In order to do the experiment, the following procedure is performed \cite{Sarwar2001}, with a modification to consider contextual information in the experiment:
+\begin{itemize}
+	\item Split the dataset in training and test.
+	\item Build the model with the training data.
+	\item Build the profile of each user. Include contextual information.
+	\item Recommend to each user based on their profile and the model.
+	\item Evaluate recommendations with the test set.
+\end{itemize}
+
+This procedure is repeated 20 times and 5-cross fold validation is used to split the data in training and test sets. Moreover, various contexts are considered, which are detailed in the following section.
+
+\subsection{Datasets}
+
+In the experiment there are two sources of data: The QA domain and the contextual information.
+
+The QA domain used is the StackExchange dataset\footnote{http://data.stackexchange.com/}. This dataset consists of the database dump of each site in the stackexchange ecosystem. Some sites are detailed in Table \ref{tab:stackexchange-dataset-description}, together with their main features.
+
+In this experimental setup, the results are reported per StackExchange site. Therefore, we consider each site as a different dataset. Given that the aim of the system is to provide users with pieces of information that help explain the context and also consider their preferences.
+
+Regarding the contextual dataset, a set of interesting keywords is defined. We have selected the terms \emph{news}, \emph{current} and \emph{situation}. From these seed terms, we extracted a dataset of tweets that contain any of these words from twitter. The stats of the dataset extracted is depicted in Figure \ref{fig:context-dataset-description}.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/context-dataset-description.eps}
+    \caption{Contextual dataset used in the experiment, where each day has a different status count.}
+    \label{fig:context-dataset-description}
+\end{figure}
+
+\subsection{Evaluation Measures}
+
+Usually, measures to evaluate the prediction errors in terms of rating deviation are used. However, the methods being compared do not provide a rating prediction, but a value that expresses the suitability of items regarding the user profile. Therefore, the measures that can be used are information retrieval ones, such as precision and recall. Researchers have remarked that, although they are useful, they are not sensible to the sorting of the items that the RSs does \cite{Gunawardana2015}. In order to consider the quality of the sorting, the NDCG is used:
+
+\begin{equation}
+	DCG_u = \sum_{k=1}^N\frac{r_{u,recom_{u,k}}}{log_2 (k+1)}
+\end{equation}
+
+\noindent where $recom_{u,k} \in I$ is the item recommended to user $u$ in $k$ position.
+
+\begin{equation}
+	NDCG = \frac{DCG}{DCG_{perfect}}
+\end{equation}
+
+\noindent where $DCG_{perfect}$ is a perfect sorting of the items, i.e., the list of items sorted by their value in the test set.
+
+\subsection{Results}
+
+In this section, the results obtained for the different approaches compared are shown and analysed to evaluate the performance of the proposal.
+
+Table \ref{tab:results-ndcg-3dprinting} shows the results of the compared approaches in the 3dprinting site.
+
 
 \textbf{\textit{Acknowledgements:}} This research work was partially supported by the Research Project TIN-2015-66524-P, the Spanish FPU fellowship (FPU13/01151), and also the Eureka SD Project (agreement number 2013-2591).
 
 \section*{Bibliography}
 \bibliography{rs-bibliography}
-\bibliographystyle{plain}
+
+\end{spacing}
+
+\end{document}
