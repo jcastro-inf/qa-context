@@ -93,6 +93,66 @@ Recommender systems (GRSs) filter relevant items to users in overloaded search s
 
 \section{Introduction}\label{sec:introduction}
 
+Users satisfaction in current scenario is seriously affected by the amount of information available. This situation originates that users need to put a significant effort for finding relevant pieces of information for them. In some scenarios it might not be possible for users to explore information items in order to select the most suitable one. The \emph{information overload} problem impacts users satisfaction. Recommender Systems have been a powerful tool for alleviating information overload in large search spaces. RSs have been proven to be successful in several domains, such as e-health \cite{}, \cite{}. In this paper we focus on QA recommendation with contextual information integration.
+
+There are several approaches within RecommenderSystems. The most widespread ones are Collaborative Filtering (CFRS) and Content Based (CBRS). The main difference among them is that CFRS focuses on user preferences, while CBRS focuses on the analysis on items descriptions. Therefore, the effectivity these recommendation approaches is subject to the quality and amount of available information.
+
+Within CBRSs we distinguish two kinds of CBRSs: (i) based on item features, (ii) based on items descriptions. In this paper we focus on the latter, given that QA items have a strong component of textual information for both explaining the question and answering it. Although CBRSs need some input from user preferences (user cold-start) and suffer from overfitting (lack of diversity in recommendations) \cite{}, CBRS have demonstrated their utility when new items are introduced in the system, i.e., item cold-start \cite{Aggarwal2016}. This feature makes it interesting to apply CBRS approaches in domains where new items are constantly introduced, such as web pages or news. In this direction, QA recommendation share the features that make it interesting to apply CBRSs, hence, we focus on them.
+
+%Boundary of knowledge in QA recommendation with CBRSs.
+In this scenario there are several proposals for QA recommendation with CBRS approaches. 
+
+EnTagRec \cite{Wang2014} is not a CBRS, but it works on keywords. An Enhanced Tag Recommendation System for Software Information Sites. Individual user recommender system to retrieve tags for a new post that is evaluated in several STS: Stack Overflow, Ask Ubuntu, Ask Different, and Free code. Offline evaluation with Precision@10 and Recall@10.
+
+\cite{Shao2017} Recommending Answerers for Stack Overflow with LDA Model. Recommends unanswered questions to users to encourage faster answers. Matches topic of the question with the expertise of the target user. Offline evaluation on StackOverflow dump. Accuracy as evaluation measure.
+
+\cite{Odiete2017} Recommending Programming Languages by Identifying Skill Gaps Using Analysis of Experts. A Study of Stack Overflow. Helps developers expand their knowledge by suggesting them to learn the programming language that fits his/her expertise gaps using expertise graphs.
+
+\cite{Lipczak2010} Learning in efficient tag recommendation. Tag recommendation system. It does not propose a new algorithm, but a way to update the model in order to incorporate new information to it without needing to build it from scratch. It does offline evaluation with DelicioUs dataset and Stack Overflow. Precision and recall are used as evaluation measures.
+
+\cite{Zheng2015b} A Hybrid Trust-Based Recommender System for Online Communities of Practice. It is a recommender system to find answerers to a specific question formulated by an asker. This RS uses the hybrid trust network of the asker and combines content analysis to extract the keywords of the question. They achieve higher precision and recall. They perform offline experimentation to detect whether the
+
+
+%Parrafo de contexto: Explicación de por qué introducimos basado en contexto.
+Justification of context-aware recommendation.
+
+
+%Boundary of knowledge of QA recommendation with contextual information:
+
+\cite{Ponzanelli2014} Libra: RS for supporting programmers complete issues and bugs using query completion. They perform online testing assessing the percent of success of a programmer that is using Libra with a control group.
+
+\cite{Ponzanelli2017} Harnessing stack overflow for the IDE. Presents a plug-in for eclipse that enables stack overflow searches contextualized to the language and other relevant. It does no evaluation whatsoever.
+
+\cite{Ponzanelli2014b} Prompter: A Self-Confident Recommender System. The same as the previous one. Proposes a plug-in that automatically searches on stack overflow. This one notifies the user if it is confident enough of the answer provided. The user can provide the confidence level that has to be reached to trigger “proactive” help.
+
+\cite{Parikh2009} Buzz-based recommender system. This system looks somewhat similar to the system that we want to develop, but on eCommerce. This one is based on buzzwords used in the text input of the search within eBay. Our work will be based on buzzwords detected on twitter to recommend historic questions on StackExchange (Any site).
+
+\cite{DePessemier2016} This paper does A user-centric evaluation of context-aware recommendations for a mobile news service. Hace una evaluación de un Sistema de recomendación basado en contenido con información contextual. Es interesante para tenerlo en cuenta como técnica a comparar
+
+\section{Preliminaries}
+
+This section provides the required background for the current research, including basics about CBRS, and related works in content based recommendation with context awareness.
+
+\subsection{Content-based recommender systems.}
+
+An accurate definition of Recommender System (RS) given by R. Burke \cite{Burke2002} is \emph{"any system that produces individualized recommendations as output or has the effect of guiding the user in a personalized way to interesting or useful objects in a large space of possible options"}. 
+
+\subsection{Context-aware recommender systems.}
+
+Traditional recommender systems can be classified on six classes based on the knowledge source \cite{DePessemier2016}: demographic recommendations, knowledge-based
+recommendations, community-based recommendations, content-based recommendations,
+collaborative recommendations, and hybrid recommendations. As noted by R.Burke \cite{Burke2002} other sources of information can be considered in the recommendation, such as the context in which the recommendation is received by users, and F. Ricci \cite{Ricci2012contextualizing} stated that the conditions or circustances in which the recommendation is delivered significantly affect the decision behaviour of the users. Therefore, the consideration of users' context is key to provide interesting recommendations.
+
+With this regard, the varius context-aware recommendation approaches can be classiffied into three classes \cite{Adomavicius2011}:
+\begin{itemize}
+	\item Pre-filtering: The system selects the feedback gathered in the same context in which the recommendation is delivered to the user.
+	\item Post-filtering: The recommendations are generated first without considering contextual information. After that, the item preditions are modified regarding the specific context of the users, possibly filtering out some items.
+	\item Contextual modelling:
+\end{itemize}
+
+\subsection{Related works in context-aware content-based recommender systems.}
+
+
 \section{Proposal}
 
 The proposal is composed of several parts:
@@ -196,11 +256,13 @@ This user profile describes the user preferences in terms of the singular values
 
 \section{Context profile building}
 
-In parallel with the building of the user profile, it is needed to build the context profile. In this proposal we assume that the source of the context is a microblogging system that delivers status updates by users. To narrow down the status updates that the system receives in order to focus in an aspect of the context. Therefore, there is a set of terms that must appear in the status updates:
+In parallel with the building of the user profile, it is needed to build the context profile. In this proposal we assume that the source of the context is a microblogging system that delivers status updates by users. To narrow down the status updates that the system receives in order to focus in an aspect of the context. Therefore, there is a set of terms that must appear in the status updates.
 
-\begin{equation}
-	\forall d \in Context \exists t \in d \wedge t\in T_c
-\end{equation}
+First, from al the terms that the context contains, the proposal filters out the terms that do not appear in the set of terms used in the QA site. 
+
+Given that the context is composed of several status updates, there can be a mixing of topics. In order to separate the topics of the context and select the most suitable one, the proposal performs a fuzzy clustering of the words of the context. Hence, the fuzzy c-means clustering algorithm groups the terms using the feature vector of the words as the word definition.
+
+Once the terms of the context are grouped, the proposal generates a context profile for each cluster. A profile of each cluster is generated combining the profiles of the words that are included in each of them.
 
 Based on the terms that appear on the context we can build the profile of the context using the feature representation of each term from the QA domain.
 
@@ -248,6 +310,32 @@ In order to do the experiment, the following procedure is performed \cite{Sarwar
 
 This procedure is repeated 20 times and 5-cross fold validation is used to split the data in training and test sets. Moreover, various contexts are considered, which are detailed in the following section.
 
+\subsection{Methods compared}
+
+We compared several recommendation techniques to integrate contextual information in QA recommendation. Here, we show the results of three ways of characterise the context:
+
+\begin{itemize}
+
+	\item No clustering: The words are not separated in clusters, therefore the context profile is unique. There is a single profile of the context that is built combining the profiles of the words that are included in the context.
+	\begin{equation}
+		profile_{T_c} = \sum_{t \in T_c} * profile_t
+	\end{equation}
+
+	\item Max membership: The words are used only in the cluster to whom they have the highest membership value:
+	\begin{equation}
+		profile_{cluster_l} = \sum_{t \in T} \mu^{max}_{t,l} * profile_t
+	\end{equation}
+
+	\item Weithed by membership: The cluster profiles are built combining the feature vector of each word weighted by the membership value of the word to the cluster:
+	\begin{equation}
+		profile_{cluster_l} = \sum_{t \in T} \mu_{t,l} * profile_t
+	\end{equation}
+	\noindent where $\mu_{t,l}$ is the membership of term $t$ to cluster $l$.
+
+\end{itemize}
+
+Moreover, the proposals compared have parameter $\alpha$. In the experiment we explored several values for it, here, to make the results clear, we show the results for $\alpha \in \[0.85,1.00\]$
+
 \subsection{Datasets}
 
 In the experiment there are two sources of data: The QA domain and the contextual information.
@@ -287,8 +375,46 @@ In this section, the results obtained for the different approaches compared are 
 
 Table \ref{tab:results-ndcg-3dprinting} shows the results of the compared approaches in the 3dprinting site.
 
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.33\textwidth]{figures/ndcg-results-proposal-context-no-clustering.eps}
+    \caption{Contextual dataset used in the experiment, where each day has a different status count.}
+    \label{fig:ndcg-results-proposal-context-no-clustering}
+    \includegraphics[width=0.33\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
+    \label{fig:ndcg-results-proposal-context-fuzzy-clustering-max}
+    \includegraphics[width=0.33\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
+    \caption{Contextual dataset used in the experiment, where each day has a different status count.}
+    \label{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}
+\end{figure}
 
-\textbf{\textit{Acknowledgements:}} This research work was partially supported by the Research Project TIN-2015-66524-P, the Spanish FPU fellowship (FPU13/01151), and also the Eureka SD Project (agreement number 2013-2591).
+Figures \ref{fig:ndcg-results-proposal-context-no-clustering}, \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-max} and \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership} show the results of the 3 techniques compared in the 3dprinting QA dataset. The three figures have the same scale and, in X axis, alpha parameter is shown. The series denote the context, hence its position show the results of the proposal with the correspongding alpha value for the day.
+
+In Figure \ref{fig:ndcg-results-proposal-context-no-clustering} it can be noticed that, alghout the proposal improves the results of LSA in some days (contexts), the improvement does not compensates for the decay in performance in other days. Focusing in the context of 2017-11-28, LSAContext improves the results of LSA for all alpha values.
+
+Figure \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership} shows that LSAContextFuzzy improves the results of LSA. It obtains better results than LSAContext, given that the results are distributed more upper than those of the LSAContext aproach. If we focus on the results on single days, it can be noticed that LSAContextFuzzy improves greatly for the context of day 2017-11-28. However, there is a major decay in three contexts: 2017-11-29, 2017-11-30 and 2017-12-15 in which the proposal does not reaches the value of the LSA approach. If we focus specifically on the day 2017-12-12, there is a decay for $\alpha \in [0.90,0.95]$ but it improves the results of LSA for $\alpha \in [0.96,0.99]$.
+
+Figure \ref{fig:ndcg-resutls-proposal-context-fuzzy-clustering-max} shows that LSAContextClustering improves the results of LSA for most of the contexts explored. It consistenly obtains better results than LSA, althought the improvements.
+
+Figure \ref{fig:ndcg-results-3proposals-average} sumarises the results of the three proposals as compared to the LSA approach. It shows that LSAContextFuzzy and LSAContext, although they obtain better results than LSA in some contexts, in average they do not provide improvement. In the case of LSAContextClustering, it overcomes the results of all the remaining approaches for $\alpha \in [0.90,0.97]$. For $\alpha=0.94$ it reached the maximum average NDCG across all contexts explored, hence this value is the best one in this QA domain.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.33\textwidth]{figures/ndcg-results-3proposals-average.eps}
+    \caption{Average NDCG of the compared approaches in all contexts.}
+    \label{fig:ndcg-results-3proposals-average}
+\end{figure}
+
+The best approaches of the compared ones is the LSAContextClustering with $\alpha=0.94$. This value has been optimised for the 3dprinting QA dataset, hence, for other domains it needs to be adjusted. This parameter provides the LSAContextClustering with flexibility to adapt to different QA domains.
+
+\section{Conclusions}
+
+In this paper, we have explored the application of contextual information in the QA domain recommendation. LSAContextClustering first builds the LSA model associated to the QA domain. After that, it builds the user profile combining the QA profiles with the user preferences. In parallel, it builds the profiles of the context, which is separated in a number of clusters and a context profile is built for each of them. The following step is to combine the user profile with the context profile that is more close to their preferences, which is achieved computing the cosineCoefficient between the profiles. This combined profile allows the system to know user preferences and also consider contextual information in the recommendation. 
+
+We performed a case study to compare various configurations for the proposed approach. It shows that all improvements done provide better results as compared to the baseline method (LSA). We found out that the best way to generate each context cluster profile is to select only the words whose membership value is the highest across clusters in the explored QA domain.
+
+In this scenario, contextual information is a key source of information to provide users with relevant recommendations that allow them to better understand the current scenario. The provided system is a relevant tool in the completion of user knowledge through the recommendation of QA items.
+
+\textbf{\textit{Acknowledgements:}} This research work was partially supported by the Research Project TIN-2015-66524-P, the Spanish FPU fellowship (FPU13/01151).
 
 \section*{Bibliography}
 \bibliography{rs-bibliography}
