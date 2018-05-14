@@ -146,16 +146,28 @@ This section provides the required background for the current research, includin
 
 An accurate definition of Recommender System (RS) given by R. Burke \cite{Burke2002} is \emph{"any system that produces individualized recommendations as output or has the effect of guiding the user in a personalized way to interesting or useful objects in a large space of possible options"}. Within RSs, various techniques can be distinguished based on the knowledge source \cite{DePessemier2016}: demographic, knowledge-based, community-based, content-based, collaborative, and hybrid recommendations. Among them, we focus on CBRSs.
 
-The various CBRSs approaches can be classified regarding the item representation. With this regard there are (i) field-based representations, and (ii) free-text representation. 
+The various CBRSs approaches can be classified regarding the item representation. Here we focus on those CBRSs that use a vector space modelling to represent items. With this regard there are CBRS with (i) field-based representations, and (ii) free-text representation. 
 
-In feature-based representations (also called fields or properties), items are usually stored in a database table where rows are items and columns are the item features. Each item might have a different value for each of these features. The recommender system here usually tries to learn a model that uses such information to approximate the rating function.
+In feature-based representations, items are usually stored in a database table where rows are items and columns are the item features (also called fields or properties) and each item might have a different value for each of these features. The recommender system learns a model that uses such information to approximate the rating function. With this regard there are proposals based on weighting features importance regading the user's ratings using collaborative information \cite{Symeonidis2007} or using entropy and dependence between items' features and user's ratings \cite{Castro2014}. Other approaches learn the rating function using linear regression (InterestLMS) \cite{DePessemier2016}.
 
-Hablar de mi paper de IJCIS.
+In free-text representation there is a natural language piece of text that describes the item, such as movie synopsis or that is part of the item itself, such as the content of a web page or a news article. Such a kind of unstructured data provides information about the item (called document in these systems), however, they also have the complexity of dealing with natural language due to polysemous words and synonyms. 
+
+The Tf-Idf approach is usually aplied when dealing with free-text representation items. In TfIdf, the unstructured data is converted in sctructured data stemming words \cite{Porter1980} to keep their root. This process reduces the number of features of documents unifying words such as computer, compute and computing, wich are different forms that share meaning. After that, for each document, a vector of weights of each term is generated based on the importance of the term on the document:
+
+\begin{equation}
+	w_{t,d} = tf_{t,d}*idf_{t}
+\end{equation}
+
+\begin{equation}
+	idf_t = -\log \left( \frac{N}{N_t}\right)
+\end{equation}
+\noindent where $tf_{t,d}$ is the number of occurrences of term $t$ in document $d$ and $N_t$ is the number of documents that contain the term $t$ at least once.
+
+At this point the system contains a vector space model of items. User profiles can be generated aggregating the profiles of the items that they liked in the past \cite{Symeonidis2007}. Then, the recommendation with this CBRSs is computed comparing user profiles with item profiles with the cosine correlation and the closest ones are recommended. 
+
+While TfIdf method is effective, it cannot deal with polisemy or synonym words. In order to overcome this issue, Latent Semantic Indxing (LSI) methods are applied.
 
 
-In free-text representations
-
-TfIdf.
 
 LSA sobre TfIdf.
 
