@@ -93,14 +93,48 @@ Recommender systems (GRSs) filter relevant items to users in overloaded search s
 
 \section{Introduction}\label{sec:introduction}
 
-Users satisfaction in current scenario is seriously affected by the amount of information available. This situation originates that users need to put a significant effort for finding relevant pieces of information for them. In some scenarios it might not be possible for users to explore information items in order to select the most suitable one. The \emph{information overload} problem impacts users satisfaction. Recommender Systems have been a powerful tool for alleviating information overload in large search spaces. RSs have been proven to be successful in several domains, such as e-health \cite{}, \cite{}. In this paper we focus on QA recommendation with contextual information integration.
+%Information overload and Recommender Systems
+Users satisfaction in current scenario is affected by the amount of information available. This situation originates that users need to put a significant effort for finding relevant pieces of information for them. In some scenarios it might not be possible for users to explore information items in order to select the most suitable one. The \emph{information overload} problem impacts users satisfaction. Recommender Systems have been a powerful tool for alleviating information overload in large search spaces. RSs have been proven to be successful in several domains, such as e-health \cite{}, \cite{}. In this paper we focus on QA recommendation with contextual information integration.
 
-There are several approaches within RecommenderSystems. The most widespread ones are Collaborative Filtering (CFRS) and Content Based (CBRS). The main difference among them is that CFRS focuses on user preferences, while CBRS focuses on the analysis on items descriptions. Therefore, the effectivity these recommendation approaches is subject to the quality and amount of available information.
+%RSs approaches
+There are several approaches within RecommenderSystems. The most widespread ones are Collaborative Filtering (CFRS) and Content Based (CBRS). The main difference among them is that CFRS focuses on user preferences, while CBRS focuses on the analysis on items descriptions. Therefore, the performance of these recommendation approaches is subject to the quality and amount of available information.
 
+%CBRSs
 Within CBRSs we distinguish two kinds of CBRSs: (i) based on item features, (ii) based on items descriptions. In this paper we focus on the latter, given that QA items have a strong component of textual information for both explaining the question and answering it. Although CBRSs need some input from user preferences (user cold-start) and suffer from overfitting (lack of diversity in recommendations) \cite{}, CBRS have demonstrated their utility when new items are introduced in the system, i.e., item cold-start \cite{Aggarwal2016}. This feature makes it interesting to apply CBRS approaches in domains where new items are constantly introduced, such as web pages or news. In this direction, QA recommendation share the features that make it interesting to apply CBRSs, hence, we focus on them.
 
 %Boundary of knowledge in QA recommendation with CBRSs.
 In this scenario there are several proposals for QA recommendation with CBRS approaches. 
+
+
+
+
+%Parrafo de contexto: Explicación de por qué introducimos basado en contexto.
+Justification of context-aware recommendation.
+
+
+%Boundary of knowledge of QA recommendation with contextual information:
+
+
+
+\section{Preliminaries}
+
+This section provides the required background for the current research, including basics about CBRS, and related works in content based recommendation with context awareness.
+
+\subsection{Content-based recommender systems.}
+
+An accurate definition of Recommender System (RS) given by R. Burke \cite{Burke2002} is \emph{"any system that produces individualized recommendations as output or has the effect of guiding the user in a personalized way to interesting or useful objects in a large space of possible options"}. Within RSs, various techniques can be distinguished. 
+
+Hablar de mi paper de IJIS.
+
+TfIdf.
+
+LSA sobre TfIdf.
+
+Hibridacion con colaborativos, \cite{Symeonidis2007} 
+
+Otras basadas en contenido
+
+\subsubsection{CBRSs relacionados con la propuesta}
 
 EnTagRec \cite{Wang2014} is not a CBRS, but it works on keywords. An Enhanced Tag Recommendation System for Software Information Sites. Individual user recommender system to retrieve tags for a new post that is evaluated in several STS: Stack Overflow, Ask Ubuntu, Ask Different, and Free code. Offline evaluation with Precision@10 and Recall@10.
 
@@ -113,11 +147,26 @@ EnTagRec \cite{Wang2014} is not a CBRS, but it works on keywords. An Enhanced Ta
 \cite{Zheng2015b} A Hybrid Trust-Based Recommender System for Online Communities of Practice. It is a recommender system to find answerers to a specific question formulated by an asker. This RS uses the hybrid trust network of the asker and combines content analysis to extract the keywords of the question. They achieve higher precision and recall. They perform offline experimentation to detect whether the
 
 
-%Parrafo de contexto: Explicación de por qué introducimos basado en contexto.
-Justification of context-aware recommendation.
+\subsection{Context-aware recommender systems.}
 
+Traditional recommender systems can be classified on six classes based on the knowledge source \cite{DePessemier2016}: demographic recommendations, knowledge-based
+recommendations, community-based recommendations, content-based recommendations,
+collaborative recommendations, and hybrid recommendations. As noted by R.Burke \cite{Burke2002} other sources of information can be considered in the recommendation, such as the context in which the recommendation is received by users, and F. Ricci \cite{Ricci2012contextualizing} stated that the conditions or circumstances in which the recommendation is delivered significantly affect the decision behaviour of the users. Therefore, the consideration of users' context is key to provide interesting recommendations.
 
-%Boundary of knowledge of QA recommendation with contextual information:
+With this regard, the various context-aware recommendation approaches can be classified into three classes \cite{Adomavicius2011}:
+\begin{itemize}
+	\item Pre-filtering: The system selects the feedback gathered in the same context in which the recommendation is delivered to the user.
+	\item Post-filtering: The recommendations are generated first without considering contextual information. After that, the item predictions are modified regarding the specific context of the users, possibly filtering out some items.
+	\item Contextual modelling: The contextual information is directly integrated in the model that is used to recommend.
+\end{itemize}
+
+In Contextual Pre-filtering, the approach is to filter out the information that was not not gathered in the current context. With this regard, in traditional RSs the information is viewed as a function $R: User \times Item \rightarrow Rating $ that the RS tries to approximate. In CARS, the information can be viewed as a three dimensional cube $User \times Item \times Context \rightarrow Rating$. Contextual pre-filtering selects only the information relative to the context, hence, it tries to approximate function $R_{context}: User \times Item \rightarrow Ratings_{context}$ This way, they only consider ratings generated in the context in which the recommendation is delivered to the user. Contextual pre-filtering is a simple and effective approach, but it is affected by data sparsity when there is not enough information generated in all contexts to provide accurate recommendations. Some researchers have tried to overcome this issue through context-generalization \cite{Adomavicius2011}, that generalizes the context when the information available in the current context is not enough and includes information from the broader context.
+
+In contextual post-filtering, the recommendations are first computed overlooking the contextual information, as in traditional RSs. After this initial step, recommendations are tuned to adjust to the current context \cite{Panniello2009}, either removing irrelevant items or through a weighting function that changes predictions of items regarding the suitability of target user's context. A previous work \cite{} evaluated them in the same scenarios and compared pre- and post-filtering approaches. It determined that neither pre-filtering nor post-filtering completely dominates the other and a study to determine the best approach is needed in each specific case.
+
+Previous approaches try to reduce the CARS problem to a two dimensional one that can be solved with traditional RSs. This is not the case in contextual modelling, in which contextual information is directly incorporated in the recommendation model to recommend. With this regard, researchers have explored heuristic-based \cite{Panniello2014}, probabilistic \cite{Adomavicius2005b}, or matrix factorization \cite{Baltrunas2011c} contextual modelling approaches.
+
+\subsubsection{CA-CBRSs relacionacos con este trabajo}
 
 \cite{Ponzanelli2014} Libra: RS for supporting programmers complete issues and bugs using query completion. They perform online testing assessing the percent of success of a programmer that is using Libra with a control group.
 
@@ -129,28 +178,9 @@ Justification of context-aware recommendation.
 
 \cite{DePessemier2016} This paper does A user-centric evaluation of context-aware recommendations for a mobile news service. Hace una evaluación de un Sistema de recomendación basado en contenido con información contextual. Es interesante para tenerlo en cuenta como técnica a comparar
 
-\section{Preliminaries}
-
-This section provides the required background for the current research, including basics about CBRS, and related works in content based recommendation with context awareness.
-
-\subsection{Content-based recommender systems.}
-
-An accurate definition of Recommender System (RS) given by R. Burke \cite{Burke2002} is \emph{"any system that produces individualized recommendations as output or has the effect of guiding the user in a personalized way to interesting or useful objects in a large space of possible options"}. 
-
-\subsection{Context-aware recommender systems.}
-
-Traditional recommender systems can be classified on six classes based on the knowledge source \cite{DePessemier2016}: demographic recommendations, knowledge-based
-recommendations, community-based recommendations, content-based recommendations,
-collaborative recommendations, and hybrid recommendations. As noted by R.Burke \cite{Burke2002} other sources of information can be considered in the recommendation, such as the context in which the recommendation is received by users, and F. Ricci \cite{Ricci2012contextualizing} stated that the conditions or circustances in which the recommendation is delivered significantly affect the decision behaviour of the users. Therefore, the consideration of users' context is key to provide interesting recommendations.
-
-With this regard, the varius context-aware recommendation approaches can be classiffied into three classes \cite{Adomavicius2011}:
-\begin{itemize}
-	\item Pre-filtering: The system selects the feedback gathered in the same context in which the recommendation is delivered to the user.
-	\item Post-filtering: The recommendations are generated first without considering contextual information. After that, the item preditions are modified regarding the specific context of the users, possibly filtering out some items.
-	\item Contextual modelling:
-\end{itemize}
 
 \subsection{Related works in context-aware content-based recommender systems.}
+
 
 
 \section{Proposal}
@@ -334,7 +364,7 @@ We compared several recommendation techniques to integrate contextual informatio
 
 \end{itemize}
 
-Moreover, the proposals compared have parameter $\alpha$. In the experiment we explored several values for it, here, to make the results clear, we show the results for $\alpha \in \[0.85,1.00\]$
+Moreover, the proposals compared have parameter $\alpha$. In the experiment we explored several values for it, here, to make the results clear, we show the results for $\alpha \in [0.85,1.00]$ with increments of $0.01$
 
 \subsection{Datasets}
 
