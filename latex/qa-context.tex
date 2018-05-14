@@ -102,9 +102,20 @@ There are several approaches within RecommenderSystems. The most widespread ones
 %CBRSs
 Within CBRSs we distinguish two kinds of CBRSs: (i) based on item features, (ii) based on items descriptions. In this paper we focus on the latter, given that QA items have a strong component of textual information for both explaining the question and answering it. Although CBRSs need some input from user preferences (user cold-start) and suffer from overfitting (lack of diversity in recommendations) \cite{}, CBRS have demonstrated their utility when new items are introduced in the system, i.e., item cold-start \cite{Aggarwal2016}. This feature makes it interesting to apply CBRS approaches in domains where new items are constantly introduced, such as web pages or news. In this direction, QA recommendation share the features that make it interesting to apply CBRSs, hence, we focus on them.
 
-%Boundary of knowledge in QA recommendation with CBRSs.
-In this scenario there are several proposals for QA recommendation with CBRS approaches. 
+\subsubsection{CBRSs relacionados con la propuesta}
 
+%Boundary of knowledge in QA recommendation with CBRSs.
+In this scenario there are several proposals for QA recommendation with CBRS approaches.
+
+EnTagRec \cite{Wang2014} is not a CBRS, but it works on keywords. An Enhanced Tag Recommendation System for Software Information Sites. Individual user recommender system to retrieve tags for a new post that is evaluated in several STS: Stack Overflow, Ask Ubuntu, Ask Different, and Free code. Offline evaluation with Precision@10 and Recall@10.
+
+\cite{Shao2017} Recommending Answerers for Stack Overflow with LDA Model. Recommends unanswered questions to users to encourage faster answers. Matches topic of the question with the expertise of the target user. Offline evaluation on StackOverflow dump. Accuracy as evaluation measure.
+
+\cite{Odiete2017} Recommending Programming Languages by Identifying Skill Gaps Using Analysis of Experts. A Study of Stack Overflow. Helps developers expand their knowledge by suggesting them to learn the programming language that fits his/her expertise gaps using expertise graphs.
+
+\cite{Lipczak2010} Learning in efficient tag recommendation. Tag recommendation system. It does not propose a new algorithm, but a way to update the model in order to incorporate new information to it without needing to build it from scratch. It does offline evaluation with DelicioUs dataset and Stack Overflow. Precision and recall are used as evaluation measures.
+
+\cite{Zheng2015b} A Hybrid Trust-Based Recommender System for Online Communities of Practice. It is a recommender system to find answerers to a specific question formulated by an asker. This RS uses the hybrid trust network of the asker and combines content analysis to extract the keywords of the question. They achieve higher precision and recall. They perform offline experimentation to detect whether the
 
 
 
@@ -113,6 +124,17 @@ Justification of context-aware recommendation.
 
 
 %Boundary of knowledge of QA recommendation with contextual information:
+\subsection{CA-CBRSs relacionados con este trabajo}
+
+\cite{Ponzanelli2014} Libra: RS for supporting programmers complete issues and bugs using query completion. They perform online testing assessing the percent of success of a programmer that is using Libra with a control group.
+
+\cite{Ponzanelli2017} Harnessing stack overflow for the IDE. Presents a plug-in for eclipse that enables stack overflow searches contextualized to the language and other relevant. It does no evaluation whatsoever.
+
+\cite{Ponzanelli2014b} Prompter: A Self-Confident Recommender System. The same as the previous one. Proposes a plug-in that automatically searches on stack overflow. This one notifies the user if it is confident enough of the answer provided. The user can provide the confidence level that has to be reached to trigger “proactive” help.
+
+\cite{Parikh2009} Buzz-based recommender system. This system looks somewhat similar to the system that we want to develop, but on eCommerce. This one is based on buzzwords used in the text input of the search within eBay. Our work will be based on buzzwords detected on twitter to recommend historic questions on StackExchange (Any site).
+
+\cite{DePessemier2016} This paper does A user-centric evaluation of context-aware recommendations for a mobile news service. Hace una evaluación de un Sistema de recomendación basado en contenido con información contextual. Es interesante para tenerlo en cuenta como técnica a comparar
 
 
 
@@ -141,18 +163,6 @@ Hibridacion con colaborativos, \cite{Symeonidis2007}
 
 Otras basadas en contenido
 
-\subsubsection{CBRSs relacionados con la propuesta}
-
-EnTagRec \cite{Wang2014} is not a CBRS, but it works on keywords. An Enhanced Tag Recommendation System for Software Information Sites. Individual user recommender system to retrieve tags for a new post that is evaluated in several STS: Stack Overflow, Ask Ubuntu, Ask Different, and Free code. Offline evaluation with Precision@10 and Recall@10.
-
-\cite{Shao2017} Recommending Answerers for Stack Overflow with LDA Model. Recommends unanswered questions to users to encourage faster answers. Matches topic of the question with the expertise of the target user. Offline evaluation on StackOverflow dump. Accuracy as evaluation measure.
-
-\cite{Odiete2017} Recommending Programming Languages by Identifying Skill Gaps Using Analysis of Experts. A Study of Stack Overflow. Helps developers expand their knowledge by suggesting them to learn the programming language that fits his/her expertise gaps using expertise graphs.
-
-\cite{Lipczak2010} Learning in efficient tag recommendation. Tag recommendation system. It does not propose a new algorithm, but a way to update the model in order to incorporate new information to it without needing to build it from scratch. It does offline evaluation with DelicioUs dataset and Stack Overflow. Precision and recall are used as evaluation measures.
-
-\cite{Zheng2015b} A Hybrid Trust-Based Recommender System for Online Communities of Practice. It is a recommender system to find answerers to a specific question formulated by an asker. This RS uses the hybrid trust network of the asker and combines content analysis to extract the keywords of the question. They achieve higher precision and recall. They perform offline experimentation to detect whether the
-
 
 \subsection{Context-aware recommender systems.}
 
@@ -170,21 +180,6 @@ In Contextual Pre-filtering, the approach is to filter out the information that 
 In contextual post-filtering, the recommendations are first computed overlooking the contextual information, as in traditional RSs. After this initial step, recommendations are tuned to adjust to the current context \cite{Panniello2009}, either removing irrelevant items or through a weighting function that changes predictions of items regarding the suitability of target user's context. A previous work \cite{} evaluated them in the same scenarios and compared pre- and post-filtering approaches. It determined that neither pre-filtering nor post-filtering completely dominates the other and a study to determine the best approach is needed in each specific case.
 
 Previous approaches try to reduce the CARS problem to a two dimensional one that can be solved with traditional RSs. This is not the case in contextual modelling, in which contextual information is directly incorporated in the recommendation model to recommend. With this regard, researchers have explored heuristic-based \cite{Panniello2014}, probabilistic \cite{Adomavicius2005b}, or matrix factorization \cite{Baltrunas2011c} contextual modelling approaches.
-
-\subsubsection{CA-CBRSs relacionacos con este trabajo}
-
-\cite{Ponzanelli2014} Libra: RS for supporting programmers complete issues and bugs using query completion. They perform online testing assessing the percent of success of a programmer that is using Libra with a control group.
-
-\cite{Ponzanelli2017} Harnessing stack overflow for the IDE. Presents a plug-in for eclipse that enables stack overflow searches contextualized to the language and other relevant. It does no evaluation whatsoever.
-
-\cite{Ponzanelli2014b} Prompter: A Self-Confident Recommender System. The same as the previous one. Proposes a plug-in that automatically searches on stack overflow. This one notifies the user if it is confident enough of the answer provided. The user can provide the confidence level that has to be reached to trigger “proactive” help.
-
-\cite{Parikh2009} Buzz-based recommender system. This system looks somewhat similar to the system that we want to develop, but on eCommerce. This one is based on buzzwords used in the text input of the search within eBay. Our work will be based on buzzwords detected on twitter to recommend historic questions on StackExchange (Any site).
-
-\cite{DePessemier2016} This paper does A user-centric evaluation of context-aware recommendations for a mobile news service. Hace una evaluación de un Sistema de recomendación basado en contenido con información contextual. Es interesante para tenerlo en cuenta como técnica a comparar
-
-
-\subsection{Related works in context-aware content-based recommender systems.}
 
 
 
@@ -453,6 +448,7 @@ In this scenario, contextual information is a key source of information to provi
 
 \section*{Bibliography}
 \bibliography{rs-bibliography}
+\bibliographystyle{plain}
 
 \end{spacing}
 
