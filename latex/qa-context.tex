@@ -122,9 +122,16 @@ This section provides the required background for the current research, includin
 
 \subsection{Content-based recommender systems.}
 
-An accurate definition of Recommender System (RS) given by R. Burke \cite{Burke2002} is \emph{"any system that produces individualized recommendations as output or has the effect of guiding the user in a personalized way to interesting or useful objects in a large space of possible options"}. Within RSs, various techniques can be distinguished. 
+An accurate definition of Recommender System (RS) given by R. Burke \cite{Burke2002} is \emph{"any system that produces individualized recommendations as output or has the effect of guiding the user in a personalized way to interesting or useful objects in a large space of possible options"}. Within RSs, various techniques can be distinguished based on the knowledge source \cite{DePessemier2016}: demographic, knowledge-based, community-based, content-based, collaborative, and hybrid recommendations. Among them, we focus on CBRSs.
 
-Hablar de mi paper de IJIS.
+The various CBRSs approaches can be classified regarding the item representation. With this regard there are (i) field-based representations, and (ii) free-text representation. 
+
+In feature-based representations (also called fields or properties), items are usually stored in a database table where rows are items and columns are the item features. Each item might have a different value for each of these features. The recommender system here usually tries to learn a model that uses such information to approximate the rating function.
+
+Hablar de mi paper de IJCIS.
+
+
+In free-text representations
 
 TfIdf.
 
@@ -149,9 +156,7 @@ EnTagRec \cite{Wang2014} is not a CBRS, but it works on keywords. An Enhanced Ta
 
 \subsection{Context-aware recommender systems.}
 
-Traditional recommender systems can be classified on six classes based on the knowledge source \cite{DePessemier2016}: demographic recommendations, knowledge-based
-recommendations, community-based recommendations, content-based recommendations,
-collaborative recommendations, and hybrid recommendations. As noted by R.Burke \cite{Burke2002} other sources of information can be considered in the recommendation, such as the context in which the recommendation is received by users, and F. Ricci \cite{Ricci2012contextualizing} stated that the conditions or circumstances in which the recommendation is delivered significantly affect the decision behaviour of the users. Therefore, the consideration of users' context is key to provide interesting recommendations.
+In addition to the information traditionally used by RSs to recommend, as noted by R.Burke \cite{Burke2002}, other sources of information can be considered in the recommendation, such as the context in which the recommendation is received by users. F. Ricci \cite{Ricci2012contextualizing} stated that the conditions or circumstances in which the recommendation is delivered significantly affect the decision behaviour of the users. Therefore, the consideration of users' context is key to provide interesting recommendations.
 
 With this regard, the various context-aware recommendation approaches can be classified into three classes \cite{Adomavicius2011}:
 \begin{itemize}
