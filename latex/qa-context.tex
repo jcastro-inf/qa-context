@@ -100,41 +100,26 @@ Users satisfaction in current scenario is affected by the amount of information 
 There are several approaches within RecommenderSystems. The most widespread ones are Collaborative Filtering (CFRS) and Content Based (CBRS). The main difference among them is that CFRS focuses on user preferences, while CBRS focuses on the analysis on items descriptions. Therefore, the performance of these recommendation approaches is subject to the quality and amount of available information.
 
 %CBRSs
-Within CBRSs we distinguish two kinds of CBRSs: (i) based on item features, (ii) based on items descriptions. In this paper we focus on the latter, given that QA items have a strong component of textual information for both explaining the question and answering it. Although CBRSs need some input from user preferences (user cold-start) and suffer from overfitting (lack of diversity in recommendations) \cite{}, CBRS have demonstrated their utility when new items are introduced in the system, i.e., item cold-start \cite{Aggarwal2016}. This feature makes it interesting to apply CBRS approaches in domains where new items are constantly introduced, such as web pages or news. In this direction, QA recommendation share the features that make it interesting to apply CBRSs, hence, we focus on them.
+Within CBRSs we distinguish two kinds of CBRSs: (i) based on item features, (ii) based on items descriptions. In this paper we focus on the latter, given that QA items have a strong component of textual information for both explaining the question and answering it. Although CBRSs suffer from user cold start because they need some input from user preferences and lack of diversity in recommendations \cite{}, CBRS have demonstrated their utility when new items are introduced in the system, i.e., in scenarios with strong item cold-start \cite{Aggarwal2016}. This feature makes it interesting to apply CBRS approaches in domains where new items are constantly introduced, such as web pages or news. In this direction, QA recommendation shares the features that make it interesting to apply CBRSs, hence, we focus on them.
 
 \subsubsection{CBRSs relacionados con la propuesta}
 
 %Boundary of knowledge in QA recommendation with CBRSs.
-In this scenario there are several proposals for QA recommendation with CBRS approaches.
+In the QA domain recommendation scenario there are several proposals for QA recommendation with CBRS approaches. Shao et al.\cite{Shao2017} propose to apply Latent Dirichlet Allocation to label questions in a latent semantic feature category and find the most suitable answerers. In this direction, Zheng et al. \cite{Zheng2015b} combine trust-based analysis of answerers with content analysis. While these approaches aim to reduce the answer time searching for adequate answerer for new posted questions, there are other RSs that aim to expand users' knowledge. Odiete et al. \cite{Odiete2017} analyse users expertise and build a graph of expertise used to find gaps in their knowledge and suggest.
 
-EnTagRec \cite{Wang2014} is not a CBRS, but it works on keywords. An Enhanced Tag Recommendation System for Software Information Sites. Individual user recommender system to retrieve tags for a new post that is evaluated in several STS: Stack Overflow, Ask Ubuntu, Ask Different, and Free code. Offline evaluation with Precision@10 and Recall@10.
+%EnTagRec \cite{Wang2014} is not a CBRS, but it works on keywords. An Enhanced Tag Recommendation System for Software Information Sites. Individual user recommender system to retrieve tags for a new post that is evaluated in several STS: Stack Overflow, Ask Ubuntu, Ask Different, and Free code. Offline evaluation with Precision@10 and Recall@10.
 
-\cite{Shao2017} Recommending Answerers for Stack Overflow with LDA Model. Recommends unanswered questions to users to encourage faster answers. Matches topic of the question with the expertise of the target user. Offline evaluation on StackOverflow dump. Accuracy as evaluation measure.
+%\cite{Lipczak2010} Learning in efficient tag recommendation. Tag recommendation system. It does not propose a new algorithm, but a way to update the model in order to incorporate new information to it without needing to build it from scratch. It does offline evaluation with DelicioUs dataset and Stack Overflow. Precision and recall are used as evaluation measures.
 
-\cite{Odiete2017} Recommending Programming Languages by Identifying Skill Gaps Using Analysis of Experts. A Study of Stack Overflow. Helps developers expand their knowledge by suggesting them to learn the programming language that fits his/her expertise gaps using expertise graphs.
+In this work we focus on recommending questions to users that are both in their area of interest, and that are relevant regarding the current context. Therefore, it is interesting to expore Context-Aware CBRSs (CA-CBRSs), which integrate contextual features to the content based recommendation. De Pessemier et al. \cite{DePessemier2016} consider recommendations in mobile devices as very suitable to integrate context-awareness, and uses device and time of the day to deliver contextualized news recommendations. In QA recommendation with context-aware information, SeaHawk \cite{Ponzanelli2014} and Prompter \cite{Ponzanelli2014b} are CA-CBRSs that support programmers to complete issues and bugs using query completion and recommends StackOverflow questions, where the context is the specific part of the source code in which the recommendations are requested. In this direction, Libra \cite{Ponzanelli2017} also integrates recommendations but it also considers, in addition to context extracted from the Integrated Development Environment context, resources opened by the user such as urls or documents to better understand his/her context. Other works consider the context as current buzzwords to deliver currently relevant recommendations \cite{Parikh2009}
 
-\cite{Lipczak2010} Learning in efficient tag recommendation. Tag recommendation system. It does not propose a new algorithm, but a way to update the model in order to incorporate new information to it without needing to build it from scratch. It does offline evaluation with DelicioUs dataset and Stack Overflow. Precision and recall are used as evaluation measures.
+In this paper we propose a CA-CBRS that recommends QA items aimed to complete users' information about current context with the knowledge provided by users of QA systems. In this scenario, the context is stracted from microblogging systems to characterise current context. However, context extractes this way is often noisy or several topics are mixed. With this regard we propose to cluster context to identify the topics that are being discussed, and after that the context most suitable to users preferences is selected in ordert to provide contextualized recommendations that are also adjusted to users' individual interests. This way, we can build a user profile that combines preferences and context.
 
-\cite{Zheng2015b} A Hybrid Trust-Based Recommender System for Online Communities of Practice. It is a recommender system to find answerers to a specific question formulated by an asker. This RS uses the hybrid trust network of the asker and combines content analysis to extract the keywords of the question. They achieve higher precision and recall. They perform offline experimentation to detect whether the
+The remaining of this paper is structured as follows. Section \ref{sec:preliminaries} provides a background of CBRSs and CA-CBRSs. Secion \ref{sec:proposal} introduces in further detail our proposal of CA-CBRS for QA recommendation. Section \ref{sec:case-study} shows a case study performed to evaluate the proposal and discuss the findings. Finally, Section \ref{sec:conclusions} concludes the paper.
 
+%\cite{Parikh2009} Buzz-based recommender system. This system looks somewhat similar to the system that we want to develop, but on eCommerce. This one is based on buzzwords used in the text input of the search within eBay. Our work will be based on buzzwords detected on twitter to recommend historic questions on StackExchange (Any site).
 
-
-%Parrafo de contexto: Explicación de por qué introducimos basado en contexto.
-Justification of context-aware recommendation.
-
-
-%Boundary of knowledge of QA recommendation with contextual information:
-\subsection{CA-CBRSs relacionados con este trabajo}
-
-\cite{Ponzanelli2014} Libra: RS for supporting programmers complete issues and bugs using query completion. They perform online testing assessing the percent of success of a programmer that is using Libra with a control group.
-
-\cite{Ponzanelli2017} Harnessing stack overflow for the IDE. Presents a plug-in for eclipse that enables stack overflow searches contextualized to the language and other relevant. It does no evaluation whatsoever.
-
-\cite{Ponzanelli2014b} Prompter: A Self-Confident Recommender System. The same as the previous one. Proposes a plug-in that automatically searches on stack overflow. This one notifies the user if it is confident enough of the answer provided. The user can provide the confidence level that has to be reached to trigger “proactive” help.
-
-\cite{Parikh2009} Buzz-based recommender system. This system looks somewhat similar to the system that we want to develop, but on eCommerce. This one is based on buzzwords used in the text input of the search within eBay. Our work will be based on buzzwords detected on twitter to recommend historic questions on StackExchange (Any site).
-
-\cite{DePessemier2016} This paper does A user-centric evaluation of context-aware recommendations for a mobile news service. Hace una evaluación de un Sistema de recomendación basado en contenido con información contextual. Es interesante para tenerlo en cuenta como técnica a comparar
+%\cite{DePessemier2016} This paper does A user-centric evaluation of context-aware recommendations for a mobile news service. Hace una evaluación de un Sistema de recomendación basado en contenido con información contextual. Es interesante para tenerlo en cuenta como técnica a comparar
 
 
 
@@ -163,17 +148,11 @@ The Tf-Idf approach is usually aplied when dealing with free-text representation
 \end{equation}
 \noindent where $tf_{t,d}$ is the number of occurrences of term $t$ in document $d$ and $N_t$ is the number of documents that contain the term $t$ at least once.
 
-At this point the system contains a vector space model of items. User profiles can be generated aggregating the profiles of the items that they liked in the past \cite{Symeonidis2007}. Then, the recommendation with this CBRSs is computed comparing user profiles with item profiles with the cosine correlation and the closest ones are recommended. 
+At this point the system contains a vector space model of items. User profiles can be generated aggregating the profiles of the items that they liked in the past \cite{Symeonidis2007}. Then, the recommendation with this CBRS is computed comparing user profiles with item profiles with the cosine correlation and the closest ones are recommended. 
 
-While TfIdf method is effective, it cannot deal with polisemy or synonym words. In order to overcome this issue, Latent Semantic Indexing (LSI) is applied \cite{deGemmis2015}. In LSI, the term-document matrix is factorised with Singular Value Decomposition(SVD) (see Figure \ref{fig:content-based-lsi-svd}) to reduce it to orthogonal dimensions and keep the $k$ most relevant singular values. This way, a reduced feature space is defined, which properly manages noise and redundancy of terms. User profiles are generated from this feature-space definition through a linear combination of document profiles that they liked \cite{Bambini2011}. Then, recommendations are generated comparing user and document profiles with cosine correlation coefficient.
+While TfIdf method is effective, it cannot deal with polisemy or synonym words. In order to overcome this issue, Latent Semantic Indexing (LSI) is applied \cite{deGemmis2015}. In LSI, the term-document matrix is factorised with Singular Value Decomposition (SVD) to reduce it to orthogonal dimensions and keep the $k$ most relevant singular values (see Figure \ref{fig:content-based-lsi-svd}). This way, a reduced feature space is defined, which properly manages noise and redundancy of terms. User profiles are generated from this feature-space definition through a linear combination of document profiles that they liked \cite{Bambini2011}. Then, recommendations are generated comparing user and document profiles with cosine correlation coefficient.
 
-(incluir imagen con la descomposición de la matriz TfIdf con SVD: TfIdf=U.s.V^t)
-
-
-
-
-Otras basadas en contenido
-
+(incluir imagen con la descomposición de la matriz TfIdf con SVD: $TfIdf=U.s.V^t$)
 
 \subsection{Context-aware recommender systems.}
 
@@ -190,8 +169,7 @@ In Contextual Pre-filtering, the approach is to filter out the information that 
 
 In contextual post-filtering, the recommendations are first computed overlooking the contextual information, as in traditional RSs. After this initial step, recommendations are tuned to adjust to the current context \cite{Panniello2009}, either removing irrelevant items or through a weighting function that changes predictions of items regarding the suitability of target user's context. A previous work \cite{} evaluated them in the same scenarios and compared pre- and post-filtering approaches. It determined that neither pre-filtering nor post-filtering completely dominates the other and a study to determine the best approach is needed in each specific case.
 
-Previous approaches try to reduce the CARS problem to a two dimensional one that can be solved with traditional RSs. This is not the case in contextual modelling, in which contextual information is directly incorporated in the recommendation model to recommend. With this regard, researchers have explored heuristic-based \cite{Panniello2014}, probabilistic \cite{Adomavicius2005b}, or matrix factorization \cite{Baltrunas2011c} contextual modelling approaches.
-
+Previous approaches try to reduce the CARS problem to a two dimensional one that can be solved with traditional RSs. This is not the case in contextual modelling, in which contextual information is directly integrated in the recommendation model to recommend. With this regard, researchers have explored heuristic-based \cite{Panniello2014}, probabilistic \cite{Adomavicius2005b}, or matrix factorization \cite{Baltrunas2011c} contextual modelling approaches.
 
 
 \section{Proposal}
@@ -199,11 +177,7 @@ Previous approaches try to reduce the CARS problem to a two dimensional one that
 The proposal is composed of several parts:
 11
 \begin{enumerate}
-	\item Extract information of the QA domain.
-	\begin{itemize}
-		\item TfIdf
-		\item LSA over TfIdf
-	\end{itemize}
+	\item QA domain semantic analysis.
 	\item Building user preference profile: Aggregate 
 	\item Context profile building
 	\item Contextualization of user profiles
@@ -211,11 +185,9 @@ The proposal is composed of several parts:
 \end{enumerate}
 
 
-\section{Extract information of the QA domain.}
+\section{QA domain semantic analysis}
 
 In the QA dataset there is textual information of the question and its related answers. In this proposal we treat all the i
-
-\subsection{TfIdf}
 
 In this proposal we consider posts as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once stemmed, their term frequency is computed using the raw count of appearance on the document:
 \begin{equation}
