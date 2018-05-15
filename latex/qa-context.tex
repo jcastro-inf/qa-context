@@ -165,13 +165,12 @@ The Tf-Idf approach is usually aplied when dealing with free-text representation
 
 At this point the system contains a vector space model of items. User profiles can be generated aggregating the profiles of the items that they liked in the past \cite{Symeonidis2007}. Then, the recommendation with this CBRSs is computed comparing user profiles with item profiles with the cosine correlation and the closest ones are recommended. 
 
-While TfIdf method is effective, it cannot deal with polisemy or synonym words. In order to overcome this issue, Latent Semantic Indxing (LSI) methods are applied.
+While TfIdf method is effective, it cannot deal with polisemy or synonym words. In order to overcome this issue, Latent Semantic Indexing (LSI) is applied \cite{deGemmis2015}. In LSI, the term-document matrix is factorised with Singular Value Decomposition(SVD) (see Figure \ref{fig:content-based-lsi-svd}) to reduce it to orthogonal dimensions and keep the $k$ most relevant singular values. This way, a reduced feature space is defined, which properly manages noise and redundancy of terms. User profiles are generated from this feature-space definition through a linear combination of document profiles that they liked \cite{Bambini2011}. Then, recommendations are generated comparing user and document profiles with cosine correlation coefficient.
+
+(incluir imagen con la descomposición de la matriz TfIdf con SVD: TfIdf=U.s.V^t)
 
 
 
-LSA sobre TfIdf.
-
-Hibridacion con colaborativos, \cite{Symeonidis2007} 
 
 Otras basadas en contenido
 
