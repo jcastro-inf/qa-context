@@ -1,12 +1,15 @@
-file_name="qa-context.tex"
+textfile="qa-context.tex"
+auxfile="qa-context.aux"
 
-pdflatex $file_name 
-pdflatex $file_name 
-bibtex $file_name 
-pdflatex $file_name 
+pdflatex $textfile
+bibtex    $auxfile 
+pdflatex $textfile 
+pdflatex $textfile 
+
 echo "Creating diff file..."
-latexdiff old.tex $file_name > diff.tex 
-pdflatex diff.tex 
-pdflatex diff.tex 
-bibtex diff.aux 
+latexdiff old.tex $textfile > diff.tex
+
+pdflatex diff.tex
+bibtex    diff.aux
+pdflatex diff.tex
 pdflatex diff.tex

@@ -59,7 +59,7 @@
 
 \title{Improving recommendation of useful pieces of information for users to better understand current context}
 
-\begin{spacing}{2}
+\begin{spacing}{1.5}
 
 \begin{frontmatter}
 
@@ -94,15 +94,13 @@ Recommender systems (GRSs) filter relevant items to users in overloaded search s
 \section{Introduction}\label{sec:introduction}
 
 %Information overload and Recommender Systems
-Users satisfaction in current scenario is affected by the amount of information available. This situation originates that users need to put a significant effort for finding relevant pieces of information for them. In some scenarios it might not be possible for users to explore information items in order to select the most suitable one. The \emph{information overload} problem impacts users satisfaction. Recommender Systems have been a powerful tool for alleviating information overload in large search spaces. RSs have been proven to be successful in several domains, such as e-health \cite{}, \cite{}. In this paper we focus on QA recommendation with contextual information integration.
+Users satisfaction in current scenario is affected by the amount of information available. This situation originates that users need to put a significant effort for finding relevant pieces of information for them. In some scenarios it might not be possible for users to explore information items in order to select the most suitable one. The \emph{information overload} problem impacts users satisfaction. Recommender Systems have been a powerful tool for alleviating information overload in large search spaces. RSs have been proven to be successful in several domains, such as e-health \cite{}, e-commerce \cite{} or tourism \cite{}. In this paper we focus on QA recommendation with contextual information integration.
 
 %RSs approaches
 There are several approaches within RecommenderSystems. The most widespread ones are Collaborative Filtering (CFRS) and Content Based (CBRS). The main difference among them is that CFRS focuses on user preferences, while CBRS focuses on the analysis on items descriptions. Therefore, the performance of these recommendation approaches is subject to the quality and amount of available information.
 
 %CBRSs
 Within CBRSs we distinguish two kinds of CBRSs: (i) based on item features, (ii) based on items descriptions. In this paper we focus on the latter, given that QA items have a strong component of textual information for both explaining the question and answering it. Although CBRSs suffer from user cold start because they need some input from user preferences and lack of diversity in recommendations \cite{}, CBRS have demonstrated their utility when new items are introduced in the system, i.e., in scenarios with strong item cold-start \cite{Aggarwal2016}. This feature makes it interesting to apply CBRS approaches in domains where new items are constantly introduced, such as web pages or news. In this direction, QA recommendation shares the features that make it interesting to apply CBRSs, hence, we focus on them.
-
-\subsubsection{CBRSs relacionados con la propuesta}
 
 %Boundary of knowledge in QA recommendation with CBRSs.
 In the QA domain recommendation scenario there are several proposals for QA recommendation with CBRS approaches. Shao et al.\cite{Shao2017} propose to apply Latent Dirichlet Allocation to label questions in a latent semantic feature category and find the most suitable answerers. In this direction, Zheng et al. \cite{Zheng2015b} combine trust-based analysis of answerers with content analysis. While these approaches aim to reduce the answer time searching for adequate answerer for new posted questions, there are other RSs that aim to expand users' knowledge. Odiete et al. \cite{Odiete2017} analyse users expertise and build a graph of expertise used to find gaps in their knowledge and suggest.
@@ -121,9 +119,8 @@ The remaining of this paper is structured as follows. Section \ref{sec:prelimina
 
 %\cite{DePessemier2016} This paper does A user-centric evaluation of context-aware recommendations for a mobile news service. Hace una evaluación de un Sistema de recomendación basado en contenido con información contextual. Es interesante para tenerlo en cuenta como técnica a comparar
 
-
-
 \section{Preliminaries}
+\label{sec:preliminaries}
 
 This section provides the required background for the current research, including basics about CBRS, and related works in content based recommendation with context awareness.
 
@@ -138,13 +135,19 @@ In feature-based representations, items are usually stored in a database table w
 In free-text representation there is a natural language piece of text that describes the item, such as movie synopsis or that is part of the item itself, such as the content of a web page or a news article. Such a kind of unstructured data provides information about the item (called document in these systems), however, they also have the complexity of dealing with natural language due to polysemous words and synonyms. 
 
 The Tf-Idf approach is usually aplied when dealing with free-text representation items. In TfIdf, the unstructured data is converted in sctructured data stemming words \cite{Porter1980} to keep their root. This process reduces the number of features of documents unifying words such as computer, compute and computing, wich are different forms that share meaning. After that, for each document, a vector of weights of each term is generated based on the importance of the term on the document:
+\begin{equation}
+	profile^{tfidf}_{d} = \{w_{t,d}~~~~s.t.~~~~ t \in d \}
+	\label{eq:document-profile-tfidf}
+\end{equation}
 
 \begin{equation}
 	w_{t,d} = tf_{t,d}*idf_{t}
+	\label{eq:document-profile-tfidf-term-weights}
 \end{equation}
 
 \begin{equation}
 	idf_t = -\log \left( \frac{N}{N_t}\right)
+	\label{eq:document-profile-tfidf-idf}
 \end{equation}
 \noindent where $tf_{t,d}$ is the number of occurrences of term $t$ in document $d$ and $N_t$ is the number of documents that contain the term $t$ at least once.
 
@@ -171,45 +174,33 @@ In contextual post-filtering, the recommendations are first computed overlooking
 
 Previous approaches try to reduce the CARS problem to a two dimensional one that can be solved with traditional RSs. This is not the case in contextual modelling, in which contextual information is directly integrated in the recommendation model to recommend. With this regard, researchers have explored heuristic-based \cite{Panniello2014}, probabilistic \cite{Adomavicius2005b}, or matrix factorization \cite{Baltrunas2011c} contextual modelling approaches.
 
-
 \section{Proposal}
+\label{sec:proposal}
 
-The proposal is composed of several parts:
+Here, a new proposal for recommendation based on CBRS and CARS is introduced. When recommendations need to be targeted to specific contexts, it is possible to modify user profiles to include contextual information in a way such that later recommendations are both targeted to user preferences and current context.
+
+The proposed model fits into the CARS approach of contextual modelling, because it integrates contextual information in the model built by the RS. The general scheme of the proposal, LSAContextCluster, is depicted in Figure \ref{fig:proposal-scheme}, and it is composed of five phases:
 11
 \begin{enumerate}
 	\item QA domain semantic analysis.
-	\item Building user preference profile: Aggregate 
-	\item Context profile building
-	\item Contextualization of user profiles
+	\item Build user preference profile.
+	\item Build context profile.
+	\item Contextualize user profiles.
 	\item Prediction
 \end{enumerate}
 
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{figures/proposal-scheme.eps}
+	\caption{General scheme of the proposal.}
+	\label{fig:proposal-scheme}
+\end{figure}
 
-\section{QA domain semantic analysis}
+\subsection{QA domain semantic analysis}
 
-In the QA dataset there is textual information of the question and its related answers. In this proposal we treat all the i
+In a QA dataset there is textual information of the question and their related answers. This is, a given question may have several answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the tfidf document profiles $profile^{tfidf}_{d}$ are built according to Eq. \ref{fig:document-profile-tfidf}.
 
-In this proposal we consider posts as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once stemmed, their term frequency is computed using the raw count of appearance on the document:
-\begin{equation}
-	profile_{d} = \{tf_{t,d}~~~~s.t.~~~~ t \in d \} ~~~~,  ~~~~~~
-	tf_{t,d} = f_{t,d}
-\end{equation}
-
-Once the term frequency is computed for all terms in all documents, the inverse document frequency is calculated for each term.
-
-\begin{equation}
-	idf_t = - \log( N / n_t )
-\end{equation}
-
-Finally, the values of the profiles are weighted with the $idf_t$ of each term:
-\begin{equation}
-	profile_d = \{w_{t,d} ~~~~s.t. ~~~~t\in d\} ~~~~,  ~~~~~~
-	w_{t,d} = tf_{t,d}*idf_t
-\end{equation}
-
-\subsection{LSA over TfIdf}
-
-Once the tf-idf profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and words in a reduced number of features, while reducing the negative impact of synonyms in the text \cite{}. Therefore, the aim of this step is to decompose the word-document in: word-features matrix ($U$), singular value vector ($s$), and document-features matrix ($V$):
+Once the tfidf document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and words in a reduced number of features, while reducing the negative impact of synonyms in the text \cite{}. Therefore, the aim of this step is to decompose the word-document in: word-features matrix ($U$), singular value vector ($s$), and document-features matrix ($V$):
 
 \begin{equation}
 	TFIDF_{(|D|\times|T|)} = U_{(|D|\times k)} * s_{(k)} * V'_{(k \times |W|)}
@@ -219,14 +210,14 @@ The proposal performs an approximated factorisation of the TF-IDF matrix using s
 
 Hence, we obtain the profile of both terms and documents in the reduced space:
 \begin{equation}
-	profile_d = \{ U_{t,1},\dots, U_{t,k}\}
+	profile^{lsi}_d = \{ U_{t,1},\dots, U_{t,k}\}
 \end{equation}
 
 \begin{equation}
-	profile_t = \{ V_{t,1},\dots, V_{t,k}\}
+	profile^{lsi}_t = \{ V_{t,1},\dots, V_{t,k}\}
 \end{equation}
 
-\section{Building user preference profile: Aggregate words' profiles}
+\subsection{Building user preference profile: Aggregate words' profiles}
 
 At this point the proposal has built a model to describe documents and words. In order to provide personalised recommendation to users, it is needed to build user profiles in the same space. The information the system holds about users is a unary matrix that states whether the user has expressed interest in the document either by creating, commenting, or voting it:
 
@@ -267,7 +258,7 @@ This way, the user profile is built upon the profiles of the documents that belo
 
 This user profile describes the user preferences in terms of the singular values.
 
-\section{Context profile building}
+\subsection{Context profile building}
 
 In parallel with the building of the user profile, it is needed to build the context profile. In this proposal we assume that the source of the context is a microblogging system that delivers status updates by users. To narrow down the status updates that the system receives in order to focus in an aspect of the context. Therefore, there is a set of terms that must appear in the status updates.
 
@@ -283,7 +274,7 @@ Based on the terms that appear on the context we can build the profile of the co
 	profile_{T_c} = \{\sum_{t \in T_c} U_{t,1}, \dots, \sum_{t \in T_c} U_{t,k} \}
 \end{equation}
 
-\section{Contextualization of user profiles}
+\subsection{Contextualization of user profiles}
 
 Once we have the user profile and the context profile, it is needed to combine them in order to provide personalised recommendation that are suited to the current context $T_c$:
 
@@ -295,7 +286,7 @@ Once we have the user profile and the context profile, it is needed to combine t
 	profile_u^{T_c} = \{ \alpha * profile_{u,1} + (1- \alpha ) * profile_{T_c,1},\dots, \alpha * profile_{u,1} + ( 1 - \alpha ) * profile_{T_c,k} \}
 \end{equation}
 
-\section{Prediction}
+\subsection{Prediction}
 
 Once we have the contextualised user profile, we can produce a prediction of the suitability for a given item regarding the profile:
 \begin{equation}
@@ -305,12 +296,13 @@ Once we have the contextualised user profile, we can produce a prediction of the
 The recommendation is a list of documents sorted by $p_{u,d}$.
 
 \section{Experiment}
+\label{sec:case-study}
 
 To evaluate the proposal, we performed an experiment that simulates the recommendation of QA items in in various context. The remainder of the section is structured as follows. First, the settings of the experiment are described. The datasets and methods for processing are then detailed. After that, the evaluation measures are commented. Lastly, the results are analysed.
 
 \subsection{Experimental procedure}
 
-In these experiments, a RS based on LSA modelling with contextual information is evaluated (LSAContext). The baseline method to compare with is the LSA method without contextual information. 30 features are considered in LSA and LSAContext models.
+In these experiments, a RS based on LSA with contextual information is evaluated (LSAContext). The baseline method to compare with is the LSA method without contextual information. 30 features are considered in LSA and LSAContext models.
 
 In order to do the experiment, the following procedure is performed \cite{Sarwar2001}, with a modification to consider contextual information in the experiment:
 \begin{itemize}
@@ -420,6 +412,7 @@ Figure \ref{fig:ndcg-results-3proposals-average} sumarises the results of the th
 The best approaches of the compared ones is the LSAContextClustering with $\alpha=0.94$. This value has been optimised for the 3dprinting QA dataset, hence, for other domains it needs to be adjusted. This parameter provides the LSAContextClustering with flexibility to adapt to different QA domains.
 
 \section{Conclusions}
+\label{sec:conclusions}
 
 In this paper, we have explored the application of contextual information in the QA domain recommendation. LSAContextClustering first builds the LSA model associated to the QA domain. After that, it builds the user profile combining the QA profiles with the user preferences. In parallel, it builds the profiles of the context, which is separated in a number of clusters and a context profile is built for each of them. The following step is to combine the user profile with the context profile that is more close to their preferences, which is achieved computing the cosineCoefficient between the profiles. This combined profile allows the system to know user preferences and also consider contextual information in the recommendation. 
 
