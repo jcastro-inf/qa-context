@@ -180,8 +180,7 @@ Previous approaches try to reduce the CARS problem to a two dimensional one that
 Here, a new proposal for recommendation based on CBRS and CARS is introduced. When recommendations need to be targeted to specific contexts, it is possible to modify user profiles to include contextual information in a way such that later recommendations are both targeted to user preferences and current context.
 
 The proposed model fits into the CARS approach of contextual modelling, because it integrates contextual information in the model built by the RS. The general scheme of the proposal, LSAContextCluster, is depicted in Figure \ref{fig:proposal-scheme}, and it is composed of five phases:
-11
-\begin{enumerate}
+\begin{enumerate}[(i)]
 	\item QA domain semantic analysis.
 	\item Build user preference profile.
 	\item Build context profile.
@@ -198,7 +197,7 @@ The proposed model fits into the CARS approach of contextual modelling, because 
 
 \subsection{QA domain semantic analysis}
 
-In a QA dataset there is textual information of the question and their related answers. This is, a given question may have several answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the tfidf document profiles $profile^{tfidf}_{d}$ are built according to Eq. \ref{fig:document-profile-tfidf}.
+In a QA dataset there is textual information of the question and their related answers. This is, a given question may have several answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the tfidf document profiles $profile^{tfidf}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
 
 Once the tfidf document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and words in a reduced number of features, while reducing the negative impact of synonyms in the text \cite{}. Therefore, the aim of this step is to decompose the word-document in: word-features matrix ($U$), singular value vector ($s$), and document-features matrix ($V$):
 
