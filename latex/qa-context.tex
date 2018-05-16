@@ -218,7 +218,10 @@ Hence, we obtain the profile of both terms and documents in the reduced space:
 
 \subsection{Building user preference profile: Aggregate words' profiles}
 
-At this point the proposal has built a model to describe documents and words. In order to provide personalised recommendation to users, it is needed to build user profiles in the same space. The information the system holds about users is a unary matrix that states whether the user has expressed interest in the document either by creating, commenting, or voting it:
+At this point LSAContextCluster has built a model with terms and words profiles. In order to provide personalised recommendation to users, it is needed to build user profiles in the same space. The information the system holds about users is a unary matrix that states whether the user has expressed interest in the document (see Table \ref{tab:user-preferences}) either by creating, commenting, or voting it. With this table we can get the set of documents that user $u$ has expressed interest in:
+\begin{equation}
+	R_{u} = \{d ~~~~s.t.~~~~r_{u,d} \in R \}
+\end{equation}
 
 \begin{table}
 	\caption{Users' preferences over items, the rating matrix.}
@@ -244,55 +247,40 @@ $u_m$    & $r_{u_m,i_1}$ & $\dots$  & $r_{u_m,i_k}$ & $\dots$  & $r_{u_m,i_n}$
 	\end{tabular}}
 \end{table}
 
-With this table we can get the set of documents that user $u$ has expressed interest in:
+This way, the user's profile is built upon the profiles of the documents that belong to $R_u$, and describes the user's preferences in terms of the latent space:
 \begin{equation}
-	R_{u} = {d ~~~~s.t.~~~~r_{u,d} =1 }
+	profile^{lsi}_u = \sum_{d \in R_u} profile^{lsi}_d = \{ \sum_{d \in R_u} V_{d,1}, \dots, \sum_{d \in R_u} V_{d,k}\}
 \end{equation}
-
-This way, the user profile is built upon the profiles of the documents that belong to $R_u$:
-
-\begin{equation}
-	profile_u = \sum_{d \in R_u} V_d = \{ \sum_{d \in R_u} V_{d,1}, \dots, \sum_{d \in R_u} V_{d,k}\}
-\end{equation}
-
-This user profile describes the user preferences in terms of the singular values.
 
 \subsection{Context profile building}
 
-In parallel with the building of the user profile, it is needed to build the context profile. In this proposal we assume that the source of the context is a microblogging system that delivers status updates by users. To narrow down the status updates that the system receives in order to focus in an aspect of the context. Therefore, there is a set of terms that must appear in the status updates.
+In parallel with the building of the user profile, it is needed to build the context profile. LSAContextCluster source of the context is a microblogging system that delivers status updates by users. To narrow down the status updates that the system receives in order to focus in an aspect of the context a set of relevant terms is selected, which contains terms that must appear in the status updates. First, from all the terms that the context contains, LSAContextCluster filters out the terms that do not appear in the set of terms used in the QA site. 
 
-First, from al the terms that the context contains, the proposal filters out the terms that do not appear in the set of terms used in the QA site. 
+Given that the context is composed of several status updates, there can be a mixture of topics. In order to separate the topics of the context, the proposal performs a fuzzy clustering of the terms used the context. Hence, the fuzzy c-means clustering algorithm groups the terms using the feature vector of the terms, $profile^{lsi}_d$, as the word definition. The distance among words used in the clustering is based on cosine correlation coefficient.
 
-Given that the context is composed of several status updates, there can be a mixing of topics. In order to separate the topics of the context and select the most suitable one, the proposal performs a fuzzy clustering of the words of the context. Hence, the fuzzy c-means clustering algorithm groups the terms using the feature vector of the words as the word definition.
-
-Once the terms of the context are grouped, the proposal generates a context profile for each cluster. A profile of each cluster is generated combining the profiles of the words that are included in each of them.
-
-Based on the terms that appear on the context we can build the profile of the context using the feature representation of each term from the QA domain.
+Once the terms of the context are grouped, the proposal generates a context profile for each cluster combining the profiles of the terms that are included in each of them. Therefore, LSAContextCluster builds the profile of the context using the feature representation of each term from the QA domain:
 
 \begin{equation}
-	profile_{T_c} = \{\sum_{t \in T_c} U_{t,1}, \dots, \sum_{t \in T_c} U_{t,k} \}
+	profile^{lsi}_{C} = \{\sum_{t \in C} U_{t,1}, \dots, \sum_{t \in C} U_{t,k} \}
 \end{equation}
 
 \subsection{Contextualization of user profiles}
 
-Once we have the user profile and the context profile, it is needed to combine them in order to provide personalised recommendation that are suited to the current context $T_c$:
+Once we have the user profile and the context profile, it is needed to combine them in order to provide personalised recommendations suited to the current context $C$:
 
 \begin{equation}
-	profile_u^{T_c} = \alpha * profile_u + (1- \alpha )*profile_{T_c}
+	profile^{lsi}_{C,u} = \alpha * profile^{lsi}_u + (1- \alpha )*profile^{lsi}_{C}
 \end{equation}
 
 \begin{equation}
-	profile_u^{T_c} = \{ \alpha * profile_{u,1} + (1- \alpha ) * profile_{T_c,1},\dots, \alpha * profile_{u,1} + ( 1 - \alpha ) * profile_{T_c,k} \}
+	profile^{lsi}_{C,u} = \{ \alpha * profile^{lsi}_{u,1} + (1- \alpha ) * profile^{lsi}_{C,1},\dots, \alpha * profile^{lsi}_{u,1} + ( 1 - \alpha ) * profile^{lsi}_{C,k} \}
 \end{equation}
 
 \subsection{Prediction}
 
-Once we have the contextualised user profile, we can produce a prediction of the suitability for a given item regarding the profile:
-\begin{equation}
-	p_{u,d} = profile_u^{T_c}*s*profile_d
+Once we have the contextualised user profile, we can produce a prediction of the suitability for a given item regarding the profile. The recommendation is a list of documents sorted by $p_{u,d}$.\begin{equation}
+	p_{u,d,c} = profile^{lsi}_{C,u}*s*profile^{lsi}_d
 \end{equation}
-
-The recommendation is a list of documents sorted by $p_{u,d}$.
 
 \section{Experiment}
 \label{sec:case-study}
@@ -306,7 +294,7 @@ In these experiments, a RS based on LSI with contextual information is evaluated
 In order to do the experiment, the following procedure is performed \cite{Sarwar2001}, with a modification to consider contextual information in the experiment:
 \begin{itemize}
 	\item Split the dataset in training and test.
-	\item Build the model with the training data.
+	\item Build the model with training data.
 	\item Build the profile of each user. Include contextual information.
 	\item Recommend to each user based on their profile and the model.
 	\item Evaluate recommendations with the test set.
@@ -322,7 +310,7 @@ We compared several recommendation techniques to integrate contextual informatio
 
 	\item No clustering: The words are not separated in clusters, therefore the context profile is unique. There is a single profile of the context that is built combining the profiles of the words that are included in the context.
 	\begin{equation}
-		profile_{T_c} = \sum_{t \in T_c} * profile_t
+		profile_{C} = \sum_{t \in C} * profile_t
 	\end{equation}
 
 	\item Max membership: The words are used only in the cluster to whom they have the highest membership value:
