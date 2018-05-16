@@ -179,7 +179,7 @@ Previous approaches try to reduce the CARS problem to a two dimensional one that
 
 Here, a new proposal for recommendation based on CBRS and CARS is introduced. When recommendations need to be targeted to specific contexts, it is possible to modify user profiles to include contextual information in a way such that later recommendations are both targeted to user preferences and current context.
 
-The proposed model fits into the CARS approach of contextual modelling, because it integrates contextual information in the model built by the RS. The general scheme of the proposal, LSAContextCluster, is depicted in Figure \ref{fig:proposal-scheme}, and it is composed of five phases:
+The proposed model fits into the CARS approach of contextual modelling, because it integrates contextual information in the model built by the RS. The general scheme of the proposal, LSIContextCluster, is depicted in Figure \ref{fig:proposal-scheme}, and it is composed of five phases:
 \begin{enumerate}[(i)]
 	\item QA domain semantic analysis.
 	\item Build user preference profile.
@@ -199,7 +199,7 @@ The proposed model fits into the CARS approach of contextual modelling, because 
 
 In a QA dataset there is textual information of the question and their related answers. This is, a given question may have several answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the tfidf document profiles $profile^{tfidf}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
 
-Once the tfidf document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and words in a reduced number of features, while reducing the negative impact of synonyms in the text \cite{}. Therefore, the aim of this step is to decompose the word-document in: word-features matrix ($U$), singular value vector ($s$), and document-features matrix ($V$):
+Once the tfidf document profiles are built, LSI is performed to reduce the dimensionality of the matrix. LSI is proven to be effective through the description of both document and words in a reduced number of features, while reducing the negative impact of synonyms in the text \cite{}. Therefore, the aim of this step is to decompose the word-document in: word-features matrix ($U$), singular value vector ($s$), and document-features matrix ($V$):
 
 \begin{equation}
 	TFIDF_{(|D|\times|T|)} = U_{(|D|\times k)} * s_{(k)} * V'_{(k \times |W|)}
@@ -301,7 +301,7 @@ To evaluate the proposal, we performed an experiment that simulates the recommen
 
 \subsection{Experimental procedure}
 
-In these experiments, a RS based on LSA with contextual information is evaluated (LSAContext). The baseline method to compare with is the LSA method without contextual information. 30 features are considered in LSA and LSAContext models.
+In these experiments, a RS based on LSI with contextual information is evaluated (LSIContext). The baseline method to compare with is the LSI method without contextual information. 30 features are considered in LSI and LSIContext models.
 
 In order to do the experiment, the following procedure is performed \cite{Sarwar2001}, with a modification to consider contextual information in the experiment:
 \begin{itemize}
@@ -393,13 +393,13 @@ Table \ref{tab:results-ndcg-3dprinting} shows the results of the compared approa
 
 Figures \ref{fig:ndcg-results-proposal-context-no-clustering}, \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-max} and \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership} show the results of the 3 techniques compared in the 3dprinting QA dataset. The three figures have the same scale and, in X axis, alpha parameter is shown. The series denote the context, hence its position show the results of the proposal with the correspongding alpha value for the day.
 
-In Figure \ref{fig:ndcg-results-proposal-context-no-clustering} it can be noticed that, alghout the proposal improves the results of LSA in some days (contexts), the improvement does not compensates for the decay in performance in other days. Focusing in the context of 2017-11-28, LSAContext improves the results of LSA for all alpha values.
+In Figure \ref{fig:ndcg-results-proposal-context-no-clustering} it can be noticed that, alghout the proposal improves the results of LSI in some days (contexts), the improvement does not compensates for the decay in performance in other days. Focusing in the context of 2017-11-28, LSIContext improves the results of LSI for all alpha values.
 
-Figure \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership} shows that LSAContextFuzzy improves the results of LSA. It obtains better results than LSAContext, given that the results are distributed more upper than those of the LSAContext aproach. If we focus on the results on single days, it can be noticed that LSAContextFuzzy improves greatly for the context of day 2017-11-28. However, there is a major decay in three contexts: 2017-11-29, 2017-11-30 and 2017-12-15 in which the proposal does not reaches the value of the LSA approach. If we focus specifically on the day 2017-12-12, there is a decay for $\alpha \in [0.90,0.95]$ but it improves the results of LSA for $\alpha \in [0.96,0.99]$.
+Figure \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership} shows that LSIContextFuzzy improves the results of LSI. It obtains better results than LSIContext, given that the results are distributed more upper than those of the LSIContext aproach. If we focus on the results on single days, it can be noticed that LSIContextFuzzy improves greatly for the context of day 2017-11-28. However, there is a major decay in three contexts: 2017-11-29, 2017-11-30 and 2017-12-15 in which the proposal does not reaches the value of the LSI approach. If we focus specifically on the day 2017-12-12, there is a decay for $\alpha \in [0.90,0.95]$ but it improves the results of LSI for $\alpha \in [0.96,0.99]$.
 
-Figure \ref{fig:ndcg-resutls-proposal-context-fuzzy-clustering-max} shows that LSAContextClustering improves the results of LSA for most of the contexts explored. It consistenly obtains better results than LSA, althought the improvements.
+Figure \ref{fig:ndcg-resutls-proposal-context-fuzzy-clustering-max} shows that LSIContextClustering improves the results of LSI for most of the contexts explored. It consistenly obtains better results than LSI, althought the improvements.
 
-Figure \ref{fig:ndcg-results-3proposals-average} sumarises the results of the three proposals as compared to the LSA approach. It shows that LSAContextFuzzy and LSAContext, although they obtain better results than LSA in some contexts, in average they do not provide improvement. In the case of LSAContextClustering, it overcomes the results of all the remaining approaches for $\alpha \in [0.90,0.97]$. For $\alpha=0.94$ it reached the maximum average NDCG across all contexts explored, hence this value is the best one in this QA domain.
+Figure \ref{fig:ndcg-results-3proposals-average} sumarises the results of the three proposals as compared to the LSI approach. It shows that LSIContextFuzzy and LSIContext, although they obtain better results than LSI in some contexts, in average they do not provide improvement. In the case of LSIContextClustering, it overcomes the results of all the remaining approaches for $\alpha \in [0.90,0.97]$. For $\alpha=0.94$ it reached the maximum average NDCG across all contexts explored, hence this value is the best one in this QA domain.
 
 \begin{figure}[htb]
     \centering
@@ -408,14 +408,14 @@ Figure \ref{fig:ndcg-results-3proposals-average} sumarises the results of the th
     \label{fig:ndcg-results-3proposals-average}
 \end{figure}
 
-The best approaches of the compared ones is the LSAContextClustering with $\alpha=0.94$. This value has been optimised for the 3dprinting QA dataset, hence, for other domains it needs to be adjusted. This parameter provides the LSAContextClustering with flexibility to adapt to different QA domains.
+The best approaches of the compared ones is the LSIContextClustering with $\alpha=0.94$. This value has been optimised for the 3dprinting QA dataset, hence, for other domains it needs to be adjusted. This parameter provides the LSIContextClustering with flexibility to adapt to different QA domains.
 
 \section{Conclusions}
 \label{sec:conclusions}
 
-In this paper, we have explored the application of contextual information in the QA domain recommendation. LSAContextClustering first builds the LSA model associated to the QA domain. After that, it builds the user profile combining the QA profiles with the user preferences. In parallel, it builds the profiles of the context, which is separated in a number of clusters and a context profile is built for each of them. The following step is to combine the user profile with the context profile that is more close to their preferences, which is achieved computing the cosineCoefficient between the profiles. This combined profile allows the system to know user preferences and also consider contextual information in the recommendation. 
+In this paper, we have explored the application of contextual information in the QA domain recommendation. LSIContextClustering first builds the LSI model associated to the QA domain. After that, it builds the user profile combining the QA profiles with the user preferences. In parallel, it builds the profiles of the context, which is separated in a number of clusters and a context profile is built for each of them. The following step is to combine the user profile with the context profile that is more close to their preferences, which is achieved computing the cosineCoefficient between the profiles. This combined profile allows the system to know user preferences and also consider contextual information in the recommendation. 
 
-We performed a case study to compare various configurations for the proposed approach. It shows that all improvements done provide better results as compared to the baseline method (LSA). We found out that the best way to generate each context cluster profile is to select only the words whose membership value is the highest across clusters in the explored QA domain.
+We performed a case study to compare various configurations for the proposed approach. It shows that all improvements done provide better results as compared to the baseline method (LSI). We found out that the best way to generate each context cluster profile is to select only the words whose membership value is the highest across clusters in the explored QA domain.
 
 In this scenario, contextual information is a key source of information to provide users with relevant recommendations that allow them to better understand the current scenario. The provided system is a relevant tool in the completion of user knowledge through the recommendation of QA items.
 
