@@ -181,11 +181,11 @@ Here, a new proposal for recommendation based on CBRS and CARS is introduced. Wh
 
 The proposed model fits into the CARS approach of contextual modelling, because it integrates contextual information in the model built by the RS. The general scheme of the proposal, LSAContextCluster, is depicted in Figure \ref{fig:proposal-scheme}, and it is composed of five phases:
 \begin{enumerate}[(i)]
-	\item QA domain semantic analysis.
-	\item Build user preference profile.
-	\item Build context profile.
-	\item Contextualize user profiles.
-	\item Prediction
+	\item QA domain semantic analysis: It applies LSA to reduce the dimensionality of the term-document matrix.
+	\item Build user preference profile: It analyses users' preferences and generates a profile for each of them based on the profiles of the document he/she liked in the past.
+	\item Build context profile: It analyses the context, applies clustering to separate the various topics that it contains, and generates feature-space profiles for each context topic.
+	\item Contextualize user profiles: It select context topic that is most suitable to target user's preferences, combines the preference-based user profile and the context topic profile to generate the contextualized user profile.
+	\item Prediction: It compares the document profiles and the contextualised user profile to recommend.
 \end{enumerate}
 
 \begin{figure}[h]
@@ -197,28 +197,26 @@ The proposed model fits into the CARS approach of contextual modelling, because 
 
 \subsection{QA domain semantic analysis}
 
-In a QA dataset there is textual information of the question and their related answers. This is, a given question may have several answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the tfidf document profiles $profile^{tfidf}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
+In a QA dataset there is textual information of the question and their related answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the tfidf document profiles $profile^{tfidf}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
 
-Once the tfidf document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and words in a reduced number of features, while reducing the negative impact of synonyms in the text \cite{}. Therefore, the aim of this step is to decompose the word-document in: word-features matrix ($U$), singular value vector ($s$), and document-features matrix ($V$):
-
-\begin{equation}
-	TFIDF_{(|D|\times|T|)} = U_{(|D|\times k)} * s_{(k)} * V'_{(k \times |W|)}
-\end{equation}
-
-The proposal performs an approximated factorisation of the TF-IDF matrix using singular value decomposition, which allows to reduce the dimensionality of the original matrix keeping the $k$ most relevant singular values of the original matrix.
-
-Hence, we obtain the profile of both terms and documents in the reduced space:
-\begin{equation}
-	profile^{lsi}_d = \{ U_{t,1},\dots, U_{t,k}\}
-\end{equation}
+Once the tfidf document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and terms in a feature space with a reduced number of features. Therefore, the aim of this step is to decompose the word-document in word-features matrix ($U$), singular value vector ($s$), and document-features matrix ($V$), :
 
 \begin{equation}
-	profile^{lsi}_t = \{ V_{t,1},\dots, V_{t,k}\}
+	TFIDF_{(|D|\times|T|)} = U_{(|D|\times k)} * s_{(k)} * V^t_{(k \times |W|)}
 \end{equation}
 
-\subsection{Building user preference profile: Aggregate words' profiles}
+An approximated factorisation of the TF-IDF matrix is performed with Singular Value Decomposition, which allows to reduce the dimensionality of the original matrix keeping the $k$ most relevant singular values of the original matrix. Hence, we obtain the profile of both terms and documents in the feature space:
 
-At this point LSAContextCluster has built a model with terms and words profiles. In order to provide personalised recommendation to users, it is needed to build user profiles in the same space. The information the system holds about users is a unary matrix that states whether the user has expressed interest in the document (see Table \ref{tab:user-preferences}) either by creating, commenting, or voting it. With this table we can get the set of documents that user $u$ has expressed interest in:
+\begin{equation}
+	profile^{lsi}_d = \{ u_{t,1},\dots, u_{t,k}\}
+\end{equation}
+\begin{equation}
+	profile^{lsi}_t = \{ v_{t,1},\dots, v_{t,k}\}
+\end{equation}
+
+\subsection{Building user preference profile}
+
+At this point LSAContextCluster has built a model with terms and documents profiles. In order to provide personalised recommendations to users, it is needed to build user profiles in the same space. The information the system holds about users is a unary matrix that states whether the user has expressed interest in the document (see Table \ref{tab:user-preferences}) either by creating, commenting, or voting it. In this table, the set of documents that user $u$ has expressed interest in is defined as:
 \begin{equation}
 	R_{u} = \{d ~~~~s.t.~~~~r_{u,d} \in R \}
 \end{equation}
@@ -254,7 +252,7 @@ This way, the user's profile is built upon the profiles of the documents that be
 
 \subsection{Context profile building}
 
-In parallel with the building of the user profile, it is needed to build the context profile. LSAContextCluster source of the context is a microblogging system that delivers status updates by users. To narrow down the status updates that the system receives in order to focus in an aspect of the context a set of relevant terms is selected, which contains terms that must appear in the status updates. First, from all the terms that the context contains, LSAContextCluster filters out the terms that do not appear in the set of terms used in the QA site. 
+To include contextual information in the recommendation process, it is needed to build the context profile. In this proposal, the source of the context is a microblogging system that delivers status updates from users. To narrow down the status updates that the system receives in order to focus in an aspect of the context, a set of relevant terms is selected, which contains terms that must appear in the status updates. First, from all the terms that the context contains, LSAContextCluster filters out the terms that do not appear in the set of terms used in the QA site. 
 
 Given that the context is composed of several status updates, there can be a mixture of topics. In order to separate the topics of the context, the proposal performs a fuzzy clustering of the terms used the context. Hence, the fuzzy c-means clustering algorithm groups the terms using the feature vector of the terms, $profile^{lsi}_d$, as the word definition. The distance among words used in the clustering is based on cosine correlation coefficient.
 
@@ -266,7 +264,7 @@ Once the terms of the context are grouped, the proposal generates a context prof
 
 \subsection{Contextualization of user profiles}
 
-Once we have the user profile and the context profile, it is needed to combine them in order to provide personalised recommendations suited to the current context $C$:
+In order to provide contextualised personalised recommendations, it is needed to combine user's preference profiles with the context topic profile to provide personalised recommendations suited to the current context $C$:
 
 \begin{equation}
 	profile^{lsi}_{C,u} = \alpha * profile^{lsi}_u + (1- \alpha )*profile^{lsi}_{C}
@@ -282,16 +280,14 @@ Once we have the contextualised user profile, we can produce a prediction of the
 	p_{u,d,c} = profile^{lsi}_{C,u}*s*profile^{lsi}_d
 \end{equation}
 
-\section{Experiment}
+\section{Case study}
 \label{sec:case-study}
 
-To evaluate the proposal, we performed an experiment that simulates the recommendation of QA items in in various context. The remainder of the section is structured as follows. First, the settings of the experiment are described. The datasets and methods for processing are then detailed. After that, the evaluation measures are commented. Lastly, the results are analysed.
+To evaluate the proposal, we performed an experiment that simulates the recommendation of QA items in various context. The remainder of the section is structured as follows. First, the settings of the experiment are described. The datasets and methods for processing them are then detailed. After that, the evaluation measures are commented. Lastly, the results are analysed.
 
 \subsection{Experimental procedure}
 
-In these experiments, a RS based on LSA with contextual information is evaluated (LSAContext). The baseline method to compare with is the LSA method without contextual information. 30 features are considered in LSA and LSAContext models.
-
-In order to do the experiment, the following procedure is performed \cite{Sarwar2001}, with a modification to consider contextual information in the experiment:
+In these experiments, a RS based on LSA with contextual information is evaluated (LSAContext). In order to do the experiment, the following procedure is performed \cite{Sarwar2001}, with a modification to consider contextual information in the experiment:
 \begin{itemize}
 	\item Split the dataset in training and test.
 	\item Build the model with training data.
@@ -300,11 +296,14 @@ In order to do the experiment, the following procedure is performed \cite{Sarwar
 	\item Evaluate recommendations with the test set.
 \end{itemize}
 
-This procedure is repeated 20 times and 5-cross fold validation is used to split the data in training and test sets. Moreover, various contexts are considered, which are detailed in the following section.
+This procedure is repeated 20 times and 5-cross fold validation is used to split the data in training and test sets. Moreover, various contexts are considered, which are detailed in Section \ref{sec:case-study-datasets}.
 
 \subsection{Methods compared}
 
-We compared several recommendation techniques to integrate contextual information in QA recommendation. Here, we show the results of three ways of characterise the context:
+
+The baseline method to compare with is the LSA method without contextual information. For the sake of compareness, 30 features are considered in all LSA models.
+
+We compared several ways for integrating contextual information in QA recommendation. Here, we show the results of three ways to characterise the context:
 
 \begin{itemize}
 
@@ -326,13 +325,16 @@ We compared several recommendation techniques to integrate contextual informatio
 
 \end{itemize}
 
-Moreover, the proposals compared have parameter $\alpha$. In the experiment we explored several values for it, here, to make the results clear, we show the results for $\alpha \in [0.85,1.00]$ with increments of $0.01$
+Moreover, in order to adjust the weight of preference profile over context profile, the methods compared have parameter $\alpha$. In the experiment we explored several values for it, here, to make the results clearer, we show only $\alpha \in [0.85,1.00]$ with increments of $0.01$
 
 \subsection{Datasets}
+\label{sec:case-study-datasets}
 
 In the experiment there are two sources of data: The QA domain and the contextual information.
 
 The QA domain used is the StackExchange dataset\footnote{http://data.stackexchange.com/}. This dataset consists of the database dump of each site in the stackexchange ecosystem. Some sites are detailed in Table \ref{tab:stackexchange-dataset-description}, together with their main features.
+
+(Incluir tabla de datasets)
 
 In this experimental setup, the results are reported per StackExchange site. Therefore, we consider each site as a different dataset. Given that the aim of the system is to provide users with pieces of information that help explain the context and also consider their preferences.
 
@@ -369,13 +371,20 @@ Table \ref{tab:results-ndcg-3dprinting} shows the results of the compared approa
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.33\textwidth]{figures/ndcg-results-proposal-context-no-clustering.eps}
-    \caption{Contextual dataset used in the experiment, where each day has a different status count.}
+    \includegraphics[width=0.9\textwidth]{figures/ndcg-results-proposal-context-no-clustering.eps}
+    \caption{Results of the proposal to manage context without clustering}
     \label{fig:ndcg-results-proposal-context-no-clustering}
-    \includegraphics[width=0.33\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
+\end{figure}
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
+    \caption{Results of the proposal to manage context with max membership.}
     \label{fig:ndcg-results-proposal-context-fuzzy-clustering-max}
-    \includegraphics[width=0.33\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
-    \caption{Contextual dataset used in the experiment, where each day has a different status count.}
+\end{figure}
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
+    \caption{Results of the proposal to manage context with fuzzy membership.}
     \label{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}
 \end{figure}
 
@@ -391,7 +400,7 @@ Figure \ref{fig:ndcg-results-3proposals-average} sumarises the results of the th
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.33\textwidth]{figures/ndcg-results-3proposals-average.eps}
+    \includegraphics[width=0.9\textwidth]{figures/ndcg-results-3proposals-average.eps}
     \caption{Average NDCG of the compared approaches in all contexts.}
     \label{fig:ndcg-results-3proposals-average}
 \end{figure}
