@@ -170,7 +170,7 @@ With this regard, the various context-aware recommendation approaches can be cla
 
 In Contextual Pre-filtering, the approach is to filter out the information that was not not gathered in the current context. With this regard, in traditional RSs the information is viewed as a function $R: User \times Item \rightarrow Rating $ that the RS tries to approximate. In CARS, the information can be viewed as a three dimensional cube $User \times Item \times Context \rightarrow Rating$. Contextual pre-filtering selects only the information relative to the context, hence, it tries to approximate function $R_{context}: User \times Item \rightarrow Ratings_{context}$ This way, they only consider ratings generated in the context in which the recommendation is delivered to the user. Contextual pre-filtering is a simple and effective approach, but it is affected by data sparsity when there is not enough information generated in all contexts to provide accurate recommendations. Some researchers have tried to overcome this issue through context-generalization \cite{Adomavicius2011}, that generalizes the context when the information available in the current context is not enough and includes information from the broader context.
 
-In contextual post-filtering, the recommendations are first computed overlooking the contextual information, as in traditional RSs. After this initial step, recommendations are tuned to adjust to the current context \cite{Panniello2009}, either removing irrelevant items or through a weighting function that changes predictions of items regarding the suitability of target user's context. A previous work \cite{} evaluated them in the same scenarios and compared pre- and post-filtering approaches. It determined that neither pre-filtering nor post-filtering completely dominates the other and a study to determine the best approach is needed in each specific case.
+In contextual post-filtering, the recommendations are first computed overlooking the contextual information, as in traditional RSs. After this initial step, recommendations are tuned to adjust to the current context, either removing irrelevant items or through a weighting function that changes predictions of items regarding the suitability of target user's context. A previous work \cite{Panniello2009} evaluated them in the same scenarios and compared pre- and post-filtering approaches. It determined that neither pre-filtering nor post-filtering completely dominates the other and a study to determine the best approach is needed in each specific case.
 
 Previous approaches try to reduce the CARS problem to a two dimensional one that can be solved with traditional RSs. This is not the case in contextual modelling, in which contextual information is directly integrated in the recommendation model to recommend. With this regard, researchers have explored heuristic-based \cite{Panniello2014}, probabilistic \cite{Adomavicius2005b}, or matrix factorization \cite{Baltrunas2011c} contextual modelling approaches.
 
@@ -325,7 +325,7 @@ We compared several ways for integrating contextual information in QA recommenda
 
 \end{itemize}
 
-Moreover, in order to adjust the weight of preference profile over context profile, the methods compared have parameter $\alpha$. In the experiment we explored several values for it, here, to make the results clearer, we show only $\alpha \in [0.85,1.00]$ with increments of $0.01$
+Moreover, in order to adjust the weight of preference profile over context profile, the methods compared have parameter $\alpha$. In the experiment we explored several values for it, here, to make the results clearer, we show only $\alpha \in [0.90,1.00]$ with increments of $0.01$
 
 \subsection{Datasets}
 \label{sec:case-study-datasets}
@@ -342,7 +342,7 @@ Regarding the contextual dataset, a set of interesting keywords is defined. We h
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/context-dataset-description.eps}
+    \includegraphics[width=0.9\textwidth]{figures/context-dataset-description.eps}
     \caption{Contextual dataset used in the experiment, where each day has a different status count.}
     \label{fig:context-dataset-description}
 \end{figure}
@@ -371,19 +371,19 @@ Table \ref{tab:results-ndcg-3dprinting} shows the results of the compared approa
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/ndcg-results-proposal-context-no-clustering.eps}
+    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-no-clustering.eps}
     \caption{Results of the proposal to manage context without clustering}
     \label{fig:ndcg-results-proposal-context-no-clustering}
 \end{figure}
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
+    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
     \caption{Results of the proposal to manage context with max membership.}
     \label{fig:ndcg-results-proposal-context-fuzzy-clustering-max}
 \end{figure}
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
+    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
     \caption{Results of the proposal to manage context with fuzzy membership.}
     \label{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}
 \end{figure}
@@ -394,7 +394,26 @@ In Figure \ref{fig:ndcg-results-proposal-context-no-clustering} it can be notice
 
 Figure \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership} shows that LSAContextFuzzy improves the results of LSA. It obtains better results than LSAContext, given that the results are distributed more upper than those of the LSAContext aproach. If we focus on the results on single days, it can be noticed that LSAContextFuzzy improves greatly for the context of day 2017-11-28. However, there is a major decay in three contexts: 2017-11-29, 2017-11-30 and 2017-12-15 in which the proposal does not reaches the value of the LSA approach. If we focus specifically on the day 2017-12-12, there is a decay for $\alpha \in [0.90,0.95]$ but it improves the results of LSA for $\alpha \in [0.96,0.99]$.
 
-Figure \ref{fig:ndcg-resutls-proposal-context-fuzzy-clustering-max} shows that LSAContextClustering improves the results of LSA for most of the contexts explored. It consistenly obtains better results than LSA, althought the improvements.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
+    \caption{Results of the proposal to manage context with fuzzy membership.}
+    \label{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}
+\end{figure}
+
+
+Figure \ref{fig:ndcg-resutls-proposal-context-fuzzy-clustering-max} shows that LSAContextClustering improves the results of LSA for most of the contexts explored. It consistenly obtains better results than LSA, although the improvements obtained in some contexts is canceled with worst results in other contexts.
+
+
+Figure \ref{fig:ndcg-results-3proposals-bests-per-day} compares the results of each proposal with the best alpha. Here LSA has no variability across days because it does not considers context. LSAContext has a great variability in performance across days, however, the better results obtained from 2017-12-08 onwards are canceled by the low performance from 2017-11-30 to 2017-12-07. LSAContextClusteringMax and LSAContextClusteringFuzzy performances did not dropped drastically in certain contexts as it happened for LSAContext. Instead, they show ups and downs in the contexts. It is worth to notice that LSAContextClusteringMax obtained greater peaks than LSAContextClusteringFuzzy.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-3proposals-bests-per-day.eps}
+    \caption{Results of the proposal to manage context with fuzzy membership.}
+    \label{fig:ndcg-results-3proposals-bests-per-day}
+\end{figure}
 
 Figure \ref{fig:ndcg-results-3proposals-average} sumarises the results of the three proposals as compared to the LSA approach. It shows that LSAContextFuzzy and LSAContext, although they obtain better results than LSA in some contexts, in average they do not provide improvement. In the case of LSAContextClustering, it overcomes the results of all the remaining approaches for $\alpha \in [0.90,0.97]$. For $\alpha=0.94$ it reached the maximum average NDCG across all contexts explored, hence this value is the best one in this QA domain.
 
