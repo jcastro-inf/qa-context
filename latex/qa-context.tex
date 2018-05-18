@@ -111,7 +111,7 @@ In the QA domain recommendation scenario there are several proposals for QA reco
 
 In this work we focus on recommending questions to users that are in their area of interest, and that are relevant regarding the current context. Therefore, it is interesting to explore Context-Aware CBRSs (CA-CBRSs), which integrate contextual information to the content-based recommendation. De Pessemier et al. \cite{DePessemier2016} consider recommendations in mobile devices as very suitable to integrate context-awareness, and uses device and time of the day to deliver contextualized news recommendations. In QA recommendation, SeaHawk \cite{Ponzanelli2014} and Prompter \cite{Ponzanelli2014b} are CA-CBRSs that support programmers to complete issues and bugs using query completion and recommends StackOverflow questions, where the context is the specific part of the source code in which the recommendations are requested. In this direction, Libra \cite{Ponzanelli2017} also integrates recommendations but it also considers, in addition to context extracted from the Integrated Development Environment context, resources opened by the user such as urls or documents to better understand his/her context. Other works consider the context as current buzzwords to deliver currently relevant recommendations \cite{Parikh2009}
 
-In this paper we propose a CA-CBRS that recommends QA items aimed to complete users' information about current context with the knowledge provided by users of QA systems. In this scenario, the context is extracted from microblogging systems to characterise current context. However, the context extracted this way is often noisy or several topics are mixed. With this regard, we propose to cluster context to identify the topics that are being discussed, and after that the context most suitable to users preferences is selected in order to provide contextualized recommendations that are also adjusted to users' individual interests. This way, we can build a user profile that combines preferences and context.
+In this paper we propose a CA-CBRS that recommends QA items aimed to complete users' information about current context with the knowledge provided by users of QA systems. In this scenario, the context is extracted from microblogging systems to characterise current context. However, the context extracted this way is often noisy or several topics are mixed. With this regard, we propose to cluster context to identify the topics that are being discussed, and after that the context most suitable to users preferences is selected to build a user profile that combines preferences and context. This way, the proposal provides contextualized recommendations that are also adjusted to users' individual interests.
 
 The remaining of this paper is structured as follows. Section \ref{sec:preliminaries} provides a background of CBRSs and CA-CBRSs. Section \ref{sec:proposal} introduces in further detail our proposal of CA-CBRS for QA recommendation. Section \ref{sec:case-study} shows a case study performed to evaluate the proposal and discuss the findings. Finally, Section \ref{sec:conclusions} concludes the paper.
 
@@ -128,13 +128,13 @@ This section provides the required background for the current research, includin
 
 An accurate definition of Recommender System (RS) given by R. Burke \cite{Burke2002} is \emph{"any system that produces individualized recommendations as output or has the effect of guiding the user in a personalized way to interesting or useful objects in a large space of possible options"}. Within RSs, various techniques can be distinguished based on the knowledge source \cite{DePessemier2016}: demographic, knowledge-based, community-based, content-based, collaborative, and hybrid recommendations. Among them, we focus on CBRSs.
 
-The various CBRSs approaches can be classified regarding the item representation. Here we focus on those CBRSs that use a vector space modelling to represent items. With this regard there are CBRS with (i) field-based representations, and (ii) free-text representation. 
+The various CBRSs approaches can be classified regarding the item representation. Here we focus on those CBRSs that use a vector space modelling to represent items. With this regard there are CBRS with (i) feature-based representations, and (ii) free-text representation.
 
-In feature-based representations, items are usually stored in a database table where rows are items and columns are the item features (also called fields or properties) and each item might have a different value for each of these features. The recommender system learns a model that uses such information to approximate the rating function. With this regard there are proposals based on weighting features importance regarding the user's ratings using collaborative information \cite{Symeonidis2007} or using entropy and dependence between items' features and user's ratings \cite{Castro2014}. Other approaches learn the rating function using linear regression (InterestLMS) \cite{DePessemier2016}.
+In feature-based representation, items are usually stored in a database table where rows are items and columns are the item features (also called fields or properties) and each item might have a different value for each of these features. The recommender system learns a model that uses such information to approximate the rating function. With this regard there are proposals based on weighting features importance regarding the user's ratings using collaborative information \cite{Symeonidis2007} or using entropy and dependence between items' features and user's ratings \cite{Castro2014}. Other approaches learn the rating function using linear regression (InterestLMS) \cite{DePessemier2016}.
 
 In free-text representation there is a natural language piece of text that describes the item, such as movie synopsis or that is part of the item itself, such as the content of a web page or a news article. Such a kind of unstructured data provides information about the item (called document in these systems), however, they also have the complexity of dealing with natural language due to polysemous words and synonyms. 
 
-The Tf-Idf approach is usually applied when dealing with free-text representation items. In TfIdf, the unstructured data is converted in structured data stemming words \cite{Porter1980} to keep their root. This process reduces the number of features of documents unifying words such as computer, compute and computing, which are different forms that share meaning. After that, for each document, a vector of weights of each term is generated based on the importance of the term on the document:
+The Tf-Idf approach is usually applied when dealing with free-text representation items. In TFIDF, the unstructured data is converted in structured data stemming words \cite{Porter1980} to keep their root. This process reduces the number of components of documents unifying words such as computer, compute and computing, which are different forms that share meaning. After that, for each document, a vector of weights of each term is generated based on the importance of the term on the document:
 \begin{equation}
 	profile^{tfidf}_{d} = \{w_{t,d}~~~~s.t.~~~~ t \in d \}
 	\label{eq:document-profile-tfidf}
@@ -146,16 +146,28 @@ The Tf-Idf approach is usually applied when dealing with free-text representatio
 \end{equation}
 
 \begin{equation}
-	idf_t = -\log \left( \frac{N}{N_t}\right)
+	idf_t = -\log \left( \frac{|N|}{|N_t|}\right)
 	\label{eq:document-profile-tfidf-idf}
 \end{equation}
-\noindent where $tf_{t,d}$ is the number of occurrences of term $t$ in document $d$ and $N_t$ is the number of documents that contain the term $t$ at least once.
+\noindent where $tf_{t,d}$ is the number of occurrences of term $t$ in document $d$, $N$ is the set of all documents and $N_t$ is the set of documents that contain the term $t$ at least once.
 
-At this point the system contains a vector space model of items. User profiles can be generated aggregating the profiles of the items that they liked in the past \cite{Symeonidis2007}. Then, the recommendation with this CBRS is computed comparing user profiles with item profiles with the cosine correlation and the closest ones are recommended. 
+At this point the system contains a vector space model of items. User profiles can be generated aggregating the profiles of the items that they liked in the past \cite{Symeonidis2007}. The recommendation is computed comparing user profiles with item profiles with the cosine correlation and the closest ones are recommended. 
 
-While TfIdf method is effective, it cannot deal with polisemy or synonym words. In order to overcome this issue, Latent Semantic Indexing (LSA) is applied \cite{deGemmis2015}. In LSA, the term-document matrix is factorised with Singular Value Decomposition (SVD) to reduce it to orthogonal dimensions and keep the $k$ most relevant singular values (see Figure \ref{fig:content-based-lsi-svd}). This way, a reduced feature space is defined, which properly manages noise and redundancy of terms. User profiles are generated from this feature-space definition through a linear combination of document profiles that they liked \cite{Bambini2011}. Then, recommendations are generated comparing user and document profiles with cosine correlation coefficient.
+While TFIDF method is effective, it cannot deal with polisemy or synonym words. In order to overcome this issue, Latent Semantic Indexing (LSA) is applied \cite{deGemmis2015}. In LSA, the term-document matrix is factorised with Singular Value Decomposition (SVD) to reduce it to orthogonal dimensions and keep the $f$ most relevant singular values (see Figure \ref{fig:svd-scheme}).
 
-(incluir imagen con la descomposición de la matriz TfIdf con SVD: $TfIdf=U.s.V^t$)
+\begin{equation}
+	TFIDF_{(|D|\times|T|)} = U_{(|D|\times f)} * s_{(f)} * V^t_{(f \times |W|)}
+	\label{eq:svd}
+\end{equation}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{figures/svd-scheme.eps}
+	\caption{Decomposition of TFIDF matrix with singular Value decomposition. Note that $s$ is a diagonal matrix with the singular values sorted in descending order.}
+	\label{fig:svd-scheme}
+\end{figure}
+
+This way, a reduced feature space is defined, which properly manages noise and redundancy of terms. User profiles are generated from this feature-space definition through a linear combination of document profiles that they liked \cite{Bambini2011}. Then, recommendations are generated comparing user and document profiles with cosine correlation coefficient.
 
 \subsection{Context-aware recommender systems.}
 
@@ -168,9 +180,9 @@ With this regard, the various context-aware recommendation approaches can be cla
 	\item Contextual modelling: The contextual information is directly integrated in the model that is used to recommend.
 \end{itemize}
 
-In Contextual Pre-filtering, the approach is to filter out the information that was not not gathered in the current context. With this regard, in traditional RSs the information is viewed as a function $R: User \times Item \rightarrow Rating $ that the RS tries to approximate. In CARS, the information can be viewed as a three dimensional cube $User \times Item \times Context \rightarrow Rating$. Contextual pre-filtering selects only the information relative to the context, hence, it tries to approximate function $R_{context}: User \times Item \rightarrow Ratings_{context}$ This way, they only consider ratings generated in the context in which the recommendation is delivered to the user. Contextual pre-filtering is a simple and effective approach, but it is affected by data sparsity when there is not enough information generated in all contexts to provide accurate recommendations. Some researchers have tried to overcome this issue through context-generalization \cite{Adomavicius2011}, that generalizes the context when the information available in the current context is not enough and includes information from the broader context.
+In pre-filtering, the approach is to filter out the information that was not not gathered in the current context. In traditional RSs the information is viewed as a function $R: User \times Item \rightarrow Rating $ that the RS tries to approximate. In CARS, the information can be viewed as a three dimensional cube $User \times Item \times Context \rightarrow Rating$. Contextual pre-filtering selects only the information relative to the context, hence, it tries to approximate function $R_{context}: User \times Item \rightarrow Ratings_{context}$ This way, they only consider ratings generated in the context in which the recommendation is delivered to the user. Contextual pre-filtering is a simple and effective approach, but it is affected by data sparsity when there is not enough information generated in all contexts to provide accurate recommendations. Some researchers have tried to overcome this issue through context-generalization \cite{Adomavicius2011} when the information available in the current context is not enough and include information from the broader context.
 
-In contextual post-filtering, the recommendations are first computed overlooking the contextual information, as in traditional RSs. After this initial step, recommendations are tuned to adjust to the current context, either removing irrelevant items or through a weighting function that changes predictions of items regarding the suitability of target user's context. A previous work \cite{Panniello2009} evaluated them in the same scenarios and compared pre- and post-filtering approaches. It determined that neither pre-filtering nor post-filtering completely dominates the other and a study to determine the best approach is needed in each specific case.
+In post-filtering, the recommendations are first computed overlooking the contextual information, as in traditional RSs. After this initial step, recommendations are adjusted to the current context either removing irrelevant items or through a weighting function that changes predictions of items regarding the suitability of target user's context. A previous work \cite{Panniello2009} evaluated them in the same scenarios and compared pre- and post-filtering approaches. It determined that neither pre-filtering nor post-filtering completely dominates the other and a study to determine the best approach is needed in each specific case.
 
 Previous approaches try to reduce the CARS problem to a two dimensional one that can be solved with traditional RSs. This is not the case in contextual modelling, in which contextual information is directly integrated in the recommendation model to recommend. With this regard, researchers have explored heuristic-based \cite{Panniello2014}, probabilistic \cite{Adomavicius2005b}, or matrix factorization \cite{Baltrunas2011c} contextual modelling approaches.
 
@@ -197,26 +209,22 @@ The proposed model fits into the CARS approach of contextual modelling, because 
 
 \subsection{QA domain semantic analysis}
 
-In a QA dataset there is textual information of the question and their related answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the tfidf document profiles $profile^{tfidf}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
+In a QA dataset there is textual information of the question and their related answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the TFIDF document profiles $profile^{TFIDF}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
 
-Once the tfidf document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and terms in a feature space with a reduced number of features. Therefore, the aim of this step is to decompose the word-document in word-features matrix ($U$), singular value vector ($s$), and document-features matrix ($V$), :
+Once the TFIDF document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and terms in a feature space with a reduced number of features. Therefore, the aim of this step is to decompose the word-document in word-features matrix $U$, singular value vector $s$, and document-features matrix $V$ (see Eq. \ref{eq:svd}).
 
-\begin{equation}
-	TFIDF_{(|D|\times|T|)} = U_{(|D|\times k)} * s_{(k)} * V^t_{(k \times |W|)}
-\end{equation}
-
-An approximated factorisation of the TF-IDF matrix is performed with Singular Value Decomposition, which allows to reduce the dimensionality of the original matrix keeping the $k$ most relevant singular values of the original matrix. Hence, we obtain the profile of both terms and documents in the feature space:
+An approximated factorisation of the TFIDF matrix is performed with Singular Value Decomposition, which allows to reduce the dimensionality of the original matrix keeping the $f$ most relevant singular values of the original matrix. Hence, we obtain the profile of both terms and documents in the feature space:
 
 \begin{equation}
-	profile^{lsi}_d = \{ u_{t,1},\dots, u_{t,k}\}
+	profile^{LSA}_d = \{ u_{t,1},\dots, u_{t,f}\}
 \end{equation}
 \begin{equation}
-	profile^{lsi}_t = \{ v_{t,1},\dots, v_{t,k}\}
+	profile^{LSA}_t = \{ v_{t,1},\dots, v_{t,f}\}
 \end{equation}
 
 \subsection{Building user preference profile}
 
-At this point LSAContextCluster has built a model with terms and documents profiles. In order to provide personalised recommendations to users, it is needed to build user profiles in the same space. The information the system holds about users is a unary matrix that states whether the user has expressed interest in the document (see Table \ref{tab:user-preferences}) either by creating, commenting, or voting it. In this table, the set of documents that user $u$ has expressed interest in is defined as:
+At this point LSAContextCluster has built a model with terms and documents profiles. In order to provide personalised recommendations to users, it is needed to build user profiles in the same space. The information the system holds about users is a unary matrix that states whether the user has expressed interest in the document (see Table \ref{tab:user-preferences}) either creating, commenting, or voting it. In this table, the set of documents that user $u$ has expressed interest in is defined as:
 \begin{equation}
 	R_{u} = \{d ~~~~s.t.~~~~r_{u,d} \in R \}
 \end{equation}
@@ -247,19 +255,19 @@ $u_m$    & $r_{u_m,i_1}$ & $\dots$  & $r_{u_m,i_k}$ & $\dots$  & $r_{u_m,i_n}$
 
 This way, the user's profile is built upon the profiles of the documents that belong to $R_u$, and describes the user's preferences in terms of the latent space:
 \begin{equation}
-	profile^{lsi}_u = \sum_{d \in R_u} profile^{lsi}_d = \{ \sum_{d \in R_u} V_{d,1}, \dots, \sum_{d \in R_u} V_{d,k}\}
+	profile^{LSA}_u = \sum_{d \in R_u} profile^{LSA}_d = \{ \sum_{d \in R_u} V_{d,1}, \dots, \sum_{d \in R_u} V_{d,f}\}
 \end{equation}
 
 \subsection{Context profile building}
 
-To include contextual information in the recommendation process, it is needed to build the context profile. In this proposal, the source of the context is a microblogging system that delivers status updates from users. To narrow down the status updates that the system receives in order to focus in an aspect of the context, a set of relevant terms is selected, which contains terms that must appear in the status updates. First, from all the terms that the context contains, LSAContextCluster filters out the terms that do not appear in the set of terms used in the QA site. 
+To include contextual information in the recommendation process, it is needed to build the context profile. In this proposal, the source of the context is a microblogging system that delivers status updates from users. First, from all the terms that the context contains, LSAContextCluster filters out the terms that do not appear in the set of terms used in the QA site.
 
-Given that the context is composed of several status updates, there can be a mixture of topics. In order to separate the topics of the context, the proposal performs a fuzzy clustering of the terms used the context. Hence, the fuzzy c-means clustering algorithm groups the terms using the feature vector of the terms, $profile^{lsi}_d$, as the word definition. The distance among words used in the clustering is based on cosine correlation coefficient.
+Given that the context is composed of several status updates, there can be a mixture of topics. In order to separate the topics of the context, the proposal performs a fuzzy clustering of the terms used the context. Hence, the fuzzy c-means clustering algorithm groups the terms using the feature vector of the terms, $profile^{LSA}_d$, as the word definition. The distance among words used in the clustering is based on cosine correlation coefficient.
 
 Once the terms of the context are grouped, the proposal generates a context profile for each cluster combining the profiles of the terms that are included in each of them. Therefore, LSAContextCluster builds the profile of the context using the feature representation of each term from the QA domain:
 
 \begin{equation}
-	profile^{lsi}_{C} = \{\sum_{t \in C} U_{t,1}, \dots, \sum_{t \in C} U_{t,k} \}
+	profile^{LSA}_{C} = \{\sum_{t \in C} U_{t,1}, \dots, \sum_{t \in C} U_{t,f} \}
 \end{equation}
 
 \subsection{Contextualization of user profiles}
@@ -267,74 +275,89 @@ Once the terms of the context are grouped, the proposal generates a context prof
 In order to provide contextualised personalised recommendations, it is needed to combine user's preference profiles with the context topic profile to provide personalised recommendations suited to the current context $C$:
 
 \begin{equation}
-	profile^{lsi}_{C,u} = \alpha * profile^{lsi}_u + (1- \alpha )*profile^{lsi}_{C}
+	profile^{LSA}_{C,u} = \alpha * profile^{LSA}_u + (1- \alpha )*profile^{LSA}_{C}
 \end{equation}
 
 \begin{equation}
-	profile^{lsi}_{C,u} = \{ \alpha * profile^{lsi}_{u,1} + (1- \alpha ) * profile^{lsi}_{C,1},\dots, \alpha * profile^{lsi}_{u,1} + ( 1 - \alpha ) * profile^{lsi}_{C,k} \}
+	profile^{LSA}_{C,u} = \{ \alpha * profile^{LSA}_{u,1} + (1- \alpha ) * profile^{LSA}_{C,1},\dots, \alpha * profile^{LSA}_{u,1} + ( 1 - \alpha ) * profile^{LSA}_{C,f} \}
 \end{equation}
 
 \subsection{Prediction}
 
 Once we have the contextualised user profile, we can produce a prediction of the suitability for a given item regarding the profile. The recommendation is a list of documents sorted by $p_{u,d}$.\begin{equation}
-	p_{u,d,c} = profile^{lsi}_{C,u}*s*profile^{lsi}_d
+	p_{u,d,c} = profile^{LSA}_{C,u}*s*profile^{LSA}_d
 \end{equation}
 
 \section{Case study}
 \label{sec:case-study}
 
-To evaluate the proposal, we performed an experiment that simulates the recommendation of QA items in various context. The remainder of the section is structured as follows. First, the settings of the experiment are described. The datasets and methods for processing them are then detailed. After that, the evaluation measures are commented. Lastly, the results are analysed.
+To evaluate the proposal, we performed an experiment that simulates the recommendation of QA items in various contexts. The remainder of the section is structured as follows. First, the settings of the experiment are described. The datasets and methods for processing them are then detailed. After that, the evaluation measures are commented. Lastly, the results are analysed.
 
 \subsection{Experimental procedure}
 
-In these experiments, a RS based on LSA with contextual information is evaluated (LSAContext). In order to do the experiment, the following procedure is performed \cite{Sarwar2001}, with a modification to consider contextual information in the experiment:
+In these experiments we compared several CBRSs based on LSA with contextual information. In order to do the experiment, the following procedure was performed \cite{Sarwar2001}, with a modification to consider contextual information in the experiment:
 \begin{itemize}
 	\item Split the dataset in training and test.
 	\item Build the model with training data.
-	\item Build the profile of each user. Include contextual information.
+	\item Build the profile of each user including contextual information if applicable.
 	\item Recommend to each user based on their profile and the model.
 	\item Evaluate recommendations with the test set.
 \end{itemize}
 
-This procedure is repeated 20 times and 5-cross fold validation is used to split the data in training and test sets. Moreover, various contexts are considered, which are detailed in Section \ref{sec:case-study-datasets}.
+This procedure was repeated 20 times and 5-cross fold validation was used to split the data in training and test sets. Moreover, various contexts were considered, which are detailed in Section \ref{sec:case-study-datasets}.
 
 \subsection{Methods compared}
 
-
-The baseline method to compare with is the LSA method without contextual information. For the sake of fair comparison, the number of features is fixed in all models, and 30 features are considered in LSA.
+The baseline method to compare with was the LSA method without contextual information. For the sake of fair comparison, the number of features was fixed in all models, and 30 features were considered in LSA.
 
 We compared several ways for integrating contextual information in QA recommendation. Here, we show the results of three ways to characterise the context:
 
 \begin{itemize}
 
-	\item No clustering: The words are not separated in clusters, therefore the context profile is unique. There is a single profile of the context that is built combining the profiles of the words that are included in the context.
+	\item No clustering (LSAContext): The words are not separated in clusters, therefore the context profile is unique. There is a single profile of the context that is built combining the profiles of the words that are included in the context.
 	\begin{equation}
 		profile_{C} = \sum_{t \in C} * profile_t
 	\end{equation}
 
-	\item Max membership: The words are used only in the cluster to whom they have the highest membership value:
-	\begin{equation}
-		profile_{cluster_l} = \sum_{t \in T} \mu^{max}_{t,l} * profile_t
-	\end{equation}
-
-	\item Weithed by membership: The cluster profiles are built combining the feature vector of each word weighted by the membership value of the word to the cluster:
+	\item Weithed by membership (LSAContextClusterFuzzy): The cluster profiles are built combining the feature vector of each word weighted by the membership value of the word to the cluster:
 	\begin{equation}
 		profile_{cluster_l} = \sum_{t \in T} \mu_{t,l} * profile_t
 	\end{equation}
 	\noindent where $\mu_{t,l}$ is the membership of term $t$ to cluster $l$.
 
+	\item Max membership (LSAContextClusterMax): The words are used only in the cluster to whom they have the highest membership value:
+	\begin{equation}
+		profile_{cluster_l} = \sum_{t \in T} \mu^{max}_{t,l} * profile_t
+	\end{equation}
+	\noindent where $\mu^{max}_{t,l}$ is one if $\mu_{t,l}$ is the maximum across clusters, and zero otherwise.
+
 \end{itemize}
 
-Moreover, in order to adjust the weight of preference profile over context profile, the methods compared have parameter $\alpha$. In the experiment we explored several values for it, here, to make the results clearer, we show only $\alpha \in [0.90,1.00]$ with increments of $0.01$
+Moreover, in order to adjust the weight of preference profile over context profile, the methods compared have parameter $\alpha$. In the experiment we explored several values for it, here, to make the results clearer, we show only $\alpha \in [0.90,1.00]$ with increments of $0.01$.
 
 \subsection{Datasets}
 \label{sec:case-study-datasets}
 
 In the experiment there are two sources of data: The QA domain and the contextual information.
 
-The QA domain used is the StackExchange dataset\footnote{http://data.stackexchange.com/}. This dataset consists of the database dump of each site in the stackexchange ecosystem. Some sites are detailed in Table \ref{tab:stackexchange-dataset-description}, together with their main features.
+The QA domain used is the StackExchange dataset\footnote{http://data.stackexchange.com/}. This dataset consists of the database dump of each site in the stackexchange ecosystem. Across them, we focus on 3dprinting, a stackExchange site devoted to it. Some stats are detailed in Table \ref{tab:stackexchange-dataset-description}.
 
-(Incluir tabla de datasets)
+\begin{table}
+	\caption{Main features of the QA domain datasets used in the case study.}
+	\label{tab:stackexchange-dataset-description}
+	\centerline{\small\baselineskip=13pt
+	\begin{tabular}{l|ccccc}
+          & 3dprinting & history    \\
+\hline
+Users     & 4025       & 13433           \\
+Questions & 597        & 6127           \\
+Answers   & 1135       & 12212           \\
+Comments  & 2754       & 53510           \\
+Votes     & 7860       & 162809           \\
+Ratings   &            & 38082
+Sparsity  & 0.9899     & 0.9958           \\
+	\end{tabular}}
+\end{table}
 
 In this experimental setup, the results are reported per StackExchange site. Therefore, we consider each site as a different dataset. Given that the aim of the system is to provide users with pieces of information that help explain the context and also consider their preferences.
 
@@ -365,9 +388,7 @@ Usually, measures to evaluate the prediction errors in terms of rating deviation
 
 \subsection{Results}
 
-In this section, the results obtained for the different approaches compared are shown and analysed to evaluate the performance of the proposal.
-
-Table \ref{tab:results-ndcg-3dprinting} shows the results of the compared approaches in the 3dprinting site.
+In this section, the results obtained for the different approaches compared are shown and analysed to evaluate the performance of the proposal. Figures \ref{fig:ndcg-results-proposal-context-no-clustering}, \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}, and \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-max} show the results of the 3 techniques compared in the 3dprinting QA dataset. The three figures have the same scale and, in X axis, alpha parameter is shown. The series denote the context, hence its position show the results of the proposal with the corresponding alpha value for the day.
 
 \begin{figure}[htb]
     \centering
@@ -377,31 +398,22 @@ Table \ref{tab:results-ndcg-3dprinting} shows the results of the compared approa
 \end{figure}
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
-    \caption{Results of the proposal to manage context with max membership.}
-    \label{fig:ndcg-results-proposal-context-fuzzy-clustering-max}
-\end{figure}
-\begin{figure}[htb]
-    \centering
     \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
     \caption{Results of the proposal to manage context with fuzzy membership.}
     \label{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}
 \end{figure}
-
-Figures \ref{fig:ndcg-results-proposal-context-no-clustering}, \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-max} and \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership} show the results of the 3 techniques compared in the 3dprinting QA dataset. The three figures have the same scale and, in X axis, alpha parameter is shown. The series denote the context, hence its position show the results of the proposal with the corresponding alpha value for the day.
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
+    \caption{Results of the proposal to manage context with max membership.}
+    \label{fig:ndcg-results-proposal-context-fuzzy-clustering-max}
+\end{figure}
 
 In Figure \ref{fig:ndcg-results-proposal-context-no-clustering} it can be noticed that, although the proposal improves the results of LSA in some days (contexts), the improvement does not compensates for the decay in performance in other days. Focusing in the context of 2017-11-28, LSAContext improves the results of LSA for all alpha values.
 
 Figure \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership} shows that LSAContextFuzzy improves the results of LSA. It obtains better results than LSAContext, given that the results are distributed more upper than those of the LSAContext approach. If we focus on the results on single days, it can be noticed that LSAContextFuzzy improves greatly for the context of day 2017-11-28. However, there is a major decay in three contexts: 2017-11-29, 2017-11-30 and 2017-12-15 in which the proposal does not reaches the value of the LSA approach. If we focus specifically on the day 2017-12-12, there is a decay for $\alpha \in [0.90,0.95]$ but it improves the results of LSA for $\alpha \in [0.96,0.99]$.
 
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
-    \caption{Results of the proposal to manage context with fuzzy membership.}
-    \label{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}
-\end{figure}
-
-Figure \ref{fig:ndcg-resutls-proposal-context-fuzzy-clustering-max} shows that LSAContextClustering improves the results of LSA for most of the contexts explored. It consistently obtains better results than LSA, although the improvements obtained in some contexts is canceled with worst results in other contexts.
+Figure \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-max} shows that LSAContextClustering improves the results of LSA for most of the contexts explored. It consistently obtains better results than LSA, although the improvements obtained in some contexts is canceled with worst results in other contexts.
 
 
 Figure \ref{fig:ndcg-results-3proposals-bests-per-day} compares the results of each proposal with the best alpha. Here LSA has no variability across days because it does not considers context. LSAContext has a great variability in performance across days, however, the better results obtained from 2017-12-08 onwards are canceled by the low performance from 2017-11-30 to 2017-12-07. LSAContextClusteringMax and LSAContextClusteringFuzzy performances did not dropped drastically in certain contexts as it happened for LSAContext. Instead, they show ups and downs in the contexts. It is worth to notice that LSAContextClusteringMax obtained greater peaks than LSAContextClusteringFuzzy.
