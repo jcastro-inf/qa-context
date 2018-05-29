@@ -197,7 +197,7 @@ The proposed model fits into the CARS approach of contextual modelling, because 
 \begin{enumerate}[(i)]
 	\item QA domain semantic analysis: It applies LSA to reduce the dimensionality of the term-document matrix.
 	\item Build user preference profile: It analyses users' preferences and generates a profile for each of them based on the profiles of the document he/she liked in the past.
-	\item Build context profile: It analyses the context, which consists on a stream of recent status updates, applies clustering to separate the various topics that the context contains, and generates feature-space profiles for each context topic.
+	\item Build context model: It analyses the context, which consists on a stream of status updates within a given time frame, applies clustering to separate the various topics that the context contains, and generates feature-space profiles for each context topic.
 	\item Contextualize user profiles: It selects context topic that is most suitable to target user's preferences, combines the preference-based user profile and the context topic profile to generate the contextualized user profile.
 	\item Prediction: It compares the document profiles and the contextualised user profile to recommend.
 \end{enumerate}
@@ -210,12 +210,13 @@ The proposed model fits into the CARS approach of contextual modelling, because 
 \end{figure}
 
 \subsection{QA domain semantic analysis}
+\label{sec:proposal-qa-semantic-analysis}
 
-In a QA dataset there is textual information of the question and their related answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the TFIDF document profiles $profile^{TFIDF}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
+Our proposal assumes that the QA dataset contains textual information of the question and their related answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the TFIDF document profiles $profile^{TFIDF}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
 
 Once the TFIDF document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and terms in a feature space with a reduced number of features. Therefore, the aim of this step is to decompose the word-document in word-features matrix $U$, singular value vector $s$, and document-features matrix $V$ (see Eq. \ref{eq:svd}).
 
-An approximated factorisation of the TFIDF matrix is performed with Singular Value Decomposition, which allows to reduce the dimensionality of the original matrix keeping the $f$ most relevant singular values of the original matrix. Hence, we obtain the profile of both terms and documents in the feature space:
+An approximated factorisation of the TFIDF matrix is performed with Singular Value Decomposition, which allows to reduce the dimensionality of the original matrix keeping the $f$ most relevant singular values of the original matrix. Hence, we obtain the profile of both terms and documents in the feature space, which compose the QA domain semantic model:
 
 \begin{equation}
 	profile^{LSA}_d = \{ u_{t,1},\dots, u_{t,f}\}
@@ -226,7 +227,7 @@ An approximated factorisation of the TFIDF matrix is performed with Singular Val
 
 \subsection{Building user preference profile}
 
-At this point LSAContextCluster has built a model with terms and documents profiles. In order to provide personalised recommendations to users, it is needed to build user profiles in the same space. The information the system holds about users is a unary matrix that states whether the user has expressed interest in the document (see Table \ref{tab:user-preferences}) either creating, commenting, or voting it. In this table, the set of documents that user $u$ has expressed interest in is defined as:
+At this point LSAContextCluster has built a model with terms and documents profiles. In order to provide personalised recommendations to users, it is needed to build user profiles in the same feature-space. LSAContextCluster holds a unary matrix that states whether a given user has expressed interest in another document (see Table \ref{tab:user-preferences}) either creating, commenting, or voting it. In this table, the set of documents that user $u$ has expressed interest in is defined as:
 \begin{equation}
 	R_{u} = \{d ~~~~s.t.~~~~r_{u,d} \in R \}
 \end{equation}
@@ -237,19 +238,19 @@ At this point LSAContextCluster has built a model with terms and documents profi
 	\centerline{\small\baselineskip=13pt
 	\begin{tabular}{|c||ccccc|}
 		\hline
-         &     $i_1$     & $\dots$  &     $i_k$     & $\dots$  & $i_n$
+         &     $d_1$     & $\dots$  &     $d_k$     & $\dots$  & $d_n$
 		\tabularnewline
 		\hline
 		\hline
-$u_1$    & $r_{u_1,i_1}$ & $\dots$  & $r_{u_1,i_k}$ & $\dots$  & $r_{u_1,i_n}$
+$u_1$    & $r_{u_1,d_1}$ & $\dots$  & $r_{u_1,d_k}$ & $\dots$  & $r_{u_1,d_n}$
 		\tabularnewline
 $\vdots$ & $\vdots$      & $\ddots$ & $\vdots$      & $\ddots$ & $\vdots$
 		\tabularnewline
-$u_j$    & $r_{u_j,i_1}$ & $\dots$  & $r_{u_j,i_k}$ & $\dots$  & $r_{u_j,i_n}$
+$u_j$    & $r_{u_j,d_1}$ & $\dots$  & $r_{u_j,d_k}$ & $\dots$  & $r_{u_j,d_n}$
 		\tabularnewline
 $\vdots$ & $\vdots$      & $\ddots$ & $\vdots$      & $\ddots$ & $\vdots$
 		\tabularnewline
-$u_m$    & $r_{u_m,i_1}$ & $\dots$  & $r_{u_m,i_k}$ & $\dots$  & $r_{u_m,i_n}$
+$u_m$    & $r_{u_m,d_1}$ & $\dots$  & $r_{u_m,d_k}$ & $\dots$  & $r_{u_m,d_n}$
 		\tabularnewline
 		\hline
 	\end{tabular}}
@@ -257,24 +258,28 @@ $u_m$    & $r_{u_m,i_1}$ & $\dots$  & $r_{u_m,i_k}$ & $\dots$  & $r_{u_m,i_n}$
 
 This way, the user's profile is built upon the profiles of the documents that belong to $R_u$, and describes the user's preferences in terms of the latent space:
 \begin{equation}
-	profile^{LSA}_u = \sum_{d \in R_u} profile^{LSA}_d = \{ \sum_{d \in R_u} V_{d,1}, \dots, \sum_{d \in R_u} V_{d,f}\}
+	profile^{LSA}_u = \sum_{d \in R_u} profile^{LSA}_d = \{ \sum_{d \in R_u} profile^{LSA}_{d,1}, \dots, \sum_{d \in R_u} profile^{LSA}_{d,f}\}
 \end{equation}
 
-\subsection{Context profile building}
+\subsection{Context model building}
 
-To include contextual information in the recommendation process, it is needed to build the context profile. In this proposal, the source of the context is a microblogging system that delivers status updates from users. First, from all the terms that the context contains, LSAContextCluster filters out the terms that do not appear in the set of terms used in the QA site.
+To include contextual information in the recommendation process, it is needed to build the context model. In this proposal, we aim to promote questions that are relevant regarding current happenings. Recent researches \cite{Hermida2010} have highlighted the inmediacy of microblogging services such as Twitter, where users share short sentences or fragments of news, thus, our proposal uses it as a source of current interesting topics. Formally, a status update consist of a free text input generated by a user with certain timestamp, among other metadata. Analysing these status updates, LSAContextCluster generates a model of the context that is later used to modify the user profile.
 
-Given that the context is composed of several status updates, there can be a mixture of topics. In order to separate the topics of the context, the proposal performs a fuzzy clustering of the terms used the context. Hence, the fuzzy c-means clustering algorithm groups the terms using the feature vector of the terms, $profile^{LSA}_d$, as the word definition. The distance among words used in the clustering is based on cosine correlation coefficient.
+The current context is composed of the status updates that were generated in a given time window. In this proposal, it is set to 24 hours, although this parameter can be modified regarding the desired sensitivity to change of the context. First, all terms of the status updates of the current context are stemmed. After that, from all the terms that the context contains, LSAContextCluster filters out the terms that do not appear in the QA semantic model generated in phase one (see Section \ref{sec:proposal-qa-semantic-analysis}).
 
-Once the terms of the context are grouped, the proposal generates a context profile for each cluster combining the profiles of the terms that are included in each of them. Therefore, LSAContextCluster builds the profile of the context using the feature representation of each term from the QA domain:
+Given that the context is composed of several status updates, there can be a mixture of topics. To determine the context topics, the proposal performs a fuzzy clustering of the terms used in the context. Hence, fuzzy c-means clustering algorithm \cite{Bezdek1984} groups the terms using their feature vector $profile^{LSA}_t$ as the term definition. The distance among terms used in the clustering is based on cosine correlation coefficient. This results in a set of clusters, each of them defines a context topic $c_i$.
+
+Once the terms of current context are grouped in context topics, the proposal generates a context profile for each topic combining the profiles of the terms that are included in each cluster. Therefore, LSAContextCluster builds a profile for each context topic using the feature representation of each term from the QA domain (see Eq \ref{eq:context-topic-profile}). At the end of this phase, LSAContextCluster has generated a model of the context composed of several context profiles, one for each context topic detected by the clustering.
 
 \begin{equation}
-	profile^{LSA}_{C} = \{\sum_{t \in C} U_{t,1}, \dots, \sum_{t \in C} U_{t,f} \}
+	profile^{LSA}_{c_i} = \sum_{t \in c_i} profile^{LSA}_{t}=\{\sum_{t \in c_i} profile^{LSA}_{t,1}, \dots, \sum_{t \in c_i} profile^{LSA}_{t,f} \}
+	\label{eq:context-topic-profile}
 \end{equation}
 
-\subsection{Contextualization of user profiles}
 
-In order to provide contextualised personalised recommendations, it is needed to combine user's preference profiles with the context topic profile to provide personalised recommendations suited to the current context $C$:
+\subsection{User profile contextualization}
+
+The context model is used to combine user's preference profiles with the most suitable context topic profile to provide personalised recommendations suited to the current context $C$. From all the context topic profiles that the context model contains, LSAContextCluster selects the closest to the user's preference profile. This way, the context topic that is more similar to the target user preferences is used to modify his/her profile, hence, the contextualisation of user profiles is personalised to user preferences. After this, the context profile of the topic and the user's preference profile are combined as follows:
 
 \begin{equation}
 	profile^{LSA}_{C,u} = \alpha * profile^{LSA}_u + (1- \alpha )*profile^{LSA}_{C}
@@ -323,15 +328,15 @@ We compared several ways for integrating contextual information in QA recommenda
 
 	\item Weithed by membership (LSAContextClusterFuzzy): The cluster profiles are built combining the feature vector of each word weighted by the membership value of the word to the cluster:
 	\begin{equation}
-		profile_{cluster_l} = \sum_{t \in T} \mu_{t,l} * profile_t
+		profile_{c_i} = \sum_{t \in c_i} \mu_{t,c_i} * profile_t
 	\end{equation}
-	\noindent where $\mu_{t,l}$ is the membership of term $t$ to cluster $l$.
+	\noindent where $\mu_{t,c_i}$ is the membership of term $t$ to cluster $c_i$.
 
 	\item Max membership (LSAContextClusterMax): The words are used only in the cluster to whom they have the highest membership value:
 	\begin{equation}
-		profile_{cluster_l} = \sum_{t \in T} \mu^{max}_{t,l} * profile_t
+		profile_{c_i} = \sum_{t \in T} \mu^{max}_{t,c_i} * profile_t
 	\end{equation}
-	\noindent where $\mu^{max}_{t,l}$ is one if $\mu_{t,l}$ is the maximum across clusters, and zero otherwise.
+	\noindent where $\mu^{max}_{t,c_i}$ is one if $\mu_{t,c_i}$ is the maximum membership across clusters, and zero otherwise.
 
 \end{itemize}
 
@@ -365,7 +370,7 @@ Sparsity  & 0.99898    & 0.99996  & 0.99890 & 0.99998 & 0.99998 & 0.99954 \\
 
 In this experimental setup, the results are reported per StackExchange site. Therefore, we consider each site as a different dataset. Given that the aim of the system is to provide users with pieces of information that help explain the context and also consider their preferences.
 
-Regarding the contextual dataset, a set of interesting keywords is defined. We have selected the terms \emph{news}, \emph{current} and \emph{situation}. From these seed terms, we extracted a dataset of tweets that contain any of these words from twitter. The stats of the dataset extracted is depicted in Figure \ref{fig:context-dataset-description}.
+Regarding the contextual dataset, a set of interesting keywords is defined based on the aim of the proposal for contextualising recommendations. Given that the proposal focuses on selecting currently hot topics, we have selected the terms \emph{news}, \emph{current} and \emph{situation}. From these seed terms, we extracted a dataset of tweets that contain any of these words from Twitter. The stats of the dataset extracted is depicted in Figure \ref{fig:context-dataset-description}.
 
 \begin{figure}[htb]
     \centering
