@@ -49,8 +49,8 @@
 \RequirePackage{color}\definecolor{ADDITIONS}{rgb}{0.0,0.6,0.0}
 \RequirePackage{color}\definecolor{REVISE}{rgb}{0.2,0.2,1.0}
 \providecommand{\DIFadd}[1]{{\protect\textcolor{ADDITIONS}{\hwave{#1}}}}% DIF PREAMBLE
-\providecommand{\DIFdel}[1]{{\protect\textcolor{DELETIONS}{\hsout{#1}}}}% DIF PREAMBLE
-%\providecommand{\DIFdel}[1]{{\protect}}% DIF PREAMBLE
+%\providecommand{\DIFdel}[1]{{\protect\textcolor{DELETIONS}{\hsout{#1}}}}% DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect}}% DIF PREAMBLE
 \providecommand{\revise}[1]{{\protect\textcolor{REVISE}{\uwave{#1}}}}% DIF PREAMBLE
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,17 +59,13 @@
 
 \begin{document}
 
-\title{Context aware content based recommendation of question answering items with semantic model of question domain and topic detection of collaborative interest of users}
-
-\title{A contextual modeling recommendation approach based on semantic model with topic discovery in collective interest.}
-
-\title{Context aware content based recommendation with semantic model and fuzzy clustering.}
-
-\title{Harnessing collaborative interest context for improving question recommendation with semantic model.}
-
-\title{Collective interest topic detection for improving question recommendation with semantic model.}
-
-\title{Extracting context from collective interest to improve recommendation in question answering domain.}
+\title{*Context aware content based recommendation of question answering items with semantic model of question domain and topic detection of collaborative interest of users \\
+*A contextual modeling recommendation approach based on semantic model with topic discovery in collective interest.\\
+*Context aware content based recommendation with semantic model and fuzzy clustering.\\
+*Harnessing context based on collaborative interest for improving question recommendation with semantic model.\\
+*Collective interest topic detection for improving question recommendation with semantic model.\\
+*Extracting context from collective interest to improve recommendation in question answering domain.\\
+*A context aware approach based on collective interest for improving question recommendation with semantic-based models.}
 
 \begin{spacing}{1.5}
 
@@ -94,7 +90,7 @@
 
 \begin{abstract}
 
-Content-Based Recommender systems (CBRSs) filter relevant items to users in overloaded search spaces using information about their preferences. In this scenario, there are successful RSs for several domains including recommendation of news and question answering (QA), among others. The traditional recommendation scheme consists of analyzing the terms used in the item to generate an item profile and a user profile that later is used to recommend items that match the user profile. This basic scheme can be further improved considering that context influences user preferences. Some examples of contexts are the day of week, time, season of year or companion of the target user. An interesting source of context is the trend in current collective interest, where a feed of status updates can be analyzed to profile context. When the information is extracted in such a way, there are several key aspects in the context integration with the user profile, such as context cleaning, aggregation and weighting. This paper explores such aspects and proposes a recommender system that integrates context to improve QA recommendation with context information. A case study will evaluate the results on several datasets, showing that the context integration benefits recommendation.
+Content-Based Recommender systems (CBRSs) filter relevant items to users in overloaded search spaces using information about their preferences. There are successful RSs for several domains including recommendation of news and question answering (QA), among others. The traditional recommendation scheme consists of analyzing the terms used in the item to generate an item profile and a user profile that is later used to recommend items that match the user profile. This basic scheme can be further improved considering that context influences user preferences. Some examples of contexts are the day of week, time, season of year or companion of the target user. An interesting source of context is the trend in current collective interest, where a feed of status updates can be analyzed to model the context. When the information is extracted in such a way, there are several key aspects in the context integration with the user profile, such as context cleaning, aggregation and weighting. This paper explores such aspects and proposes a recommender system that integrates context to improve QA recommendation with contextual information. A case study will evaluate the results on several datasets, showing that the context integration benefits recommendation.
 
 \begin{keyword}
    \texttt{recommender systems} \sep \texttt{context-aware recommendation} \sep \texttt{user profile contextualisation}
@@ -106,7 +102,7 @@ Content-Based Recommender systems (CBRSs) filter relevant items to users in over
 \section{Introduction}\label{sec:introduction}
 
 %Information overload and Recommender Systems
-The increasing amount of information available in current scenarios affects users' satisfaction when they search for items that meet their interests. This situation originates that users need to put significant effort for finding relevant pieces of information for them. In some scenarios it might not be possible for users to explore information items in order to select the most suitable one,hence, the \emph{information overload} problem impacts users satisfaction. Recommender Systems (RSs) have been a powerful tool for alleviating information overload in large search spaces. RSs have been proven to be successful in several domains, such as e-business \cite{Lu2013}, e-learning \cite{Wu2015,Yera2014}, e-tourism \cite{Noguera2012,AlHassan2015}, e-commerce \cite{Rafailidis2016}, web pages \cite{Nguyen2014,Xuan2015} and financial investment \cite{Musto2015}, among others. In this paper we focus on question answering (QA) recommendation with contextual information integration.
+The increasing amount of information available in current scenarios affects users' satisfaction when they search for items that meet their interests. This situation originates that users need to put significant effort for finding relevant pieces of information for them. In some scenarios it might not be possible for users to explore information items in order to select the most suitable one,hence, the \emph{information overload} problem impacts users satisfaction. Recommender Systems (RSs) have been a powerful tool for alleviating information overload in large search spaces. RSs have been proven to be successful in several domains, such as e-business \cite{Lu2013}, e-learning \cite{Wu2015,Yera2014}, e-tourism \cite{AlHassan2015,Noguera2012}, e-commerce \cite{Rafailidis2016}, web pages \cite{Nguyen2014,Xuan2015} and financial investment \cite{Musto2015}, among others. In this paper we focus on question answering (QA) recommendation with contextual information integration.
 
 %RSs approaches
 There are several approaches within RSs. The most widespread ones are Collaborative Filtering (CFRS) and Content Based (CBRS). The main difference among them is that CFRSs focus on users' interaction with items, i.e., user preferences, while CBRSs focus on the analysis of items descriptions, i.e., content. Therefore, the performance of these recommendation approaches is subject to the quality and amount of available information in each type.
