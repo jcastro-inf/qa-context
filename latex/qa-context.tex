@@ -39,6 +39,8 @@
 %Allow more figures per page
 \renewcommand{\floatpagefraction}{.999}
 
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
 
 %%%%%%%%%%%% FIX SECTIONS LATEXDIFF %%%%%%%%%%%%%%%%%%%%%
 \usepackage{xcolor}
@@ -49,8 +51,8 @@
 \RequirePackage{color}\definecolor{ADDITIONS}{rgb}{0.0,0.6,0.0}
 \RequirePackage{color}\definecolor{REVISE}{rgb}{0.2,0.2,1.0}
 \providecommand{\DIFadd}[1]{{\protect\textcolor{ADDITIONS}{\hwave{#1}}}}% DIF PREAMBLE
-%\providecommand{\DIFdel}[1]{{\protect\textcolor{DELETIONS}{\hsout{#1}}}}% DIF PREAMBLE
-\providecommand{\DIFdel}[1]{{\protect}}% DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\textcolor{DELETIONS}{\hsout{#1}}}}% DIF PREAMBLE
+%\providecommand{\DIFdel}[1]{{\protect}}% DIF PREAMBLE
 \providecommand{\revise}[1]{{\protect\textcolor{REVISE}{\uwave{#1}}}}% DIF PREAMBLE
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,7 +86,7 @@
 
 \begin{abstract}
 
-Content-Based Recommender systems (CBRSs) filter relevant items to users in overloaded search spaces using information about their preferences. There are successful RSs for several domains including recommendation of news and question answering (QA), among others. The traditional recommendation scheme consists of analyzing the terms used in the item to generate an item profile and a user profile that is later used to recommend items that match the user profile. This basic scheme can be further improved considering that context influences user preferences. Some examples of contexts are the day of week, time, season of year or companion of the target user. An interesting source of context is the trend in current collaborative interest, where a feed of status updates can be analyzed to model the context. When the information is extracted in such a way, there are several key aspects in the context integration with the user profile, such as context cleaning, aggregation and weighting. This paper explores such aspects and proposes a recommender system that integrates context to improve QA recommendation with contextual information. A case study will evaluate the results on several datasets, showing that the context integration benefits recommendation.
+Content-Based Recommender systems (CBRSs) filter relevant items to users in overloaded search spaces using information about their preferences. There are successful RSs for several domains including recommendation of news and question answering (QA), among others. The traditional recommendation scheme consists of analyzing the terms used in the item description to generate an item profile and a user profile that is later used to recommend items that match the user profile. This basic scheme can be further improved considering that context influences user preferences. Some examples of contexts are the day of week, time, season of year or companion of the target user. An interesting source of context is the trend in current collaborative interest, where a feed of status updates can be analyzed to model the context. When the information is extracted in such a way, there are several key aspects in the context integration with the user profile, such as context cleaning, aggregation and weighting. This paper explores such aspects and proposes a recommender system that integrates context to improve QA recommendation with contextual information. A case study will evaluate the results on several datasets, showing that the context integration benefits recommendation.
 
 \begin{keyword}
    \texttt{recommender systems} \sep \texttt{context-aware recommendation} \sep \texttt{user profile contextualization}
@@ -96,13 +98,13 @@ Content-Based Recommender systems (CBRSs) filter relevant items to users in over
 \section{Introduction}\label{sec:introduction}
 
 %Information overload and Recommender Systems
-The increasing amount of information available in current scenarios affects users' satisfaction when they search for items that meet their interests. This situation originates that users need to put significant effort for finding relevant pieces of information for them. In some scenarios it might not be possible for users to explore information items in order to select the most suitable one,hence, the \emph{information overload} problem impacts users satisfaction. Recommender Systems (RSs) have been a powerful tool for alleviating information overload in large search spaces. RSs have been proved to be successful in several domains, such as e-business \cite{Lu2013}, e-learning \cite{Wu2015,Yera2014}, e-tourism \cite{AlHassan2015,Noguera2012}, e-commerce \cite{Rafailidis2016}, web pages \cite{Nguyen2014,Xuan2015} and financial investment \cite{Musto2015}, among others. In this paper we focus on question answering (QA) recommendation with contextual information integration.
+The increasing amount of information available in current scenarios affects users' satisfaction when they search for items that meet their interests. This situation originates that users need to put significant effort for finding relevant pieces of information for them. In some scenarios it might not be possible for users to explore information items in order to select the most suitable one. Hence, the \emph{information overload} problem impacts users satisfaction. Recommender Systems (RSs) have been a powerful tool for alleviating information overload in large search spaces. RSs have been proved to be successful in several domains, such as e-business \cite{Lu2013}, e-learning \cite{Wu2015,Yera2014}, e-tourism \cite{AlHassan2015,Noguera2012}, e-commerce \cite{Rafailidis2016}, web pages \cite{Nguyen2014,Xuan2015} and financial investment \cite{Musto2015}, among others. In this paper we focus on question answering (QA) recommendation with contextual information integration.
 
 %RSs approaches
 There are several approaches within RSs. The most widespread ones are Collaborative Filtering (CFRS) and Content Based (CBRS). The main difference among them is that CFRSs focus on users' interaction with items, i.e., user preferences, while CBRSs focus on the analysis of items descriptions, i.e., item content. Therefore, the performance of these recommendation approaches is subject to the quality and amount of available information in each type.
 
 %CBRSs
-We distinguish two kinds of CBRSs: (i) based on item features, and (ii) based on items descriptions. In this paper we focus on the latter, given that QA items have a strong component of textual information for both explaining the question and answering it. Although CBRSs suffer from user cold start because they need some input from user preferences and lack of diversity in recommendations \cite{Barragans2010}, CBRS have demonstrated their utility when new items are introduced in the system, i.e., in scenarios with strong item cold-start \cite{Aggarwal2016}. This feature makes it interesting to apply CBRS approaches in domains where new items are constantly introduced, such as web pages or news. In this direction, QA recommendation shares the features to apply CBRSs, hence, we focus on them.
+Within CBRSs we distinguish two kinds of CBRSs: (i) based on item features, and (ii) based on items descriptions. In this paper we focus on the latter, given that QA items have a strong component of textual information for both explaining the question and answering it. Although CBRSs suffer from user cold start because they need some input from user preferences and lack of diversity in recommendations \cite{Barragans2010}, CBRS have demonstrated their utility when new items are introduced in the system, i.e., in scenarios with strong item cold-start \cite{Aggarwal2016}. This feature makes the application of CBRS approaches interesting in domains where new items are constantly introduced, such as web pages or news. In this direction, QA recommendation shares the features to apply CBRSs, hence, we focus on them.
 
 %Boundary of knowledge in QA recommendation with CBRSs.
 In the QA domain recommendation scenario there are several proposals for recommendation with CBRS approaches. Shao et al.\cite{Shao2017} propose to apply Latent Dirichlet Allocation to label questions in a latent semantic feature category and find the most suitable answerers. In this direction, Zheng et al. \cite{Zheng2015b} combine trust-based analysis of answerers with content analysis. While these approaches aim to reduce the answer time searching for adequate answerer for new posted questions, there are other RSs that aim to expand users' knowledge recommending already answered questions. Odiete et al. \cite{Odiete2017} analyze users' preferences and build a graph of expertise used to find gaps in their knowledge and suggest relevant questions.
@@ -128,7 +130,7 @@ An accurate definition of Recommender System (RS) given by R. Burke \cite{Burke2
 
 The various CBRSs approaches can be classified regarding the item representation. Here we focus on those CBRSs that use a vector space modeling to represent items. With this regard there are CBRS with (i) feature-based representations, and (ii) free-text representation.
 
-In feature-based representation, items are usually stored in a database table where rows are items and columns are the item features (also called fields or properties) and each item might have a different value for each of these features. The recommender system learns a model that uses such information to approximate the rating function. With this regard there are proposals based on weighting features importance regarding the user's ratings using collaborative information \cite{Symeonidis2007} or using entropy and dependence between items' features and user's ratings \cite{Castro2014}. Other approaches learn the rating function using linear regression (InterestLMS) \cite{DePessemier2016}.
+In feature-based representation, items are usually stored in a database table where rows are items and columns are the item features (also called fields or properties) and each item might have a different value for each of these features. The recommender system learns a model that uses such information to approximate the rating function. With this regard there are proposals based on weighting features importance regarding the user's ratings using collaborative information \cite{Symeonidis2007} or using entropy and dependence between items' features and user's ratings \cite{Castro2014}. Other approaches learn the rating function using linear regression \cite{DePessemier2016}.
 
 In free-text representation there is a natural language piece of text that describes the item, such as movie synopsis or that is part of the item itself, such as the content of a web page or a news article. Such a kind of unstructured data provides information about the item (called document in these systems), however, they also have the complexity of dealing with natural language due to polysemous words and synonyms. 
 
@@ -184,7 +186,7 @@ In post-filtering, the recommendations are first computed overlooking the contex
 
 Previous approaches try to reduce the CARS problem to a two dimensional one that can be solved with traditional RSs. This is not the case in contextual modeling, in which contextual information is directly integrated in the recommendation model to recommend. With this regard, researchers have explored heuristic-based \cite{Panniello2014}, probabilistic \cite{Adomavicius2005b}, or matrix factorization \cite{Baltrunas2011c} contextual modeling approaches.
 
-\section{Semantic model for recommending questions with context awareness based on topic detection}
+\section{Semantic model for recommending questions with context awareness based on topic detection in collaborative interest}
 \label{sec:proposal}
 
 Here, a novel proposal, LSAContextCluster, for recommendation based on CA-CBRS is introduced. Recommendations might need to be targeted to specific contexts, e.g., when a system delivers recommendations of answered questions about history and current situation makes some questions more interesting than others, such as in the celebration of the anniversary of some relevant historic event. In these cases, it is possible to modify user profiles to include contextual information in a way such that later recommendations are both targeted to user preferences and current context.
@@ -210,7 +212,7 @@ The proposed model fits into the CARS approach of contextual modeling, because i
 
 Our proposal assumes that the QA dataset contains textual information of the question and their related answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the TFIDF document profiles $profile^{TFIDF}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
 
-Once the TFIDF document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and terms in a feature space with a reduced number of features. Therefore, the aim of this step is to decompose the word-document in word-features matrix $U$, singular value vector $s$, and document-features matrix $V$ (see Eq. \ref{eq:svd}).
+Once the TFIDF document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and terms in a feature space with a reduced number of features. Therefore, the aim of this step is to decompose the initial word-document matrix in a word-features matrix $U$, a singular value vector $s$, and a document-features matrix $V$ (see Eq. \ref{eq:svd}).
 
 An approximated factorization of the TFIDF matrix is performed with Singular Value Decomposition, which allows to reduce the dimensionality of the original matrix keeping the $f$ most relevant singular values of the original matrix. Hence, we obtain the profile of both terms and documents in the feature space, which compose the QA domain semantic model:
 
@@ -259,11 +261,11 @@ This way, the user's profile is built upon the profiles of the documents that be
 
 \subsection{Context model building}
 
-To include contextual information in the recommendation process, it is needed to build the context model. In this proposal, we aim to promote questions that are relevant regarding current happenings. Recent researches \cite{Hermida2010} have highlighted the immediacy of microblogging services such as Twitter, where users share short sentences or fragments of news, thus, our proposal uses it as a source of current interesting topics. Formally, a status update consist of a free text input generated by a user with certain timestamp, among other meta-data. Analyzing these status updates, LSAContextCluster generates a model of the context that is later used to modify the user profile.
+To include contextual information in the recommendation process, it is needed to build the context model. In this proposal, we aim to promote questions that are relevant regarding current happenings. Recent researches \cite{Hermida2010} have highlighted the immediacy of microblogging services such as Twitter, where users share short sentences or fragments of news, thus, our proposal uses it as a source of collaborative interest. Formally, a status update consist of a free text input generated by a user with certain timestamp, among other meta-data. Analyzing these status updates, LSAContextCluster generates a model of the context that is later used to modify the user profile.
 
-The current context is composed of the status updates that were generated in a given time window. In this proposal, it is set to 24 hours, although this parameter can be modified regarding the desired sensitivity to change of the context. First, all terms of the status updates of the current context are stemmed. After that, from all the terms that the context contains, LSAContextCluster filters out the terms that do not appear in the QA semantic model generated in phase one (see Section \ref{sec:proposal-qa-semantic-analysis}).
+The context is composed of the status updates that were generated in a given time window. In this proposal, it is set to 24 hours, although this parameter can be modified regarding the desired sensitivity of the context model. First, all terms of the status updates of the current context are stemmed. After that, from all the terms that the context contains, LSAContextCluster filters out the terms that do not appear in the QA semantic model generated in phase one (see Section \ref{sec:proposal-qa-semantic-analysis}).
 
-Given that the context is composed of several status updates, there can be a mixture of topics. To determine the context topics, the proposal performs a fuzzy clustering of the terms used in the context. Hence, fuzzy c-means clustering algorithm \cite{Bezdek1984} groups the terms using their feature vector $profile^{LSA}_t$ as the term definition. The distance among terms used in the clustering is based on cosine correlation coefficient. This results in a set of clusters, each of them defines a context topic $c_i$.
+Given that the context is composed of several status updates, there can be a mixture of topics. To determine the context topics, the proposal performs a fuzzy clustering of the terms used in the context. Hence, fuzzy c-means clustering algorithm \cite{Bezdek1984} groups the terms using their feature vector $profile^{LSA}_t$ as the term definition. The distance among terms used in the clustering is based on cosine correlation coefficient. The result is a set of clusters where each cluster  $c_i$ defines a context topic.
 
 Once the terms of current context are grouped in context topics, the proposal generates a context profile for each topic combining the profiles of the terms that are included in each cluster. Therefore, LSAContextCluster builds a profile for each context topic using the feature representation of each term from the QA domain (see Eq \ref{eq:context-topic-profile}). At the end of this phase, LSAContextCluster has generated a model of the context composed of several context profiles, one for each context topic detected by the clustering.
 
@@ -275,19 +277,23 @@ Once the terms of current context are grouped in context topics, the proposal ge
 
 \subsection{User profile contextualization}
 
-The context model is used to combine user's preference profiles with the most suitable context topic profile to provide personalized recommendations suited to the current context $C$. From all the context topic profiles that the context model contains, LSAContextCluster selects the closest to the user's preference profile. This way, the context topic that is more similar to the target user preferences is used to modify his/her profile, hence, the contextualization of user profiles is personalized to user preferences. After this, the context profile of the topic and the user's preference profile are combined as follows:
+In this step, the target user's preference profile is combined with the context model to provide contextualized personalized recommendations. To do so in a personalized way, from all the context topic profiles that the context model contains, LSAContextCluster selects the most similar to the user's preference profile. This way, the context topic $c_i$ that has a greater cosine coefficient with the target user preferences is used to modify his/her profile, hence, the contextualization of user profiles is personalized to user preferences.
 
 \begin{equation}
-	profile^{LSA}_{C,u} = \alpha * profile^{LSA}_u + (1- \alpha )*profile^{LSA}_{C}
+	\argmax_{c_i}~~~~ cosine(profile^{LSA}_u,profile^{LSA}_{c_i})
 \end{equation}
 
+After this selection, the profile of the selected context topic $c_i$ and the user's preference profile are combined to obtain the contextualized user profile:
+
 \begin{equation}
-	profile^{LSA}_{C,u} = \{ \alpha * profile^{LSA}_{u,1} + (1- \alpha ) * profile^{LSA}_{C,1},\dots, \alpha * profile^{LSA}_{u,1} + ( 1 - \alpha ) * profile^{LSA}_{C,f} \}
+	profile^{LSA}_{C,u} = \alpha * profile^{LSA}_u + (1- \alpha )*profile^{LSA}_{c_i}
 \end{equation}
 
 \subsection{Prediction}
 
-Once we have the contextualized user profile, we can produce a prediction of the suitability for a given item regarding the profile. The recommendation is a list of documents sorted by $p_{u,d}$.\begin{equation}
+Once we have the contextualized user profile, we can produce a prediction of the suitability for a given item regarding the profile. The recommendation is a list of documents sorted by $p_{u,d}$:
+
+\begin{equation}
 	p_{u,d,c} = profile^{LSA}_{C,u}*s*profile^{LSA}_d
 \end{equation}
 

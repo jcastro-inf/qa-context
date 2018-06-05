@@ -5,9 +5,10 @@ rm *.aux
 
 pdflatex $textfile
 bibtex    $auxfile 
-pdflatex $textfile 
-pdflatex $textfile 
+pdflatex $textfile
+pdflatex $textfile
 
+rm diff*
 echo "Creating diff file..."
 latexdiff old.tex $textfile > diff.tex
 
