@@ -4,13 +4,13 @@ auxfile="qa-context.aux"
 rm *.aux
 
 pdflatex $textfile
-bibtex    $auxfile 
+bibtex    $auxfile
 pdflatex $textfile
 pdflatex $textfile
 
 rm diff*
 echo "Creating diff file..."
-latexdiff old.tex $textfile > diff.tex
+~/latexdiff/latexdiff old.tex $textfile > diff.tex
 
 pdflatex diff.tex
 bibtex    diff.aux
