@@ -15779,7 +15779,7 @@
 }
 
 @article{Katarya2016,
-    abstract     = {With the exponential development of the number of users browsing the internet, an important factor that now the developer community is focussing on is the user experience. Recommender systems are the platforms that make personalized recommendations for a particular user by predicting the ratings for various items. Recommender systems majorly ignore the sequential information and rather focus on content information, but sequential information also provides much information about the behavior of the user. In this research work, we have presented a novel web-based recommender system which is based on sequential information of user's navigation on web pages. We received top-N clusters when Fuzzy C-mean (FCM) clustering is employed. We determined the similar users for the target user and also evaluated the weight for each web page. We have tried to solve that problem of recommender systems as we offered a system to forecast a user's next Web page visit. In our work, we proposed a system which generates recommendations to the users, by considering the sequential information that exists in their usage patterns of Web pages. We employed fuzzy clustering to give recommender system a sequential approach. We calculated weights for each page category considered in our system and predict top page recommendation for the target user. The real-world dataset of MNSBC is used in the experiments. The dataset consists of 5000 user entries with 6, entries per user. When we performed a comparison between the existing model with our proposed model, then it clearly showed that the accuracy of the proposed model is almost three times better than some existing systems. The accuracy of our proposed model is nearly 33 {\%}.},
+    abstract     = {With the exponential development of the number of users browsing the internet, an important factor that now the developer community is focussing on is the user experience. Recommender systems are the platforms that make personalized recommendations for a particular user by predicting the ratings for various items. Recommender systems majorly ignore the sequential information and rather focus on content information, but sequential information also provides much information about the behavior of the user. In this research work, we have presented a novel web-based recommender system which is based on sequential information of user's navigation on web pages. We received top-N clusters when Fuzzy C-mean (FCM) clustering is employed. We determined the similar users for the target user and also evaluated the weight for each web page. We have tried to solve that problem of recommender systems as we offered a system to forecast a user's next Web page visit. In our work, we proposed a system which generates recommendations to the users, by considering the sequential information that exists in their usage patterns of Web pages. We employed fuzzy clustering to give recommender system a sequential approach. We calculated weights for each page category considered in our system and predict top page recommendation for the target user. The real-world dataset of MNSBC is used in the experiments. The dataset consists of 5000 user entries with 6, entries per user. When we performed a comparison between the existing model with our proposed model, then it clearly showed that the accuracy of the proposed model is almost three times better than some existing systems. The accuracy of our proposed model is nearly 33 {\%}.},
     author       = {Katarya, Rahul and Verma, Om Prakash},
     doi          = {10.1007/s11042-016-4078-7},
     issn         = {1573-7721},
@@ -16204,4 +16204,41 @@ abstract = { This paper examines new para-journalism forms such as micro-bloggin
   pages={191--203},
   year={1984},
   publisher={Elsevier}
+}
+
+@article{Figueroa2016,
+title = "Context-aware semantic classification of search queries for browsing community question–answering archives",
+journal = "Knowledge-Based Systems",
+volume = "96",
+pages = "1 - 13",
+year = "2016",
+issn = "0950-7051",
+doi = "https://doi.org/10.1016/j.knosys.2016.01.008",
+url = "http://www.sciencedirect.com/science/article/pii/S0950705116000186",
+author = "Alejandro Figueroa and Günter Neumann",
+keywords = "Community question answering, Semantic classification of question-like search queries, Large-scale feature selection for search session analysis, Explicit semantic analysis",
+abstract = "Community question answering (cQA) platforms, like Yahoo! Answers, provide standard search APIs to browse past questions and answers. Since, the largest cQA services maintain massive sets of resolved questions, the necessity for effective methods to revitalize the information contained in their archives is getting more and more important to serve the needs of their members as promptly and as reliably as possible. In this paper, we present a novel strategy for effectively browsing cQA archives. The core idea is to induce the semantic classes of question-like search queries (e.g., “rib pain after ovulation” and “iron oxide household”) by means of the contextual information set up or represented by inferred views of their respective search sessions, namely views modeling previous queries entered by the same user. When searching cQA archives, members do not associate semantic classes to their queries, so we are considering the cQA as a knowledge base that defines a taxonomy of semantic classes for their posted questions, which provides an explicit mapping between search queries and these questions. Following a supervised learning approach, we investigate and analyze the most salient features that are necessary to automatically exploit this relevant cQA mapping. We carried out a large number of experiments using a rich set of attributes extracted from an automatically acquired big dataset from Yahoo! Answers. Our results confirm what was often only intuitively assumed, namely, that larger contexts actually help to detect semantic relations implicitly expressed in sequences of queries submitted by users during their search sessions. In particular, we discover that Explicit Semantic Analysis is extremely helpful for inferring discriminative semantic cues that reduce, and thus determine, the semantic range of question-like search queries. Conversely, constructing traditional bag-of-words models on top of prior queries in the session was detrimental."
+}
+
+@misc{Kuchmann2015,
+  title={Context-aware question answering system},
+  author={Kuchmann-Beauger, Nicolas and Aufaure, Marie-Aude and Thollot, Raphael},
+  year={2015},
+  month=jan # "~13",
+  publisher={Google Patents},
+  note={US Patent 8,935,277}
+}
+
+@article{Erra2015,
+title = "Approximate TF–IDF based on topic extraction from massive message stream using the GPU",
+journal = "Information Sciences",
+volume = "292",
+pages = "143 - 161",
+year = "2015",
+issn = "0020-0255",
+doi = "https://doi.org/10.1016/j.ins.2014.08.062",
+url = "http://www.sciencedirect.com/science/article/pii/S0020025514008676",
+author = "Ugo Erra and Sabrina Senatore and Fernando Minnella and Giuseppe Caggianese",
+keywords = "Twitter, TF–IDF, GPU, Topic extraction, Frequent items, Massive data stream",
+abstract = "The Web is a constantly expanding global information space that includes disparate types of data and resources. Recent trends demonstrate the urgent need to manage the large amounts of data stream, especially in specific domains of application such as critical infrastructure systems, sensor networks, log file analysis, search engines and more recently, social networks. All of these applications involve large-scale data-intensive tasks, often subject to time constraints and space complexity. Algorithms, data management and data retrieval techniques must be able to process data stream, i.e., process data as it becomes available and provide an accurate response, based solely on the data stream that has already been provided. Data retrieval techniques often require traditional data storage and processing approach, i.e., all data must be available in the storage space in order to be processed. For instance, a widely used relevance measure is Term Frequency–Inverse Document Frequency (TF–IDF), which can evaluate how important a word is in a collection of documents and requires to a priori know the whole dataset. To address this problem, we propose an approximate version of the TF–IDF measure suitable to work on continuous data stream (such as the exchange of messages, tweets and sensor-based log files). The algorithm for the calculation of this measure makes two assumptions: a fast response is required, and memory is both limited and infinitely smaller than the size of the data stream. In addition, to face the great computational power required to process massive data stream, we present also a parallel implementation of the approximate TF–IDF calculation using Graphical Processing Units (GPUs). This implementation of the algorithm was tested on generated and real data stream and was able to capture the most frequent terms. Our results demonstrate that the approximate version of the TF–IDF measure performs at a level that is comparable to the solution of the precise TF–IDF measure."
 }
