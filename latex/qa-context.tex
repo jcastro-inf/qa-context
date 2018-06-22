@@ -114,15 +114,11 @@ Within CBRSs we distinguish two kinds of CBRSs: (i) based on item features, and 
 %Boundary of knowledge in QA recommendation with CBRSs.
 In the QA domain recommendation scenario there are several proposals for recommendation with CBRS approaches. Shao et al.\cite{Shao2017} propose to apply Latent Dirichlet Allocation to label questions in a latent semantic feature category and find the most suitable answerers. In this direction, Zheng et al. \cite{Zheng2015b} combine trust-based analysis of answerers with content analysis. While these approaches aim to reduce the answer time searching for adequate answerer for new posted questions, there are other RSs that aim to expand users' knowledge recommending already answered questions. Odiete et al. \cite{Odiete2017} analyze users' preferences and build a graph of expertise used to find gaps in their knowledge and suggest relevant questions.
 
-In this work we focus on recommending answered questions that are in the target user's area of interest, and that are also relevant regarding the topics that are being discussed by users in microblogging sites. Therefore, it is interesting to explore Context-Aware CBRSs (CA-CBRSs), which integrate contextual information to the content-based recommendation. De Pessemier et al. \cite{DePessemier2016} consider recommendations in mobile devices as very suitable to integrate context-awareness, and uses devices sensors and time of the day to deliver contextualized news recommendations. In QA recommendation, SeaHawk \cite{Ponzanelli2014} and Prompter \cite{Ponzanelli2014b} provide CA-CBRSs that support programmers to complete issues and bugs using query completion and recommends StackOverflow questions, where the context is the specific part of the source code in which the recommendations are requested. In this direction, Libra \cite{Ponzanelli2017} also integrates recommendations but it also considers, in addition to context extracted from the Integrated Development Environment context, resources opened by the user such as URLs or documents to better understand his/her context. Other works consider collaborative interest as current buzzwords to deliver currently relevant recommendations in e-commerce scenarios \cite{Parikh2009}. As it can be seen, there is no previous approach that focuses on context-aware recommendation regarding collaborative interest in the QA domain.
+In this work we focus on recommending answered questions that are in the target user's area of interest, and that are also relevant regarding the topics that are being discussed by users in microblogging sites. Therefore, it is interesting to explore Context-Aware CBRSs (CA-CBRSs), which integrate contextual information to the content-based recommendation. De Pessemier et al. \cite{DePessemier2016} consider recommendations in mobile devices as very suitable to integrate context-awareness, and uses devices sensors and time of the day to deliver contextualized news recommendations. In QA recommendation, SeaHawk \cite{Ponzanelli2014} and Prompter \cite{Ponzanelli2014b} provide CA-CBRSs that support programmers to complete issues and bugs using query completion and recommends StackOverflow questions, where the context is the specific part of the source code in which the recommendations are requested. In this direction, Libra \cite{Ponzanelli2017} also integrates recommendations but it also considers, in addition to context extracted from the Integrated Development Environment, resources opened by the user such as URLs or documents to better understand his/her context. Other works consider collaborative interest as current buzzwords to deliver currently relevant recommendations in e-commerce scenarios \cite{Parikh2009}. As it can be seen, there is no previous approach that focuses on context-aware recommendation regarding collaborative interest in the QA domain.
 
 In this paper, we propose a novel CA-CBRS approach that recommends QA items and introduces context awareness based on topic detection within collaborative interest. In this proposal, the context is extracted from microblogging systems to characterize current trends in collaborative interest. The usage of such a context mainly helps the RS to recommend answers related to topics of interest and indirectly overcomes the overfitting problem. However, the context extracted this way is often noisy or several topics are mixed. With this regard, we propose to cluster context to identify the topics that are being discussed, and after that the context topic most suitable to target user's preferences is selected to build a contextualized user profile that combines preferences and context. This way, the proposal provides contextualized recommendations that are also adjusted to users' individual interests.
 
 The remaining of this paper is structured as follows. Section \ref{sec:preliminaries} provides a background of CBRSs and CA-CBRSs. Section \ref{sec:proposal} introduces in further detail our proposal of CA-CBRS for QA recommendation. Section \ref{sec:case-study} shows a case study performed to evaluate the proposal and discuss the findings. Finally, Section \ref{sec:conclusions} concludes the paper.
-
-%\cite{Parikh2009} Buzz-based recommender system. This system looks somewhat similar to the system that we want to develop, but on eCommerce. This one is based on buzzwords used in the text input of the search within eBay. Our work will be based on buzzwords detected on twitter to recommend historic questions on StackExchange (Any site).
-
-%\cite{DePessemier2016} This paper does A user-centric evaluation of context-aware recommendations for a mobile news service. Hace una evaluación de un Sistema de recomendación basado en contenido con información contextual. Es interesante para tenerlo en cuenta como técnica a comparar
 
 \section{Preliminaries}
 \label{sec:preliminaries}
@@ -137,24 +133,20 @@ The various CBRSs approaches can be classified regarding the item representation
 
 In feature-based representation, items are usually stored in a database table where rows are items and columns are the item features (also called fields or properties) and each item might have a different value for each of these features. The recommender system learns a model that uses such information to approximate the rating function. There are proposals based on weighting features importance regarding the user's ratings using collaborative information \cite{Symeonidis2007} or using entropy and dependence between items' features and user's ratings \cite{Castro2014}. Other approaches learn the rating function using linear regression \cite{DePessemier2016}.
 
-In free-text representation there is a natural language piece of text that describes the item, such as movie synopsis or that is part of the item itself, such as the content of a web page or a news article. Such a kind of unstructured data provides information about the item (called document in these systems), however, they also have the complexity of dealing with natural language due to polysemous words and synonyms. 
+In free-text representation there is a natural language piece of text that describes the item, such as movie synopsis or that is part of the item itself, such as the content of a web page or a news article. Such a kind of unstructured data provides information about the item (called document in these systems), however, they also have the complexity of dealing with natural language due to polysemous words and synonyms.
 
-The TFIDF approach \cite{Erra2015} is usually applied when dealing with free-text representation items. In TFIDF, the unstructured data is converted in structured data stemming words \cite{Porter1980} to keep their root. This process reduces the number of components of documents unifying words such as computer, compute and computing, which are different forms that share meaning. After that, for each document, a vector of weights of each term is generated based on the importance of the term on the document:
+The TFIDF approach \cite{Erra2015} is usually applied when dealing with free-text representation items. In TFIDF, the unstructured data is converted in structured data stemming words \cite{Porter1980} to keep their root. This process reduces the number of components of documents unifying words such as computer, compute and computing, which are different forms that share meaning. After that, for each document, a vector of weights of each term is generated multyplying the $tf_{t,d}$ by the $idf_{t}$ \cite{Lops2011}, to consider the importance of the term on the document:
 \begin{equation}
-	profile^{tfidf}_{d} = \{w_{t,d}~~~~s.t.~~~~ t \in d \}
+	profile^{tfidf}_{d} = \{tf_{t,d}*idf_{t}~~~~s.t.~~~~ t \in d \}
 	\label{eq:document-profile-tfidf}
 \end{equation}
 
-\begin{equation}
-	w_{t,d} = tf_{t,d}*idf_{t}
-	\label{eq:document-profile-tfidf-term-weights}
-\end{equation}
+\noindent where $tf_{t,d}$ is the number of occurrences of term $t$ in document $d$, $N$ is the set of all documents and $N_t$ is the set of documents that contain the term $t$ at least once.
 
 \begin{equation}
 	idf_t = -\log \left( \frac{|N|}{|N_t|}\right)
 	\label{eq:document-profile-tfidf-idf}
 \end{equation}
-\noindent where $tf_{t,d}$ is the number of occurrences of term $t$ in document $d$, $N$ is the set of all documents and $N_t$ is the set of documents that contain the term $t$ at least once.
 
 At this point the system contains a vector space model of items. User profiles can be generated aggregating the profiles of the items that they liked in the past \cite{Symeonidis2007}. The recommendation is computed comparing user profiles with item profiles with the cosine correlation and the closest ones are recommended. 
 
@@ -228,8 +220,6 @@ An approximated factorization of the TFIDF matrix is performed with Singular Val
 	profile^{LSA}_t = \{ v_{t,1},\dots, v_{t,f}\}
 \end{equation}
 
-\revise{Cuando se usa TFIDF se tienen dos vectores, uno del perfil y otro de los pesos para cada feature. No tengo claro lo que estás haciendo al dar un solo vector).}
-
 \subsection{Building user preference profile}
 
 At this point LSAContextCluster has built a model with terms and documents profiles. In order to provide personalized recommendations to users, it is needed to build user profiles in the same feature-space. LSAContextCluster holds a unary matrix that states whether a given user has expressed interest in another document (see Table \ref{tab:user-preferences}) either creating, commenting, or voting it. In this table, the set of documents that user $u$ has expressed interest in is defined as:
@@ -265,8 +255,6 @@ This way, the user's profile is built upon the profiles of the documents that be
 \begin{equation}
 	profile^{LSA}_u = \sum_{d \in R_u} profile^{LSA}_d = \{ \sum_{d \in R_u} profile^{LSA}_{d,1}, \dots, \sum_{d \in R_u} profile^{LSA}_{d,f}\}
 \end{equation}
-
-\revise{Pesos perfil???}
 
 \subsection{Context model building}
 
