@@ -16242,3 +16242,29 @@ author = "Ugo Erra and Sabrina Senatore and Fernando Minnella and Giuseppe Caggi
 keywords = "Twitter, TF–IDF, GPU, Topic extraction, Frequent items, Massive data stream",
 abstract = "The Web is a constantly expanding global information space that includes disparate types of data and resources. Recent trends demonstrate the urgent need to manage the large amounts of data stream, especially in specific domains of application such as critical infrastructure systems, sensor networks, log file analysis, search engines and more recently, social networks. All of these applications involve large-scale data-intensive tasks, often subject to time constraints and space complexity. Algorithms, data management and data retrieval techniques must be able to process data stream, i.e., process data as it becomes available and provide an accurate response, based solely on the data stream that has already been provided. Data retrieval techniques often require traditional data storage and processing approach, i.e., all data must be available in the storage space in order to be processed. For instance, a widely used relevance measure is Term Frequency–Inverse Document Frequency (TF–IDF), which can evaluate how important a word is in a collection of documents and requires to a priori know the whole dataset. To address this problem, we propose an approximate version of the TF–IDF measure suitable to work on continuous data stream (such as the exchange of messages, tweets and sensor-based log files). The algorithm for the calculation of this measure makes two assumptions: a fast response is required, and memory is both limited and infinitely smaller than the size of the data stream. In addition, to face the great computational power required to process massive data stream, we present also a parallel implementation of the approximate TF–IDF calculation using Graphical Processing Units (GPUs). This implementation of the algorithm was tested on generated and real data stream and was able to capture the most frequent terms. Our results demonstrate that the approximate version of the TF–IDF measure performs at a level that is comparable to the solution of the precise TF–IDF measure."
 }
+
+@article{Nair2015,
+  title={Streaming twitter data analysis using spark for effective job search},
+  author={Nair, Lekha R and Shetty, Sujala D},
+  journal={Journal of Theoretical and Applied Information Technology},
+  volume={80},
+  number={2},
+  pages={349},
+  year={2015},
+  publisher={Journal of Theoretical and Applied Information}
+}
+
+@article{Maillo2017,
+title = "kNN-IS: An Iterative Spark-based design of the k-Nearest Neighbors classifier for big data",
+journal = "Knowledge-Based Systems",
+volume = "117",
+pages = "3 - 15",
+year = "2017",
+note = "Volume, Variety and Velocity in Data Science",
+issn = "0950-7051",
+doi = "https://doi.org/10.1016/j.knosys.2016.06.012",
+url = "http://www.sciencedirect.com/science/article/pii/S0950705116301757",
+author = "Jesus Maillo and Sergio Ramírez and Isaac Triguero and Francisco Herrera",
+keywords = "K-nearest neighbors, Big data, Apache Hadoop, Apache Spark, MapReduce",
+abstract = "The k-Nearest Neighbors classifier is a simple yet effective widely renowned method in data mining. The actual application of this model in the big data domain is not feasible due to time and memory restrictions. Several distributed alternatives based on MapReduce have been proposed to enable this method to handle large-scale data. However, their performance can be further improved with new designs that fit with newly arising technologies. In this work we provide a new solution to perform an exact k-nearest neighbor classification based on Spark. We take advantage of its in-memory operations to classify big amounts of unseen cases against a big training dataset. The map phase computes the k-nearest neighbors in different training data splits. Afterwards, multiple reducers process the definitive neighbors from the list obtained in the map phase. The key point of this proposal lies on the management of the test set, keeping it in memory when possible. Otherwise, it is split into a minimum number of pieces, applying a MapReduce per chunk, using the caching skills of Spark to reuse the previously partitioned training set. In our experiments we study the differences between Hadoop and Spark implementations with datasets up to 11 million instances, showing the scaling-up capabilities of the proposed approach. As a result of this work an open-source Spark package is available."
+}
