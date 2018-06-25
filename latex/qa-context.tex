@@ -289,9 +289,7 @@ In this step, the target user's preference profile is combined with the context 
 	\argmax_{c_i}~~~~ cosine(profile^{LSA}_u,profile^{LSA}_{c_i})
 \end{equation}
 
-After this selection, the profile of the selected context topic $c_i$ and the user's preference profile are combined to obtain the contextualized user profile:
-
-\revise{Explain the convex combination}
+After this selection, the profile of the selected context topic $c_i$ and the user's preference profile are combined to obtain the contextualized user profile. With this regard, the convex combination is applied, which allows to perform a weighted combination regulated by $\alpha$ parameter - the greater its value, the more importance of the user's preference profile over the profile of the selected context topic in the contextualized user profile.
 
 \begin{equation}
 	profile^{LSA}_{C,u} = \alpha * profile^{LSA}_u + (1- \alpha )*profile^{LSA}_{c_i}
