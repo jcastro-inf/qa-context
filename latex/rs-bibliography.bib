@@ -16268,3 +16268,53 @@ author = "Jesus Maillo and Sergio Ramírez and Isaac Triguero and Francisco Herr
 keywords = "K-nearest neighbors, Big data, Apache Hadoop, Apache Spark, MapReduce",
 abstract = "The k-Nearest Neighbors classifier is a simple yet effective widely renowned method in data mining. The actual application of this model in the big data domain is not feasible due to time and memory restrictions. Several distributed alternatives based on MapReduce have been proposed to enable this method to handle large-scale data. However, their performance can be further improved with new designs that fit with newly arising technologies. In this work we provide a new solution to perform an exact k-nearest neighbor classification based on Spark. We take advantage of its in-memory operations to classify big amounts of unseen cases against a big training dataset. The map phase computes the k-nearest neighbors in different training data splits. Afterwards, multiple reducers process the definitive neighbors from the list obtained in the map phase. The key point of this proposal lies on the management of the test set, keeping it in memory when possible. Otherwise, it is split into a minimum number of pieces, applying a MapReduce per chunk, using the caching skills of Spark to reuse the previously partitioned training set. In our experiments we study the differences between Hadoop and Spark implementations with datasets up to 11 million instances, showing the scaling-up capabilities of the proposed approach. As a result of this work an open-source Spark package is available."
 }
+
+@article{Dean2008,
+ author = {Dean, Jeffrey and Ghemawat, Sanjay},
+ title = {MapReduce: Simplified Data Processing on Large Clusters},
+ journal = {Commun. ACM},
+ issue_date = {January 2008},
+ volume = {51},
+ number = {1},
+ month = jan,
+ year = {2008},
+ issn = {0001-0782},
+ pages = {107--113},
+ numpages = {7},
+ url = {http://doi.acm.org/10.1145/1327452.1327492},
+ doi = {10.1145/1327452.1327492},
+ acmid = {1327492},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+}
+
+@article{Meng2016,
+  title={Mllib: Machine learning in apache spark},
+  author={Meng, Xiangrui and Bradley, Joseph and Yavuz, Burak and Sparks, Evan and Venkataraman, Shivaram and Liu, Davies and Freeman, Jeremy and Tsai, DB and Amde, Manish and Owen, Sean and others},
+  journal={The Journal of Machine Learning Research},
+  volume={17},
+  number={1},
+  pages={1235--1241},
+  year={2016},
+  publisher={JMLR. org}
+}
+
+@inproceedings{Chintapalli2016,
+  title={Benchmarking streaming computation engines: storm, flink and spark streaming},
+  author={Chintapalli, Sanket and Dagit, Derek and Evans, Bobby and Farivar, Reza and Graves, Thomas and Holderbaugh, Mark and Liu, Zhuo and Nusbaum, Kyle and Patil, Kishorkumar and Peng, Boyang Jerry and others},
+  booktitle={Parallel and Distributed Processing Symposium Workshops, 2016 IEEE International},
+  pages={1789--1792},
+  year={2016},
+  organization={IEEE}
+}
+
+@article{Zaharia2016,
+  title={Apache spark: a unified engine for big data processing},
+  author={Zaharia, Matei and Xin, Reynold S and Wendell, Patrick and Das, Tathagata and Armbrust, Michael and Dave, Ankur and Meng, Xiangrui and Rosen, Josh and Venkataraman, Shivaram and Franklin, Michael J and others},
+  journal={Communications of the ACM},
+  volume={59},
+  number={11},
+  pages={56--65},
+  year={2016},
+  publisher={ACM}
+}
