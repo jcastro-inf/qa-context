@@ -123,7 +123,7 @@ The remaining of this paper is structured as follows. Section \ref{sec:prelimina
 \section{Preliminaries}
 \label{sec:preliminaries}
 
-This section provides the required background for the current research, including basics about CBRS, and related works in content based recommendation with context awareness.
+This section provides the required background for the current research, including basics about CBRS, related works in content based recommendation with context awareness and basics in MapReduce and Spark.
 
 \subsection{Content-based recommender systems.}
 
@@ -183,7 +183,21 @@ In post-filtering, the recommendations are first computed overlooking the contex
 
 Previous approaches try to reduce the CARS problem to a two dimensional one that can be solved with traditional RSs. This is not the case in contextual modeling, in which contextual information is directly integrated in the recommendation model to recommend. With this regard, researchers have explored heuristic-based \cite{Panniello2014}, probabilistic \cite{Adomavicius2005b}, or matrix factorization \cite{Baltrunas2011c} contextual modeling approaches.
 
-\subsection{Big data}
+\subsection{MapReduce and Spark}
+\label{sec:background-mapreduce-and-spark}
+
+MapReduce \cite{Dean2008} is a processing tool to manage data in an scalable way. It was originally designed by Google in 2003 aiming to support the most powerful search-engine on the internet, but later it was also applied for parallelization in general purpose applications. In MapReduce (see Figure \ref{fig:background-mapreduce}), two main operations are defined by the user: \emph{Map} and \emph{Reduce}. The \emph{Map} operation takes an input, which is given as a set of $<$key,value$>$ pairs, and produces an intermediate set of $<$key,value$>$ pairs that can be of different type and are defined by the user. An intermediate phase merges all pairs that have the same key and redistributes the work. The \emph{Reduce} operation combines pairs by key to produce a smaller pair set.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.95\textwidth]{figures/mapreduce.png}
+	\caption{Scheme of the MapReduce approach \cite{Dean2008}.}
+	\label{fig:background-mapreduce}
+\end{figure}
+
+There are several solutions that apply the MapReduce approach. Among them, Apache Spark \cite{Zaharia2016}, which was introduced as part of the Hadoop Ecosystem, offers to the user a set of in-memory primitives that complement the MapReduce ones and that is suitable for iterative tasks. It is based on Resilient Distributed Datasets (RDDs), a structure that stores data in such a way that later computations can be easily parallelized. RDDs allow to cache or redistribute intermediate results, which enables the design of data processing pipelines.
+
+Within Spark we use two libraries: MLlib and Spark streaming. MLlib is a scalable machine learning library \cite{Meng2016} that was built to take advantage of Spark suitability for iterative tasks and provides several machine learning techniques for classification, optimization, and data pre-processing, among others. Specifically, we use the tools that MLlib provides for regression and clustering. Spark Streaming \cite{Chintapalli2016} provides an scalable way to manage data produced at high rates, which allow us to manage the data provided by microblogging systems and compute the context model.
 
 \section{Semantic model for recommending questions with context awareness based on topic detection in collaborative interest}
 \label{sec:proposal}
@@ -279,7 +293,6 @@ Once the terms of current context are grouped in context topics, the proposal ge
 	profile^{LSA}_{c_i} = \sum_{t \in c_i} profile^{LSA}_{t}=\{\sum_{t \in c_i} profile^{LSA}_{t,1}, \dots, \sum_{t \in c_i} profile^{LSA}_{t,f} \}
 	\label{eq:context-topic-profile}
 \end{equation}
-
 
 \subsection{User profile contextualization}
 
