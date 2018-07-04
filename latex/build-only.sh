@@ -1,0 +1,1 @@
+textfile="qa-context.tex";auxfile="qa-context.aux";rm *.aux;pdflatex $textfile;bibtex    $auxfile;pdflatex $textfile;pdflatex $textfile;
