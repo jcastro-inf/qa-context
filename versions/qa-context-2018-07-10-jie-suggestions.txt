@@ -1,0 +1,49 @@
+Dear Jorge,
+
+I have read your paper. The topic, structure, and results are all good.
+
+I just have the following comments:
+
+1)      Title: Harnessing social interest for improving answer context-aware recommendation with semantic model. It is not clear about the main contribution. I suggest to change, for example, to
+
+A question answer-based context-aware recommendation method with semantic model
+
+2)      About the Abstract, I think we can reduce some words in the first 2-3 sentences so that to highlight the contribution of this paper. See my revised Abstract below:
+
+Content-Based Recommender systems (CBRSs) filter relevant items to users in
+
+              overloaded search spaces using information about their preferences. However,
+
+Classical CBRS scheme is mainly based on matching between items descriptions and user profile, without 
+
+considering that context may influence user preferences. It therefore cannot get a high accurate prediction on user preferences.  This paper aims to handle this issue to improve quality of recommendation through
+
+taking interesting source of context as the trend in current collaborative interest, where a feed of status
+
+updates can be analyzed to model the context. It propose a novel CA-CBRS approach that recommends question/answer items
+
+and introduces context awareness based on topic detection within collaborative interest.
+
+A case study and related experiments show that the context integration significantly benefits recommendation.
+
+ 
+
+3)      In introduction, because you don’t have section “literature review”, I will suggest to add little more review about recommender systems including applications—aim to show the significance of this study.
+
+4)      We need to indicate more calearly the contribution of this study is >>>>> in Section 1.
+
+5)      Figure 3 should indicate the 5 phases: (I)—(V)
+
+6)      Suggest we don’t use RS in the paper, all use recommender systems.
+
+7)      “4. Case study” can be changed to 4. Case study and Experiments
+
+8)      Figure 8 may need to show these lines more clearly.
+
+9)      Change “5. Conclusions” to “5. Conclusions and further study”
+
+ 
+
+Regards
+
+Jie
