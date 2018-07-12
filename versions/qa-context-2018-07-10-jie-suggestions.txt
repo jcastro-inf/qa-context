@@ -10,21 +10,7 @@ A question answer-based context-aware recommendation method with semantic model
 
 2)      About the Abstract, I think we can reduce some words in the first 2-3 sentences so that to highlight the contribution of this paper. See my revised Abstract below:
 
-Content-Based Recommender systems (CBRSs) filter relevant items to users in
-
-              overloaded search spaces using information about their preferences. However,
-
-Classical CBRS scheme is mainly based on matching between items descriptions and user profile, without 
-
-considering that context may influence user preferences. It therefore cannot get a high accurate prediction on user preferences.  This paper aims to handle this issue to improve quality of recommendation through
-
-taking interesting source of context as the trend in current collaborative interest, where a feed of status
-
-updates can be analyzed to model the context. It propose a novel CA-CBRS approach that recommends question/answer items
-
-and introduces context awareness based on topic detection within collaborative interest.
-
-A case study and related experiments show that the context integration significantly benefits recommendation.
+Content-Based Recommender systems (CBRSs) filter relevant items to users in overloaded search spaces using information about their preferences. However, Classical CBRS scheme is mainly based on matching between items descriptions and user profile, without considering that context may influence user preferences. It therefore cannot get a high accurate prediction on user preferences.  This paper aims to handle this issue to improve quality of recommendation through taking interesting source of context as the trend in current collaborative interest, where a feed of status updates can be analyzed to model the context. It propose a novel CA-CBRS approach that recommends question/answer items and introduces context awareness based on topic detection within collaborative interest. A case study and related experiments show that the context integration significantly benefits recommendation.
 
  
 
