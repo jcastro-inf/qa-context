@@ -319,7 +319,7 @@ Once we have the contextualized user profile, we can produce a prediction of the
 	p_{u,d,c} = profile^{LSA}_{C,u}*s*profile^{LSA}_d
 \end{equation}
 
-\section{Case study}
+\section{Case study and Experiments}
 \label{sec:case-study}
 
 To evaluate the proposal, we performed an experiment that simulates the recommendation of QA items in various contexts. The remainder of the section is structured as follows. First, the settings of the experiment are described. The datasets and methods for processing them are then detailed. After that, the evaluation measures are commented. Lastly, the results are analyzed.
@@ -469,7 +469,7 @@ Figure \ref{fig:ndcg-results-3proposals-average} summarizes the results of the t
 
 The best approaches of the compared ones is the LSAContextClustering with $\alpha=0.94$. This value has been optimized for the 3dprinting QA dataset, hence, for other domains it needs to be adjusted. This parameter provides the LSAContextClustering with flexibility to adapt to different QA domains.
 
-\section{Conclusions}
+\section{Conclusions and further study}
 \label{sec:conclusions}
 
 In this paper, we have explored the application of contextual information in the QA domain recommendation. LSAContextClustering first builds the LSA model associated to the QA domain. After that, it builds the user profile combining the QA profiles with the user preferences. In parallel, it builds the profiles of the context, which is separated in a number of clusters and a context profile is built for each of them. The following step is to combine the user profile with the context profile that is more close to their preferences, which is achieved computing the Cosine Coefficient between the profiles. This combined profile allows the system to know user preferences and also consider contextual information in the recommendation. 
