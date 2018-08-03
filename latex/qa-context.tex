@@ -376,9 +376,7 @@ Moreover, in order to adjust the weight of preference profile over context profi
 
 In the experiment there are two sources of data: The QA domain and the contextual information.
 
-The QA domain used is the StackExchange dataset\footnote{http://data.stackexchange.com/}. This dataset consists of the database dump of each site in the stackexchange ecosystem. Across them, we focus on 3dprinting, a StackExchange site devoted to it. Some stats are detailed in Table \ref{tab:stackexchange-dataset-description}.
-
-\revise{Luis: Un monton de marcas que no entiendo... (i) it would be nice to clarify ........... dataset, (ii) sobre algo de at this stage}
+The QA domain used in the experiment is the StackExchange dataset\footnote{\url{http://data.stackexchange.com/}}. This dataset consists of the database dump of each site in the StackExchange ecosystem. Context influence may be vary across sites. In this case study, we focus on the StackExchange site devoted to 3D printing\footnote{\url{https://3dprinting.stackexchange.com/}}, given the current interest on such area. Some stats of the dataset are detailed in Table \ref{tab:stackexchange-dataset-description}.
 
 \begin{table}
 	\caption{Main features of the QA domain datasets used in the case study.}
@@ -398,8 +396,6 @@ Sparsity  & 0.99898    & 0.99996  & 0.99890 & 0.99998 & 0.99998 & 0.99954 \\
 \hline
 	\end{tabular}}
 \end{table}
-
-In this experimental setup, the results are reported per StackExchange site. Therefore, we consider each site as a different dataset. Given that the aim of the system is to provide users with pieces of information that help explain the context and also consider their preferences.
 
 Regarding the contextual dataset, a set of interesting keywords is defined based on the aim of the proposal for contextualizing recommendations. Given that the proposal focuses on selecting currently hot topics, we have selected the terms \emph{news}, \emph{current} and \emph{situation}. From these seed terms, we extracted a dataset of tweets that contain any of these words from Twitter. The stats of the dataset extracted is depicted in Figure \ref{fig:context-dataset-description}.
 
@@ -428,7 +424,7 @@ Usually, measures to evaluate the prediction errors in terms of rating deviation
 
 \subsection{Results}
 
-In this section, the results obtained for the different approaches compared are shown and analyzed to evaluate the performance of the proposal. Figures \ref{fig:ndcg-results-proposal-context-no-clustering}, \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}, and \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-max} show the results of the 3 techniques compared in the 3dprinting QA dataset. The three figures have the same scale and, in X axis, alpha parameter is shown. Note that for $\alpha=1.00$ the result correspond to LSA approach because the context profile is ignored. The series denote the context, hence its position shows the results of the proposal with the corresponding $alpha$ value for the day.
+In this section, the results obtained for the different approaches compared are shown and analyzed to evaluate the performance of the proposal. Figures \ref{fig:ndcg-results-proposal-context-no-clustering}, \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}, and \ref{fig:ndcg-results-proposal-context-fuzzy-clustering-max} show the results of the 3 techniques compared in the 3dprinting QA dataset. The three figures have the same scale and, in X axis, alpha parameter is shown. Note that for $\alpha=1.00$ the result of all approaches are equal to those of LSA approach because the context profile is ignored. The series denote the context, hence its position shows the results of the proposal with the corresponding $alpha$ value for the day.
 
 \begin{figure}[htb]
     \centering
