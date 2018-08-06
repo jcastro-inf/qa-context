@@ -1,9 +1,8 @@
-\documentclass[preprint]{elsarticle}
+\documentclass[journal,a4paper]{IEEEtran}
 
 \usepackage{lineno,hyperref}
 \modulolinenumbers[5]
 
-\journal{To be determined}
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{mathptmx}
@@ -58,43 +57,25 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage{verbatim}
-
 \begin{document}
 
 \title{A question answer-based context-aware recommendation method with semantic model within a big data framework}
 
-\begin{spacing}{1.5}
+\author{\thanks{This research work was partially supported by the Research Project TIN-2015-66524-P, the Spanish FPU fellowship (FPU13/01151).}Jorge~Castro \thanks{J. Castro is with the Department of Computer Science and Artificial Intelligence, University of Granada, 18071 Granada, Spain, and also with the School of Software, University of Technology Sydney, Sydney, NSW 2007, Australia (e-mail: jcastro@decsai.ugr.es).},
+Jie~Lu, Guangquan~Zhang, \thanks{J. Lu and G. Zhang are with the School of Software, University of Technology Sydney, Sydney, NSW 2007, Australia (e-mail: jie.lu@uts.edu.au, guangquan.zhang@uts.edu.au)}
+Luis~Martínez\thanks{L. Martínez is with the Computer Science Department, University of Jaén, 23008 Jaén, Spain, and also with the School of Management, Wuhan University of Technology, Wuhan 430070, China (e-mail: martin@ujaen.es)}}
 
-\begin{frontmatter}
+\markboth{Manuscript submitted to IEEE Transactions on Cybernetics}{Shell \MakeLowerCase{\textit{et al.}}: A question answer-based context-aware recommendation method with semantic model within a big data framework}
 
-\author[addressjorge,addressjie]{Jorge Castro\corref{mycorrespondingauthor}}
-\ead{jcastro@decsai.ugr.es}
-
-\author[addressjie]{Jie Lu}
-\ead{jie.lu@uts.edu.au}
-
-\author[addressjie]{Guangquan Zhang}
-\ead{guangquan.zhang@uts.edu.au}
-
-\author[addressluis]{Luis Mart\'inez}
-\cortext[mycorrespondingauthor]{Corresponding author}
-\ead{martin@ujaen.es}
-
-\address[addressjorge]{Department of Computer Science and Artificial Intelligence, University of Granada, Granada (Spain)}
-\address[addressjie]{School of Software, University of Technology Sydney, Sydney (Australia)}
-\address[addressluis]{Computer Science Department, University of Ja\'en, Ja\'en (Spain)}
+\maketitle
 
 \begin{abstract}
-
 Content-Based recommender systems (CB) filter relevant items to users in overloaded search spaces using information about their preferences. However, classical CB scheme is mainly based on matching between items descriptions and user profile, without considering that context may influence user preferences. Therefore, it cannot achieve high accuracy on user preference prediction. This paper aims to handle context-awareness (CA) to improve quality of recommendation taking contextual information as the trend in current collaborative interest, where a feed of status updates can be analyzed to model the context. It proposes a novel CA-CB approach that recommends question/answer items and introduces context awareness based on topic detection within collaborative interest. A case study and related experiments show that the context integration significantly benefits recommendation.
-
-\begin{keyword}
-   \texttt{content-based recommender system} \sep \texttt{context-aware recommendation} \sep \texttt{user profile contextualization} \sep \texttt{map-reduce}
-\end{keyword}
 \end{abstract}
 
-\end{frontmatter}
+\begin{IEEEkeywords}
+   content-based recommender system, context-aware recommendation, user profile contextualization, map-reduce
+\end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
 
@@ -161,9 +142,9 @@ While TFIDF method is effective, it cannot deal with polisemy or synonym words. 
 	\label{eq:svd}
 \end{equation}
 
-\begin{figure}[h]
+\begin{figure}[t]
 	\centering
-	\includegraphics[width=0.9\textwidth]{figures/svd-scheme.eps}
+	\includegraphics[width=0.45\textwidth]{figures/svd-scheme.eps}
 	\caption{Decomposition of TFIDF matrix with singular Value decomposition. Note that $s$ is a diagonal matrix with the singular values sorted in descending order.}
 	\label{fig:svd-scheme}
 \end{figure}
@@ -192,9 +173,9 @@ Previous approaches try to reduce the CA problem to a two dimensional one that c
 
 MapReduce \cite{Dean2008} is a processing tool to manage data in an scalable way. It was originally designed by Google in 2003 aiming to support the most powerful search-engine on the internet, but later it was also applied for parallelization in general purpose applications. In MapReduce (see Figure \ref{fig:background-mapreduce}), two main operations are defined by the user: \emph{Map} and \emph{Reduce}. The \emph{Map} operation takes an input, which is given as a set of $<$key,value$>$ pairs, and produces an intermediate set of $<$key,value$>$ pairs that can be of different type and are defined by the user. An intermediate phase merges all pairs that have the same key and redistributes the work. The \emph{Reduce} operation combines pairs by key to produce a smaller pair set.
 
-\begin{figure}[h]
+\begin{figure}[t]
 	\centering
-	\includegraphics[width=0.95\textwidth]{figures/mapreduce.eps}
+	\includegraphics[width=0.45\textwidth]{figures/mapreduce.eps}
 	\caption{Scheme of the MapReduce approach \cite{Dean2008}.}
 	\label{fig:background-mapreduce}
 \end{figure}
@@ -217,17 +198,17 @@ The proposed model fits into the CA approach of contextual modeling, because it 
 	\item Prediction: It compares the document profiles and the contextualized user profile to recommend.
 \end{enumerate}
 
-\begin{figure}[h]
+\begin{figure*}[h]
 	\centering
 	\includegraphics[width=0.95\textwidth]{figures/proposal-scheme-v5.eps}
 	\caption{General scheme of the proposal.}
 	\label{fig:proposal-scheme}
-\end{figure}
+\end{figure*}
 
 \subsection{QA domain semantic analysis}
 \label{sec:proposal-qa-semantic-analysis}
 
-Our proposal assumes that the QA dataset contains textual information of the question and their related answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the TFIDF document profiles $profile^{TFIDF}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
+Our proposal assumes that the QA dataset contains textual information of the question and their related answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \cite{Porter1980}. Once terms are stemmed, the TFIDF document profiles $profile^{TFIDF}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
 
 Once the TFIDF document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both documents and terms in a feature space with a reduced number of features. Therefore, the aim of this step is to decompose the initial word-document matrix in a word-features matrix $U$, a singular value vector $s$, and a document-features matrix $V$ (see Eq. \ref{eq:svd}).
 
@@ -282,9 +263,9 @@ The user's profile does not need to be normalised because it is later compared w
 
 To include contextual information in the recommendation process, it is needed to build the context model. In this proposal, we aim to promote questions that are relevant regarding current happenings. With this regard, our proposal uses status updates from microblogging services, such as Twitter, as the source of collaborative interest. Formally, a status update consists of a free text input generated by a user with certain timestamp, among other meta-data. Analyzing these status updates, LSAContextCluster generates a model of the context that is later used to modify the user profile. The scheme of the context model building phase is depicted in Fig. \ref{fig:proposal-context-clustering-phase}.
 
-\begin{figure}[h]
+\begin{figure}[t]
 	\centering
-	\includegraphics[width=0.95\textwidth]{figures/clustering-phase.eps}
+	\includegraphics[width=0.45\textwidth]{figures/clustering-phase.eps}
 	\caption{Context model building phase.}
 	\label{fig:proposal-context-clustering-phase}
 \end{figure}
@@ -377,20 +358,20 @@ In the experiment there are two sources of data: The QA domain and the contextua
 The QA domain used in the experiment is the StackExchange dataset\footnote{\url{http://data.stackexchange.com/}}. This dataset consists of the database dump of each site in the StackExchange ecosystem. Context influence may be vary across sites. In this case study, we focus on the StackExchange site devoted to 3D printing\footnote{\url{https://3dprinting.stackexchange.com/}}, given the current interest on such topic. Some stats of the dataset are detailed in Table \ref{tab:stackexchange-dataset-description}.
 
 \begin{table}
-	\caption{Main features of the QA domain datasets used in the case study.}
+	\caption{Main features of some StackExchange sites.}
 	\label{tab:stackexchange-dataset-description}
 	\centerline{\small\baselineskip=13pt
 	\begin{tabular}{l|rrrrrr}
 \hline
-          & 3dprinting & academia & ai      & android & apple   & history \\
+          & 3dprinting & academia & android & history \\
 \hline
-Users     & 4025       & 48448    & 3158    & 119810  & 145011  & 13433   \\
-Questions & 597        & 57967    & 421     & 41423   & 77978   & 6127    \\
-Answers   & 1135       & 16737    & 749     & 49985   & 115643  & 12212   \\
-Comments  & 2754       & 40319    & 1165    & 123291  & 242238  & 53510   \\
-Votes     & 7860       & 138416   & 5323    & 359710  & 669305  & 162809  \\
-Ratings   & 2458       & 119082   & 1461    & 109644  & 241838  & 38082   \\
-Sparsity  & 0.99898    & 0.99996  & 0.99890 & 0.99998 & 0.99998 & 0.99954 \\
+Users     & 4025       & 48448    & 119810  & 13433   \\
+Questions & 597        & 57967    & 41423   & 6127    \\
+Answers   & 1135       & 16737    & 49985   & 12212   \\
+Comments  & 2754       & 40319    & 123291  & 53510   \\
+Votes     & 7860       & 138416   & 359710  & 162809  \\
+Ratings   & 2458       & 119082   & 109644  & 38082   \\
+Sparsity  & 0.99898    & 0.99996  & 0.99998 & 0.99954 \\
 \hline
 	\end{tabular}}
 \end{table}
@@ -399,7 +380,7 @@ Regarding the contextual dataset, a set of interesting keywords is defined based
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/context-dataset-description.eps}
+    \includegraphics[width=0.45\textwidth]{figures/context-dataset-description.eps}
     \caption{Contextual dataset used in the experiment, where each day has a different status count.}
     \label{fig:context-dataset-description}
 \end{figure}
@@ -426,20 +407,20 @@ In this section, the results obtained for the different approaches compared are 
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-no-clustering.eps}
-    \caption{Results of the proposal to manage context without clustering}
+    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-proposal-context-no-clustering.eps}
+    \caption{Results managing context without clustering}
     \label{fig:ndcg-results-proposal-context-no-clustering}
 \end{figure}
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
-    \caption{Results of the proposal to manage context with fuzzy membership.}
+    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
+    \caption{Results managing context with fuzzy membership.}
     \label{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}
 \end{figure}
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
-    \caption{Results of the proposal to manage context with max membership.}
+    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
+    \caption{Results managing context with max membership.}
     \label{fig:ndcg-results-proposal-context-fuzzy-clustering-max}
 \end{figure}
 
@@ -454,7 +435,7 @@ Figure \ref{fig:ndcg-results-3proposals-bests-per-day} compares the results of e
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.98\textwidth]{figures/ndcg-results-3proposals-bests-per-day.eps}
+    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-3proposals-bests-per-day.eps}
     \caption{Results of the proposal to manage context with fuzzy membership.}
     \label{fig:ndcg-results-3proposals-bests-per-day}
 \end{figure}
@@ -463,7 +444,7 @@ Figure \ref{fig:ndcg-results-3proposals-average} summarizes the results of the t
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/ndcg-results-3proposals-average.eps}
+    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-3proposals-average.eps}
     \caption{Average NDCG of the compared approaches in all contexts.}
     \label{fig:ndcg-results-3proposals-average}
 \end{figure}
@@ -479,12 +460,37 @@ We performed a case study and experimentation developed within the big data fram
 
 In this scenario, contextual information is a key source of information to provide users with relevant recommendations that allow them to better understand the current scenario. The provided system is a relevant tool in the completion of user knowledge through the recommendation of QA items.
 
-\textbf{\textit{Acknowledgements:}} This research work was partially supported by the Research Project TIN-2015-66524-P, the Spanish FPU fellowship (FPU13/01151).
-
-\section*{Bibliography}
 \bibliography{rs-bibliography}
-\bibliographystyle{plain}
+\bibliographystyle{IEEEtran}
 
-\end{spacing}
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figures/jorgecastro.png}}]{Jorge Castro}
+received the BSc. and MSc. degrees in Computer Scientificnce from the University of Jaén, Spain. In 2011 he started in research in the same university, in which he collaborated in several research projects. He is currently a PhD student in the Department of Computer Science and Artificial Intelligence in the University of Granada, Spain. During his PhD, he is also developing a software library focused on experimenting with recommendation algorithms. His research interests are recommender systems, group recommendation and context-aware recommendation.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figures/jielu.png}}]{Jie Lu}
+(F'17) is a Distinguished Professor, the Director of the Centre for Artificial Intelligence, and the Associate Dean (Research Excellence) with the Faculty of Engineering and Information Technology at the University of Technology  Sydney, Australia. She received her PhD in information systems from the Curtin University of Technology, Australia, in 2000.
+
+Her research expertise spans fuzzy transfer learning, decision support systems, recommender systems, concept drift, and their applications in e-business. She has published 10 research books and over 400 papers in refereed journals and conference proceedings, with over 170 papers in IEEE Transactions and other international journals. She has been awarded eight Australian Research Council (ARC) Discovery Project grants and many other research grants. She is a member of the ARC College of Experts.
+
+She serves as Editor-In-Chief for Knowledge-Based Systems (Elsevier), Editor-In-Chief for the International Journal on Computational Intelligence Systems (Atlantis), Associate Editor for IEEE Transactions on Fuzzy Systems, Editor for a book series on Intelligent Information Systems (World Scientific), and has served as a guest editor of 12 special issues, general/PC/organization chairs for ten international conferences as well as having delivered 16 keynote/plenary speeches at IEEE and other international conferences.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figures/guangquanzhang.png}}]{Guangquan Zhang}
+is an Associate Professor and the Director of the Decision Systems and e-Service Intelligent (DeSI) Research Laboratory at the Center for Artificial Intelligence, Faculty of Engineering and Information Technology, University of Technology Sydney, Australia. He received his PhD in applied mathematics from Curtin University of Technology, Australia, in 2001.
+
+His research interests include fuzzy sets and systems, fuzzy optimization, fuzzy transfer learning, and fuzzy modelling in machine learning and data analytics. He has authored four monographs, five textbooks, and 300 papers including 154 refereed international journal papers.
+
+Dr. Zhang has won seven Australian Research Council (ARC) Discovery Projects grants and many other research grants. He was awarded an ARC QEII fellowship in 2005. He has served as a member of the editorial boards of several international journals, as a guest editor of eight special issues of IEEE Transactions and other international journals, and has cochaired several international conferences and workshops in the area of fuzzy decision-making and knowledge engineering.
+\end{IEEEbiography}
+
+
+\begin{IEEEbiography}
+[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{figures/luismartinez.png}}]{Luis Martínez}
+(M'10) received the M.Sc. and Ph.D. degrees in computer sciences from the University of Granada, Granada, Spain, in 1993 and 1999, respectively. He is currently a Full Professor with the Computer Science Department, University of Jaén, Jaén, Spain. He is also Visiting Professor in University of Technology Sydney, University of Portsmouth (Isambard Kingdom Brunel Fellowship Scheme), and in the Wuhan University of Technology (Chutian Scholar), Guest Professor in the Southwest Jiaotong University and Honourable professor in Xihua University both in Chengdu (China). He has co-edited eleven journal special issues on fuzzy preference modelling, soft computing, linguistic decision making and fuzzy sets theory and has been main researcher in 14 R\&D projects, also has published more than 100 papers in journals indexed by the SCI and more than 150 contributions in International Conferences related to his areas. His current research interests include decision making, fuzzy logic-based systems, computing with words and recommender systems. He was a recipient of the IEEE Transactions on fuzzy systems Outstanding Paper Award 2008 and 2012 (bestowed in 2011 and 2015, respectively). He is a Co-Editor-in-Chief of the International Journal of Computational Intelligence Systems and an Associate Editor of the journals, including the IEEE TRANSACTIONS ON FUZZY SYSTEMS, Information Fusion, the International Journal of Fuzzy Systems, and the Journal of Intelligent \& Fuzzy Systems. He is a member of IEEE and of the European Society for Fuzzy Logic and Technology. Eventually, he has been appointed as Highly Cited Researcher 2017 in Computer sciences
+\end{IEEEbiography}
+
 
 \end{document}
