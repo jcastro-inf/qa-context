@@ -231,7 +231,7 @@ The proposed model fits into the CA approach of contextual modeling, because it 
 
 Our proposal assumes that the QA dataset contains textual information of the question and their related answers. In this proposal we consider the questions together with all their answers as the document, and the words used in their text as the terms. The terms are stemmed using the Porter Stemmer algorithm \citep{Porter1980}. Once terms are stemmed, the TFIDF document profiles $profile^{TFIDF}_{d}$ are built according to Eq. \ref{eq:document-profile-tfidf}.
 
-Once the TFIDF document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both document and terms in a feature space with a reduced number of features. Therefore, the aim of this step is to decompose the initial word-document matrix in a word-features matrix $U$, a singular value vector $s$, and a document-features matrix $V$ (see Eq. \ref{eq:svd}).
+Once the TFIDF document profiles are built, LSA is performed to reduce the dimensionality of the matrix. LSA is proven to be effective through the description of both documents and terms in a feature space with a reduced number of features. Therefore, the aim of this step is to decompose the initial word-document matrix in a word-features matrix $U$, a singular value vector $s$, and a document-features matrix $V$ (see Eq. \ref{eq:svd}).
 
 An approximated factorization of the TFIDF matrix is performed with Singular Value Decomposition, which allows to reduce the dimensionality of the original matrix keeping the $f$ most relevant singular values of the original matrix. Hence, we obtain the profile of both terms and documents in the feature space, which compose the QA domain semantic model:
 
@@ -318,7 +318,7 @@ After this selection, the profile of the selected context topic $c_i$ and the us
 
 \subsection{Prediction}
 
-Once we have the contextualized user profile, we can produce a prediction of the suitability for a given item regarding the profile. The recommendation is a list of documents sorted by $p_{u,d}$:
+Once the contextualized user profile is built, we can produce a prediction of the suitability for a given item regarding the profile. The recommendation is a list of documents sorted by $p_{u,d}$:
 
 \begin{equation}
 	p_{u,d,c} = profile^{LSA}_{C,u}*s*profile^{LSA}_d
@@ -350,18 +350,18 @@ We compared several ways for integrating contextual information in QA recommenda
 
 \begin{itemize}
 
-	\item No clustering (LSAContext): The words are not separated in clusters, therefore the context profile is unique. There is a single profile of the context that is built combining the profiles of the words that are included in the context.
+	\item No clustering (LSAContext): The terms are not separated in clusters, therefore the context profile is unique. There is a single profile of the context that is built combining the profiles of the terms that are included in the context.
 	\begin{equation}
 		profile_{C} = \sum_{t \in C} * profile_t
 	\end{equation}
 
-	\item Weighted by membership (LSAContextClusterFuzzy): The cluster profiles are built combining the feature vector of each word weighted by the membership value of the word to the cluster:
+	\item Weighted by membership (LSAContextClusterFuzzy): The cluster profiles are built combining the feature vector of each term weighted by the membership value of the term to the cluster:
 	\begin{equation}
 		profile_{c_i} = \sum_{t \in c_i} \mu_{t,c_i} * profile_t
 	\end{equation}
 	\noindent where $\mu_{t,c_i}$ is the membership of term $t$ to cluster $c_i$.
 
-	\item Max membership (LSAContextClusterMax): The words are used only in the cluster to whom they have the highest membership value:
+	\item Max membership (LSAContextClusterMax): The terms are used only in the cluster to whom they have the highest membership value:
 	\begin{equation}
 		profile_{c_i} = \sum_{t \in T} \mu^{max}_{t,c_i} * profile_t
 	\end{equation}
