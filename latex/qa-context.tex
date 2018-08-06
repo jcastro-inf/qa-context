@@ -194,12 +194,10 @@ MapReduce \cite{Dean2008} is a processing tool to manage data in an scalable way
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.95\textwidth]{figures/mapreduce.png}
+	\includegraphics[width=0.95\textwidth]{figures/mapreduce.eps}
 	\caption{Scheme of the MapReduce approach \cite{Dean2008}.}
 	\label{fig:background-mapreduce}
 \end{figure}
-
-\revise{Modificar esta figura para hacerla mas adecuada a lo que se explica}
 
 There are several solutions that apply the MapReduce approach. Among them, Apache Spark \cite{Zaharia2016}, which was introduced as part of the Hadoop Ecosystem, offers to the user a set of in-memory primitives that complement the MapReduce ones and that is suitable for iterative tasks. It is based on Resilient Distributed Datasets (RDDs), a structure that stores data in such a way that later computations can be easily parallelized in distributed machines. RDDs allow to cache or redistribute intermediate results, which enables the design of data processing pipelines.
 
