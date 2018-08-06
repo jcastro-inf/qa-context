@@ -1,4 +1,4 @@
-\documentclass[journal,a4paper]{IEEEtran}
+\documentclass[journal,12pt,onecolumn,draftclsnofoot,]{IEEEtran}
 
 \usepackage{lineno,hyperref}
 \modulolinenumbers[5]
@@ -144,7 +144,7 @@ While TFIDF method is effective, it cannot deal with polisemy or synonym words. 
 
 \begin{figure}[t]
 	\centering
-	\includegraphics[width=0.45\textwidth]{figures/svd-scheme.eps}
+	\includegraphics[width=0.95\textwidth]{figures/svd-scheme.eps}
 	\caption{Decomposition of TFIDF matrix with singular Value decomposition. Note that $s$ is a diagonal matrix with the singular values sorted in descending order.}
 	\label{fig:svd-scheme}
 \end{figure}
@@ -175,7 +175,7 @@ MapReduce \cite{Dean2008} is a processing tool to manage data in an scalable way
 
 \begin{figure}[t]
 	\centering
-	\includegraphics[width=0.45\textwidth]{figures/mapreduce.eps}
+	\includegraphics[width=0.95\textwidth]{figures/mapreduce.eps}
 	\caption{Scheme of the MapReduce approach \cite{Dean2008}.}
 	\label{fig:background-mapreduce}
 \end{figure}
@@ -265,7 +265,7 @@ To include contextual information in the recommendation process, it is needed to
 
 \begin{figure}[t]
 	\centering
-	\includegraphics[width=0.45\textwidth]{figures/clustering-phase.eps}
+	\includegraphics[width=0.95\textwidth]{figures/clustering-phase.eps}
 	\caption{Context model building phase.}
 	\label{fig:proposal-context-clustering-phase}
 \end{figure}
@@ -380,7 +380,7 @@ Regarding the contextual dataset, a set of interesting keywords is defined based
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.45\textwidth]{figures/context-dataset-description.eps}
+    \includegraphics[width=0.95\textwidth]{figures/context-dataset-description.eps}
     \caption{Contextual dataset used in the experiment, where each day has a different status count.}
     \label{fig:context-dataset-description}
 \end{figure}
@@ -407,19 +407,19 @@ In this section, the results obtained for the different approaches compared are 
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-proposal-context-no-clustering.eps}
+    \includegraphics[width=0.95\textwidth]{figures/ndcg-results-proposal-context-no-clustering.eps}
     \caption{Results managing context without clustering}
     \label{fig:ndcg-results-proposal-context-no-clustering}
 \end{figure}
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
+    \includegraphics[width=0.95\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-membership.eps}
     \caption{Results managing context with fuzzy membership.}
     \label{fig:ndcg-results-proposal-context-fuzzy-clustering-membership}
 \end{figure}
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
+    \includegraphics[width=0.95\textwidth]{figures/ndcg-results-proposal-context-fuzzy-clustering-max.eps}
     \caption{Results managing context with max membership.}
     \label{fig:ndcg-results-proposal-context-fuzzy-clustering-max}
 \end{figure}
@@ -435,7 +435,7 @@ Figure \ref{fig:ndcg-results-3proposals-bests-per-day} compares the results of e
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-3proposals-bests-per-day.eps}
+    \includegraphics[width=0.95\textwidth]{figures/ndcg-results-3proposals-bests-per-day.eps}
     \caption{Results of the proposal to manage context with fuzzy membership.}
     \label{fig:ndcg-results-3proposals-bests-per-day}
 \end{figure}
@@ -444,7 +444,7 @@ Figure \ref{fig:ndcg-results-3proposals-average} summarizes the results of the t
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.45\textwidth]{figures/ndcg-results-3proposals-average.eps}
+    \includegraphics[width=0.95\textwidth]{figures/ndcg-results-3proposals-average.eps}
     \caption{Average NDCG of the compared approaches in all contexts.}
     \label{fig:ndcg-results-3proposals-average}
 \end{figure}
